@@ -76,7 +76,7 @@ import {
   provideComponentInputBinding,
   raf,
   setIonicClasses
-} from "./chunk-3XIE465P.js";
+} from "./chunk-NCHYKW37.js";
 import "./chunk-RWQ6Z4M2.js";
 import "./chunk-VX3I4KIN.js";
 import "./chunk-RO4IAZ7J.js";
@@ -88,15 +88,15 @@ import "./chunk-WH2RCB7C.js";
 import {
   ActivatedRoute,
   Router
-} from "./chunk-N7PW5WGA.js";
-import "./chunk-RAQZFFIP.js";
-import "./chunk-4IGXPD5C.js";
+} from "./chunk-NVGSZ4K5.js";
+import "./chunk-ULJUC5Y4.js";
 import {
   CommonModule,
   Location,
   NgIf,
   NgTemplateOutlet
 } from "./chunk-CVGJQ4YH.js";
+import "./chunk-4IGXPD5C.js";
 import "./chunk-2ZFTCAES.js";
 import {
   APP_INITIALIZER,

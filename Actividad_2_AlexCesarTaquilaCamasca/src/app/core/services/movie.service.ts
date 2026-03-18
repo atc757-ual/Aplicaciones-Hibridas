@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Movie, OMDbResponse } from './models/movie.model';
 
@@ -15,6 +15,26 @@ export class MovieService {
   private _currentMovie = signal<Movie | null>(null);
   public currentMovie = this._currentMovie.asReadonly();
 
+  private _favorites = signal<Movie[]>([]);
+  public favorites = this._favorites.asReadonly();
+
+  public totalFavorites =  computed(() => this._favorites().length);
+
+  toggleFavorite(movie: Movie) {
+    const current = this._favorites();
+    const exists = current.find(m => m.imdbID === movie.imdbID);
+    if(exists){
+      // Elimino de favoritos
+      this._favorites.set(current.filter(m => m.imdbID !== movie.imdbID));
+    } else {
+      //Añado a favoritos
+      this._favorites.set([...current, movie]);
+    }
+  }
+
+  isFavorite(movie: Movie): boolean {
+    return this._favorites().some(m => m.imdbID === movie.imdbID);
+  }
   searchMovies(title: string) {
     this.http.get<OMDbResponse>(`${this.API_URL}&s=${title}`)
       .subscribe(response => {

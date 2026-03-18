@@ -44,7 +44,7 @@ import {
   Router,
   RouterLink,
   UrlSerializer
-} from "./chunk-N7PW5WGA.js";
+} from "./chunk-NVGSZ4K5.js";
 import {
   Location,
   LocationStrategy,
@@ -10023,4 +10023,4 @@ export {
    * License: MIT
    *)
 */
-//# sourceMappingURL=chunk-3XIE465P.js.map
+//# sourceMappingURL=chunk-NCHYKW37.js.map

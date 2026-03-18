@@ -1,0 +1,2 @@
+# Archivos ignorados por git
+src/environments/environment.local.ts
