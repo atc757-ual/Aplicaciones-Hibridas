@@ -35,6 +35,9 @@ import {
   u
 } from "./chunk-3B5L6JJ3.js";
 import {
+  NgControl
+} from "./chunk-D5ZXXR7C.js";
+import {
   ActivatedRoute,
   ChildrenOutletContexts,
   NavigationCancel,
@@ -45,9 +48,6 @@ import {
   RouterLink,
   UrlSerializer
 } from "./chunk-IKET3A5A.js";
-import {
-  NgControl
-} from "./chunk-D5ZXXR7C.js";
 import {
   Location,
   LocationStrategy
@@ -3433,4 +3433,4 @@ export {
    * (C) Ionic http://ionicframework.com - MIT License
    *)
 */
-//# sourceMappingURL=chunk-JXV3VIHU.js.map
+//# sourceMappingURL=chunk-LAFPXDYA.js.map
