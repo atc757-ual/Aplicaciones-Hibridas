@@ -75,7 +75,7 @@ ion-input-otp.custom {
 }
 ion-input-otp.sc-ion-input-otp-ios-h {
   font-size: var(--font-size-l) !important;
-  color: var(--color-info) !important;
+  --color: var(--color-info) !important;
   --highlight-color: var(--color-info);
   --border: 2px solid var(--color-info);
   --highlight-color-focused: var(--color-info);
