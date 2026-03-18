@@ -1,0 +1,124 @@
+/* Fondo general */
+ion-content {
+  --background: #f4f6ff;
+  font-family: 'Inter', Arial, sans-serif;
+}
+
+/* HEADER AZUL */
+.ticket {
+  background: linear-gradient(180deg,#586499 0%,#8a95cf 100%);
+  padding: 16px 24px 24px 24px;
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+  color: white;
+}
+
+/* titulo */
+.ticket h2 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 24px 0 16px 0;
+
+}
+
+/* contenedor poster + info */
+.ticket-header {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+/* poster */
+.ticket-poster {
+  width: 140px;
+  height: 200px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+/* info película */
+.ticket-info {
+  flex: 1;
+}
+
+.ticket-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.ticket-meta {
+  margin: 4px 0;
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+/* detalles pequeños */
+.ticket-extra {
+  display: flex;
+  gap: 8px;
+  font-size: 13px;
+  margin: 8px 0;
+}
+
+.movie-rating {
+  display: flex;
+  gap: 4px;
+  margin: 8px 0 16px 0;
+}
+
+.rated-tag {
+  background: #fff;
+  color: #586499;
+  border-radius: 8px;
+  padding: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: 0 1px 4px rgba(88,100,153,0.08);
+  border: 1px solid #e0e4f7;
+  letter-spacing: 1px;
+  align-self: center;
+}
+
+/* TARJETA BLANCA */
+.details-card {
+  background: white;
+  border-radius: 26px;
+  padding: 24px;
+  margin-top: -20px;
+}
+
+
+.section {
+  padding:24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* titulo sección */
+.section-title {
+  font-size: 17px;
+  padding: 8px 0;
+  font-weight: 600;
+  color: #23294d;
+  text-decoration: underline;
+}
+
+.sinopsis{
+    font-size: 15px;
+    color: #4d5566;
+    line-height: 1.25;
+}
+
+.details-list {
+  display: flex;
+  font-size: 15px;
+  color: #4d5566;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.details-list strong{
+    color: #2f3545;
+    font-size:15px;
+}

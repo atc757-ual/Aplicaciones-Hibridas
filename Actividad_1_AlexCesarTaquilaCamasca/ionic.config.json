@@ -1,0 +1,7 @@
+{
+  "name": "myappnuevo",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

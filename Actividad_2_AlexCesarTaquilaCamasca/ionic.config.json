@@ -1,0 +1,7 @@
+{
+  "name": "servApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

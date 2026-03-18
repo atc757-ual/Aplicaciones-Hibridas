@@ -1,0 +1,52 @@
+<ion-content>
+  <div class="ticket">
+    <h2>Películas</h2>
+    <ion-searchbar  (ionInput)="onSearch($event)" debounce="500"></ion-searchbar>
+  </div>
+
+  <!-- Carousel de favoritos -->
+  <div class="carousel-container">
+    <div class="carousel-card">
+      <button class="carousel-arrow left" (click)="prevFavorite()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </button>
+      <div class="carousel-content">
+        <div class="carousel-poster">
+          <img *ngIf="favoriteMovies[favoriteIndex].Poster && favoriteMovies[favoriteIndex].Poster !== 'N/A'" [src]="favoriteMovies[favoriteIndex].Poster" alt="{{ favoriteMovies[favoriteIndex].Title }}" />
+          <ion-icon *ngIf="!favoriteMovies[favoriteIndex].Poster || favoriteMovies[favoriteIndex].Poster === 'N/A'" name="image-outline"></ion-icon>
+        </div>
+        <div class="carousel-info">
+          <div class="carousel-title">{{ favoriteMovies[favoriteIndex].Title }}</div>
+          <div class="carousel-meta">{{ favoriteMovies[favoriteIndex].Genre }} &bull; {{ favoriteMovies[favoriteIndex].Year }}</div>
+          <div class="carousel-rating">
+            <ion-icon name="star"></ion-icon> {{ favoriteMovies[favoriteIndex].imdbRating }}
+          </div>
+        </div>
+      </div>
+      <button class="carousel-arrow right" (click)="nextFavorite()">
+        <ion-icon name="arrow-forward-outline"></ion-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="movie-list">
+    <ion-list>
+      @for (movie of movieService.movies(); track movie.imdbID) {
+      <div class="movie-item-container">
+        <ion-item [routerLink]="['/details', movie.imdbID]" class="movie-item">
+          <ion-thumbnail slot="start">
+            <img class="movie-poster" src="{{ movie.Poster }}" alt="{{ movie.Title }}" />
+          </ion-thumbnail>
+          <div class="movie-info">
+            <div class="movie-genre">{{ movie.Type | titlecase }}</div>
+            <div class="movie-title">{{ movie.Title }}</div>
+            <div class="movie-year">{{ movie.Year }}</div>
+          </div>
+        </ion-item>
+      </div>
+      } @empty {
+      <div class="movie-empty">Introduzca un término de búsqueda para comenzar.</div>
+      }
+    </ion-list>
+  </div>
+</ion-content>

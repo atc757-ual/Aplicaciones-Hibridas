@@ -1,0 +1,117 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+/**
+ * Ionic Dark Mode
+ * -----------------------------------------------------
+ * For more info, please see:
+ * https://ionicframework.com/docs/theming/dark-mode
+ */
+
+/* @import "@ionic/angular/css/palettes/dark.always.css"; */
+/* @import "@ionic/angular/css/palettes/dark.class.css"; */
+@import '@ionic/angular/css/palettes/dark.system.css';
+
+
+// ============================================================================
+// Custom global styles and variables
+// ============================================================================
+:root {
+  --space-xs: 0.25rem;   /* 4px */
+  --space-s: 0.5rem;     /* 8px */
+  --space-ls: 0.75rem;   /* 12px */
+  --space-base: 1rem;    /* 16px */
+  --space-m: 1.5rem;     /* 24px */
+  --space-l: 2rem;       /* 32px */
+  --space-xl: 3rem;      /* 48px */
+  --space-xxl: 4rem;     /* 64px */
+  --space-xxxl: 6rem;    /* 96px */
+
+  --color-header: #FFFFFF;
+  --color-background-body: #E9E9E9;
+  --color-background-login: #FFFFFF;
+  --color-overlay-background: #020247;
+  --color-info : #002EFF;
+  --color-error: #DC2020;
+  --color-warning: #F8B106;
+  --color-success: #00A364;
+
+  --border-radius-s: 0.25rem;    /* 4px */
+  --border-radius-base: 0.5rem;  /* 8px */
+  --border-radius-m: 0.75rem;    /* 12px */
+  --border-radius-l: 1rem;       /* 16px */
+  --border-radius-xl: 1.5rem;    /* 24px */
+
+  --color-neutral-0: #FFFFFF;
+  --color-neutral-1: #F5F5F5;
+  --color-neutral-2: #E0E0E0;
+  --color-neutral-3: #cccccc;
+  --color-neutral-4: #BDBDBD;
+  --color-neutral-5: #9E9E9E;
+  --color-neutral-6: #757575;
+  --color-neutral-7: #616161;
+  --color-neutral-8: #424242;
+  --color-neutral-9: #212121;
+  --color-neutral-10: #000000;
+
+
+  --size-img-avatar-small: 1.5rem;  /* 24px */
+  --size-img-avatar-base: 2rem;     /* 32px */
+  --size-img-avatar-medium: 3rem;   /* 48px */
+  --size-img-avatar-large: 4rem;    /* 64px */
+  --size-img-avatar-xl: 6rem;       /* 96px */
+
+  --size-icon-xxl: 4rem;            /* 64px */
+
+  --color-success-soft: #e6f7ee;
+  
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semi-bold: 600;
+  --font-weight-bold: 700;
+
+  --font-size-xs: 0.65rem;   /* 10.4px */
+  --font-size-s: 0.75rem;    /* 12px */
+  --font-size-base: 0.9rem;  /* 14.4px */
+  --font-size-m: 1rem;       /* 16px */
+  --font-size-l: 1.25rem;    /* 20px */
+  --font-size-xl: 1.5rem;    /* 24px */
+  --font-size-xxl: 2rem;     /* 32px */
+  --font-size-xxxl: 3rem;    /* 48px */
+
+  --ion-color-primary: var(--color-info);
+}
+
+/* App background color */
+ion-content {
+  --background: var(--color-background-body) !important;
+}
+
+ion-button{
+  --font-weight:var(--font-weight-semi-bold);
+  min-height: 2em;
+}

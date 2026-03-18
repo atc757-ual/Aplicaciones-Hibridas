@@ -1,0 +1,87 @@
+
+
+.login-shell {
+  min-height: 100%;
+  padding: 24px 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: top;
+  gap: var(--space-base);
+  background: var(--color-neutral-1) !important;
+}
+.brand-block {
+  text-align: center;
+}
+.brand-block   h1 {
+  margin: 0;
+  font-size: var(--font-size-l);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-info);
+  line-height: 1.1;
+}
+.brand-block   p {
+  margin: var(--space-s) 0 0;
+  color: var(--color-neutral-6);
+  font-size: var(--font-size-s);
+  line-height: 1.5;
+}
+.login-card {
+  border-top: 4px solid var(--color-info);
+  margin: 0;
+  border-radius: var(--border-radius-base);
+  box-shadow: 0 12px 30px rgba(27, 64, 114, 0.08);
+}
+.validation-text {
+  font-size: var(--font-size-s);
+  color: var(--color-error);
+}
+.code-block {
+  text-align: left;
+  color: var(--color-neutral-7);
+}
+.code-title {
+  font-size: var(--font-size-m);
+  font-weight: var(--font-weight-semi-bold);
+}
+.code-label {
+  font-size: var(--font-size-s);
+  font-weight: var(--font-weight-light);
+}
+.login-image-block {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.login-illustration {
+  width: 96px;
+  height: 96px;
+  display: block;
+  object-fit: contain;
+  filter: grayscale(0.2) brightness(0.95);
+}
+.contain-button {
+  padding-top: var(--space-m);
+}
+.field-item {
+  border-radius: var(--border-radius-base);
+  border-bottom: 2px solid var(--color-info);
+  margin: var(--space-m) 0 var(--space-s) 0;
+}
+ion-input-otp.custom {
+  --separator-color: rgb(90, 23, 237, 0.12);
+  --highlight-color-focused: var(--color-info);
+  --border-width: 2px;
+}
+ion-input-otp.sc-ion-input-otp-ios-h {
+  font-size: var(--font-size-l) !important;
+  color: var(--color-info) !important;
+  --highlight-color: var(--color-info);
+  --border: 2px solid var(--color-info);
+  --highlight-color-focused: var(--color-info);
+}
+.back {
+  margin-bottom: var(--space-xxl);
+  height: 30px;
+}
+/*# sourceMappingURL=/login.page.css.map */

@@ -1,0 +1,14 @@
+<ion-header [translucent]="translucent">
+  <ion-toolbar>
+
+    <ion-buttons slot="start" *ngIf="!hideBack">
+      <ion-button class="back-btn" fill="clear" (click)="goBack()">
+        <ion-icon name="arrow-back-outline" size="large" color="dark">
+        </ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title class="ion-text-center header-title">{{ title }}</ion-title>
+    <div slot="end" class="right-slot-spacer" aria-hidden="true"></div>
+  </ion-toolbar>
+</ion-header>

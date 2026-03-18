@@ -1,0 +1,45 @@
+<app-header-app title="Clientes" ></app-header-app>
+
+<ion-content [fullscreen]="true">
+  <div class="searchbar-sticky">
+    <ion-searchbar
+      placeholder="Buscar empleados..."
+      (ionInput)="onSearch($event)"
+      animated
+      class="clients-searchbar"
+    ></ion-searchbar>
+  </div>
+
+  <p class="results-count" *ngIf="filteredClients.length > 0">
+    {{ filteredClients.length }} Empleado{{ filteredClients.length === 1 ? '' : 's' }}
+  </p>
+
+  <ion-list inset>
+    <!-- Usamos routerLinks /clients es la ruta y client.id el parametro 
+    <ion-button routerLink="/new-page">Ir a Nueva Página</ion-button>
+    <ion-button [routerLink]="['/new-page', productId]">Ver Producto</ion-button>
+    -->
+    <ion-item
+      *ngFor="let client of filteredClients"
+      [routerLink]="['/clients', client.id]"
+      detail
+      class="client-item"
+    >
+      <div slot="start" class="avatar-wrapper">
+        <ion-avatar>
+          <img [src]="client.img" [alt]="client.name" />
+        </ion-avatar>
+        <span class="status-dot" [class.active]="client.status === 'activo'"></span>
+      </div>
+      <ion-label>
+        <h2>{{ client.name }}</h2>
+        <p>{{ client.role }} · {{ client.department }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <div class="empty-state" *ngIf="filteredClients.length === 0">
+    <ion-icon name="search-outline" class="empty-icon"></ion-icon>
+    <p>No existen empleados registrados</p>
+  </div>
+</ion-content>

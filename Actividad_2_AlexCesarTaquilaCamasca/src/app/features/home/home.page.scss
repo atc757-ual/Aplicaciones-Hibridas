@@ -1,0 +1,213 @@
+/* HEADER AZUL */
+.ticket {
+  background: linear-gradient(180deg,#586499 0%,#8a95cf 100%);
+  padding: 16px 24px 24px 24px;
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+  color: white;
+}
+
+/* titulo */
+.ticket h2 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 24px 0 16px 0;
+
+}
+
+/* Fondo general */
+ion-content {
+  --background: #f6f7fb;
+}
+
+ion-searchbar{
+  padding: 0;
+  --background: #f6f7fb;
+  --highlight-color-focused: #ffffff;
+  --box-shadow: 0 2px 8px rgba(88,100,153,0.08);
+  --border-radius: 12px;
+  --height: 54px;
+  font-size: 18px;
+  --icon-size: 28px;
+  --clear-button-size: 22px;
+  margin: 12px 0 18px 0;
+}
+
+ion-searchbar .searchbar-input-container input {
+  font-size: 18px;
+  height: 54px;
+  padding: 0 16px;
+  line-height: 35px;
+} 
+
+
+.list-ios{
+  background:#f6f7fb !important;
+}
+
+.movie-empty{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #f6f7fb;
+  font-size:14px;
+  margin-top: 16px;
+}
+
+/* Lista */
+.movie-list {
+  margin: 16px;
+  overflow: hidden;
+  border-bottom:0;
+  padding:8px 0;
+}
+.movie-item-container {
+  padding:4px 0;
+  background: #ffffff;
+  border-radius: 8px;;
+}
+
+/* Poster */
+ion-thumbnail {
+  width: 55px;
+  height: 80px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-right: 16px;
+}
+
+/* Info película */
+.movie-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.movie-year {
+  font-size: 12px;
+  color: #a0a0a0;
+}
+
+.movie-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #212121;
+  padding: 8px 0;
+}
+
+.movie-genre {
+  font-size: 12px;
+  color: #808080;
+}
+
+/* Quitar línea al último */
+.movie-item:last-child {
+  border-bottom: none !important;
+}
+
+/* Carousel de favoritos */
+.carousel-container {
+  display: flex;
+  justify-content: center;
+  margin: 16px;
+}
+.carousel-card {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  height: 120px;
+  border-radius: 18px;
+  box-shadow: 0 2px 8px rgba(88,100,153,0.08);
+  background: #fff;
+  overflow: hidden;
+  position: relative;
+  border: 2px solid #586499;
+  justify-content: center;
+  padding:16px 8px ;
+}
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  background: linear-gradient(180deg,#586499 0%,#8a95cf 100%);
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(88,100,153,0.08);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+}
+.carousel-arrow.left {
+  left: 16px;
+  margin-right: 0;
+}
+.carousel-arrow.right {
+  right: 16px;
+  margin-left: 0;
+}
+.carousel-arrow ion-icon {
+  font-size: 22px;
+  color: #fff;
+}
+.carousel-content {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  justify-content: center;
+  gap: 18px;
+  margin: 0 60px; /* Espacio para los arrows */
+}
+.carousel-poster {
+  width: 90px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.carousel-poster img {
+  width: 70px;
+  height: 100px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+.carousel-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: #fff;
+  height: 100%;
+  text-align:left;
+}
+.carousel-title {
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+}
+.carousel-meta {
+  font-size: 13px;
+  opacity: 0.9;
+  text-align: center;
+}
+.carousel-rating {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: center;
+}
+
+ion-searchbar {
+  --height: 64px !important;
+  font-size: 22px !important;
+  --border-radius: 14px !important;
+  margin: 18px 0 24px 0 !important;
+  line-height: 35px;
+}
