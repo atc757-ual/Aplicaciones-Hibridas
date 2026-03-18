@@ -50,8 +50,7 @@ export class LoginPage {
 
   constructor(
     private readonly formBuilder: FormBuilder,
-    private readonly router: Router,
-    
+    private readonly navController: NavController
   ) {addIcons({arrowBackOutline})}
 
   goBack() {
@@ -90,7 +89,7 @@ export class LoginPage {
     await new Promise(res => setTimeout(res, 850));
     this.loading = false;
     setTimeout(() => {
-      this.router.navigateByUrl('/reservations');
+      this.navController.navigateRoot('/reservations');
     }, 10);
   }
 
