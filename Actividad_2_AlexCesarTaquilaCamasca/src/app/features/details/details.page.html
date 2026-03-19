@@ -1,53 +1,67 @@
 <ion-content *ngIf="movie">
-    <div class="ticket">
-        <ion-icon name="arrow-back-outline" (click)="goBack()" style="cursor:pointer" size="large"></ion-icon>
-        <h2>Detalle de película</h2>
-        <div class="ticket-header">
-            <img class="ticket-poster" [src]="movie.Poster" alt="{{ movie.Title }}" />
-            <div class="ticket-info">
-                <div class="ticket-title">{{ movie.Title }}</div>
-                <div class="ticket-meta">{{ movie.Genre }}</div>
-                <div class="ticket-extra">
-                  <span>{{ movie.Year }}</span> &bull; <span>{{ movie.Runtime }}</span> 
-                </div>
-                <div class="movie-rating">
-                    <ion-icon *ngFor="let star of movieService.getStars(movie)" [name]="star"></ion-icon>
-                </div>
-                <div>
-                    <span *ngIf="movie.Rated && movie.Rated !== 'N/A'" class="rated-tag">{{ movie.Rated }}</span>
-                </div>
-            </div>
-        </div>
+  <app-confetti></app-confetti>
+  <div class="ticket">
+    <!-- ion-nav solo debe usarse en el template principal, no dentro de una página. Aquí se muestra cómo integrarlo correctamente en el template principal (ejemplo): -->
+    <!-- <ion-nav [root]="DetailsPage"></ion-nav> -->
+    <!-- Para navegación en la página, usa NavController o ion-back-button -->
+    <!-- Si quieres un botón de regreso visual, usa ion-back-button -->
+    <div>
+      <ion-back-button class="custom" mode="md" text="" color="light" defaultHref="/home" icon="arrow-back-outline"></ion-back-button>
     </div>
-    <div class="section">
-        <div>
-            <div class="section-title">Sinopsis</div>
-            <div class="sinopsis">{{ movie.Plot }}</div>
-        </div>
-        <div>
-            <div class="section-title">Detalles</div>
-            <div class="details-list">
-                <div><strong>Director:</strong> {{ movie.Director }}</div>
-                <div><strong>Guionistas:</strong> {{ movie.Writer }}</div>
-                <div><strong>Actores:</strong> {{ movie.Actors }}</div>
-                <div><strong>Idioma:</strong> {{ movie.Language }}</div>
-                <div><strong>País:</strong> {{ movie.Country }}</div>
-                <div><strong>Premios:</strong> {{ movie.Awards }}</div>
-            </div>
-        </div>
-        <div>
-            <div class="section-title">Califiación</div>
-            <div class="details-list">
-                <div><strong>IMDB:</strong> {{ movie.imdbRating }}/10 ({{ movie.imdbVotes }} votos)</div>
-                <div *ngIf="movie.Metascore && movie.Metascore !== 'N/A'"><strong>Metascore:</strong> {{ movie.Metascore }}</div>
-                <div *ngIf="movie.Ratings && movie.Ratings.length">
-                <strong>Ratings:</strong>
-                <span *ngFor="let r of movie.Ratings">{{ r.Source }}: {{ r.Value }} </span>
-                </div>
-            </div>
-        </div>
+    <div class="head-section">
+     <div class="title-favorite">
+      <h2>Detalle de película</h2>
+      <div (click)="movieService.toggleFavorite(movie)">
+        <ion-icon 
+          [name]="'heart'"
+          [color]="movieService.isFavorite(movie.imdbID) ? 'danger' : 'white'">
+        </ion-icon>
+      </div>
     </div>
-</ion-content>
-<ion-content *ngIf="!movie">
-    <ion-item>No se encontró información de la película.</ion-item>
+      <div class="ticket-header">
+        <img class="ticket-poster" [src]="movie.Poster" alt="{{ movie.Title }}" />
+        <div class="ticket-info">
+          <div class="ticket-title">{{ movie.Title }}</div>
+          <div class="ticket-meta">{{ movie.Genre }}</div>
+          <div class="ticket-extra">
+            <span>{{ movie.Year }}</span> &bull; <span>{{ movie.Runtime }}</span> 
+          </div>
+          <div class="movie-rating">
+            <ion-icon *ngFor="let star of movieService.getStars(movie)" [name]="star"></ion-icon>
+          </div>
+          <div>
+            <span *ngIf="movie.Rated && movie.Rated !== 'N/A'" class="rated-tag">{{ movie.Rated }}</span>
+          </div>
+        </div>
+      </div>
+   </div>
+  </div>
+  <div class="section">
+    <div>
+      <div class="section-title">Sinopsis</div>
+      <div class="sinopsis">{{ movie.Plot }}</div>
+    </div>
+    <div>
+      <div class="section-title">Detalles</div>
+      <div class="details-list">
+        <div><strong>Director:</strong> {{ movie.Director }}</div>
+        <div><strong>Guionistas:</strong> {{ movie.Writer }}</div>
+        <div><strong>Actores:</strong> {{ movie.Actors }}</div>
+        <div><strong>Idioma:</strong> {{ movie.Language }}</div>
+        <div><strong>País:</strong> {{ movie.Country }}</div>
+        <div><strong>Premios:</strong> {{ movie.Awards }}</div>
+      </div>
+    </div>
+    <div>
+      <div class="section-title">Califiación</div>
+      <div class="details-list">
+        <div><strong>IMDB:</strong> {{ movie.imdbRating }}/10 ({{ movie.imdbVotes }} votos)</div>
+        <div *ngIf="movie.Metascore && movie.Metascore !== 'N/A'"><strong>Metascore:</strong> {{ movie.Metascore }}</div>
+        <div *ngIf="movie.Ratings && movie.Ratings.length">
+        <strong>Ratings:</strong>
+        <span *ngFor="let r of movie.Ratings">{{ r.Source }}: {{ r.Value }} </span>
+        </div>
+      </div>
+    </div>
+  </div>
 </ion-content>

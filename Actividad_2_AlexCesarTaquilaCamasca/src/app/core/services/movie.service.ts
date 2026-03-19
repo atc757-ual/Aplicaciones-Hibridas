@@ -1,17 +1,25 @@
 import { HttpClient } from '@angular/common/http';
-import { computed, inject, Injectable, signal } from '@angular/core';
-import { environment } from 'src/environments/environment';
+import { computed, inject, Injectable, NgModule, signal } from '@angular/core';
+import { environment } from 'src/environments/environment.local';
 import { Movie, OMDbResponse } from './models/movie.model';
-
+import { ConfettiComponent } from 'src/app/shared/confetti.component';
+import { Subject } from 'rxjs/internal/Subject';
 @Injectable({
   providedIn: 'root'
 })
+
 export class MovieService {
   private http = inject(HttpClient);
   private API_URL = `https://www.omdbapi.com/?apikey=${environment.apiKeyOMDb}`;
+   // 🔥 Declaramos el Subject para confeti
+  public confetti$ = new Subject<void>();
+  
   private _movies = signal<Movie[]>([]);
   public movies = this._movies.asReadonly();
-  
+
+  public totalResults = computed(() => this._movies().length);
+  public totalPeliculas = () => this._movies().length;
+
   private _currentMovie = signal<Movie | null>(null);
   public currentMovie = this._currentMovie.asReadonly();
 
@@ -29,12 +37,18 @@ export class MovieService {
     } else {
       //Añado a favoritos
       this._favorites.set([...current, movie]);
+      this.confetti$.next();
     }
+    console.log('Favoritos actualizados:', this._favorites());
+  }
+  getFavorites() {
+      return this._favorites();
   }
 
-  isFavorite(movie: Movie): boolean {
-    return this._favorites().some(m => m.imdbID === movie.imdbID);
+  isFavorite(id: string): boolean {
+    return this._favorites().some(m => m.imdbID === id);
   }
+  
   searchMovies(title: string) {
     this.http.get<OMDbResponse>(`${this.API_URL}&s=${title}`)
       .subscribe(response => {
@@ -43,8 +57,6 @@ export class MovieService {
         } else {
           this._movies.set([]);
         }
-        // Debug: mostrar el Signal en consola
-        console.log('movies Signal:', this._movies());
       });
   }
 
@@ -52,8 +64,6 @@ export class MovieService {
     this.http.get<Movie>(`${this.API_URL}&i=${imdbID}`)
       .subscribe(movie => {
         this._currentMovie.set(movie);
-        // Debug: mostrar el Signal en consola
-        console.log('currentMovie Signal:', this._currentMovie());
       });
       
   }
@@ -82,4 +92,6 @@ export class MovieService {
     }
     return stars;
   }
+
+  
 }

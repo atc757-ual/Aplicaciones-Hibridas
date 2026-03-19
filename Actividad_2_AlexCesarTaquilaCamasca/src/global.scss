@@ -1,3 +1,4 @@
+@import "../node_modules/swiper/swiper-bundle.min.css";
 /*
  * App Global CSS
  * ----------------------------------------------------------------------------
@@ -35,3 +36,27 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
+
+
+/* Fondo general */
+ion-content {
+  --background: #f4f6ff;
+  font-family: 'Inter', Arial, sans-serif;
+}
+
+
+/* HEADER AZUL */
+.ticket {
+  background: linear-gradient(180deg,#586499 0%,#8a95cf 100%);
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  color: white;
+}
+
+/* titulo */
+.ticket h2 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 16px 0;
+
+}

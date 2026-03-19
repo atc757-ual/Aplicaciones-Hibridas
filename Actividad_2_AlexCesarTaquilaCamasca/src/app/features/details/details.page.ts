@@ -1,16 +1,17 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, NgModule } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MovieService } from 'src/app/core/services/movie.service';
 import { NavController } from '@ionic/angular';
-
+import { ConfettiComponent } from 'src/app/shared/confetti.component';
+  
 @Component({
   selector: 'app-details',
   templateUrl: 'details.page.html',
   styleUrls: ['details.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule],
+  imports: [IonicModule, CommonModule, ConfettiComponent],
 })
 export class DetailsPage {
   movieService = inject(MovieService);
@@ -40,3 +41,4 @@ export class DetailsPage {
     return movie.imdbRating ? Math.round(Number(movie.imdbRating) / 2) : 0;
   }
 }
+
