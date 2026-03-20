@@ -9,4 +9,5 @@ export const routes: Routes = [
     path: '',
     loadChildren: () => import('./features/tabs/tabs.routes').then((m) => m.routes),
   },
+
 ];

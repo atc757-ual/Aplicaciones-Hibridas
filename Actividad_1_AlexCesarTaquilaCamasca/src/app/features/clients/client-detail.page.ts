@@ -3,7 +3,8 @@ import { NgIf } from '@angular/common';
 import {  IonContent,  IonIcon,  IonItem,  IonLabel,  IonList,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { mailOutline, callOutline, businessOutline, locationOutline, calendarOutline, personCircleOutline } from 'ionicons/icons';
+import { mailOutline, callOutline, businessOutline, locationOutline,
+  calendarOutline, personCircleOutline } from 'ionicons/icons';
 import { HeaderAppComponent } from '../../shared/components/header-app/header-app.component';
 import { Client, ClientsService } from '../../core/services/clients.service';
 

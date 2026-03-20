@@ -25,3 +25,13 @@ ion-toolbar {
   text-wrap: balance;
   text-rendering: optimizeLegibility;
 }
+
+ion-back-button.custom {
+  max-height: 54px;
+  max-width: 54px;
+  --icon-font-size: 36px;
+}
+.header-app {
+  display: flex;
+  align-items: center;
+}
