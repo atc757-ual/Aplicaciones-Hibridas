@@ -39,7 +39,6 @@ export class MovieService {
       this._favorites.set([...current, movie]);
       this.confetti$.next();
     }
-    console.log('Favoritos actualizados:', this._favorites());
   }
   getFavorites() {
       return this._favorites();

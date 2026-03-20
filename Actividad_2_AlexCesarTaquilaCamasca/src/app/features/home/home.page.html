@@ -20,11 +20,12 @@
       <div class="card" [routerLink]="['/details', movie.imdbID]">
         <img class="img-carousel" src="{{ movie.Poster }}" alt="{{ movie.Title }}" />
         <div class="detail-carousel">
-          <div class="detail-title">{{ movie.Title }}</div>
+          <div class="detail-title text-ellipsis">{{ movie.Title }}</div>
           <ion-icon class="icon-blink" name="heart" color="danger"></ion-icon>
           <div class="detail-genre">{{ movie.Genre }}</div>
           <div class="detail-year">{{ movie.Year }}</div>
         </div>
+        <div class="detail-plot text-ellipsis">{{ movie.Plot }}</div>
       </div>
 
       }
@@ -34,11 +35,12 @@
       <div class="card" [routerLink]="['/details', movie.imdbID]">
         <img class="img-carousel" src="{{ movie.Poster }}" alt="{{ movie.Title }}" />
         <div class="detail-carousel">
-          <div class="detail-title">{{ movie.Title }}</div>
+          <div class="detail-title text-ellipsis">{{ movie.Title }}</div>
           <ion-icon class="icon-blink" name="heart" color="danger"></ion-icon>
           <div class="detail-genre">{{ movie.Genre }}</div>
           <div class="detail-year">{{ movie.Year }}</div>
-        </div>
+        </div>         
+        <div class="detail-plot text-ellipsis">{{ movie.Plot }}</div>
       </div>
       }
     </div>
@@ -46,14 +48,15 @@
   }@if (totalFav == 1){
   @for (movie of favoriteMovies; track movie.imdbID) {
   <div class="container-unique">
-    <div class="card unique" [routerLink]="['/details', movie.imdbID]">
+    <div class="card" [routerLink]="['/details', movie.imdbID]">
       <img class="img-carousel" src="{{ movie.Poster }}" alt="{{ movie.Title }}" />
       <div class="detail-carousel">
-        <div class="detail-title">{{ movie.Title }}</div>
+        <div class="detail-title text-ellipsis">{{ movie.Title }}</div>
         <ion-icon class="icon-blink" name="heart" color="danger"></ion-icon>
         <div class="detail-genre">{{ movie.Genre }}</div>
         <div class="detail-year">{{ movie.Year }}</div>
       </div>
+      <div class="detail-plot text-ellipsis">{{ movie.Plot }}</div>
     </div>
   </div>
   }
