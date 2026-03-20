@@ -14,8 +14,8 @@ export class ConfettiComponent {
 
   spawnConfetti() {
     confetti({
-      particleCount: 700,
-      spread: 200,
+      particleCount: 300,
+      spread: 150,
       origin: { y: 0.5 },
 
     });

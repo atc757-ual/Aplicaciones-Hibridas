@@ -108,17 +108,18 @@ ion-thumbnail {
   border-radius: 12px;
 }
 
-
 /*Carousel*/
 .carousel {
     margin: 0 auto;
     padding: 8px 0;
-    max-width: 700px;
-    overflow: hidden;
+    max-width: 100%;
+    overflow:hidden;
     display: flex;
-    > * {
-      flex: 0 0 100%;
-    }
+    
+      > * {
+        flex: 0 0 100%;
+      }
+    
     .group {
     display: flex;
     gap: 20px;
