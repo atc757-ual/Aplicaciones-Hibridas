@@ -1,7 +1,4 @@
-.image-size{
-    max-height: 80%;
-    width: 70%;
-}
+
 
 ion-item::part(native){
   --background-activated: var(--blue-primary-025);
@@ -24,19 +21,12 @@ ion-label.font-small {
 }
 
 
-ion-img::part(image){
-    max-width:200px !important; 
-    object-fit:cover; 
-    border-radius:var(--space-s); 
-    margin-bottom: var(--space-s); 
-    object-fit:cover; 
-    border:1px solid #ccc;
-}
 
 .info-container {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+    padding: 0  var(--space-base) var(--space-base);
     gap:var(--space-base);
     color:var(--color-neutral-8);
 }
@@ -48,7 +38,16 @@ ion-img::part(image){
 /* Personalización del ion-item para alertas de información */
 ion-item.info-alert {
     width:100%;
+    padding: 0 16px 16px;
     color:var(--color-neutral-7) ;
+}
+.mapa-container{
+    width: 256px;
+    height: 256px;
+    border-radius: var(--space-s);
+    display:flex; 
+    align-items:center; 
+    justify-content:center;
 }
 
 ion-item.info-alert::part(native){
@@ -64,23 +63,75 @@ ion-item.info-alert ion-icon[slot="start"] {
   margin-inline-end: 0 !important;
 }
 
-
-.container-nativos {
-    display: flex;
-    justify-content: space-between;
-    background-color: var(--color-background);
-    gap:var(--space-base)
+.checkmark-absolute {
+  position: absolute;
+  right: 36px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
 }
 
+::ng-deep .action-sheet-group-cancel {
+  .action-sheet-button {
+    border-top: 3px solid var(--color-neutral-2);
+    color: var(--color-neutral-7);
+    background:var(--color-neutral-2);
+    &:hover {
+      background:var(--color-neutral-3);
+    }
+  }
+}
+
+.image-photo-grande {
+  width: 128px !important;
+  height: 128px !important;
+  height: auto;
+  object-fit: cover;
+}
+.miniaturas-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-s);
+  justify-items: center;
+  align-items: center;
+}
+.miniatura-foto {
+  width: 64px !important;
+  height: 64px !important;
+  object-fit: cover;
+  margin-bottom: var(--space-s)
+}
+
+.foto-con-x {
+  position: relative;
+  display: inline-block;
+}
+
+.btn-x-foto {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  z-index: 10;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--color-red-light);
+  font-size: 1.5em;
+  display: flex;
+  justify-content: center;
+}
+
+ion-img::part(image){
+    border-radius: var(--space-xs);
+    margin-bottom:var(--space-s);
+}
 
 @media (max-width: 768px) {
     ion-label.font-small {
         font-size: var(--fs-12) !important;
     }
-    .container-nativos {
-        flex-direction: column;
-    }
-
+   
 
 }
 

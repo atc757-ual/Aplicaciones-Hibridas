@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
 import { camera, location, checkmarkCircleOutline, informationCircleOutline,add, 
-   mapOutline,addCircleOutline,listCircleOutline,chevronForwardOutline 
+   mapOutline,addCircleOutline,listCircleOutline,chevronForwardOutline,send,closeCircle 
  
 } from 'ionicons/icons'; //importamos el icono de cámara de Ionicons para usarlo en la interfaz de usuario
 import { addIcons } from 'ionicons'; //importamos el icono de agregar de Ionicons para usarlo en la interfaz de usuario
@@ -12,6 +12,6 @@ import { addIcons } from 'ionicons'; //importamos el icono de agregar de Ionicon
 })
 export class AppComponent {
   constructor() {addIcons({checkmarkCircleOutline,camera,informationCircleOutline,location,add,
-    mapOutline,addCircleOutline,listCircleOutline,chevronForwardOutline
+    mapOutline,addCircleOutline,listCircleOutline,chevronForwardOutline,send,closeCircle
   }); }
 }

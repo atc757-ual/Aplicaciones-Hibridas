@@ -2,7 +2,7 @@ import { Component, OnInit,inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonImg, IonInput, IonItem,IonSelect,
-  IonSelectOption, IonButton, IonToolbar,IonBackButton,
+  IonSelectOption, IonButton, IonToolbar,IonBackButton,IonCheckbox,IonAccordion,IonAccordionGroup,
   IonIcon,IonCard,IonCardContent,IonCardHeader,IonCardTitle,IonLabel,
   IonTextarea } from '@ionic/angular/standalone';
 import { Camera, CameraResultType } from '@capacitor/camera'; //importamos el plugin de cámara de Capacitor
@@ -10,7 +10,8 @@ import { DomSanitizer } from '@angular/platform-browser'; //importamos el servic
 import { MapaService } from 'src/core/utils/maps.utils'; //importamos el servicio MapaService para manejar la creación y manipulación de mapas en la aplicación
 import { Geolocation } from '@capacitor/geolocation'; //imortamos el plugin de geolocalización de Capacitor
 import { StorageService } from 'src/core/services/storage.service';
-import { SimpleReport } from 'src/core/models/models';
+import { SimpleReport,Categories } from 'src/core/models/models';
+
 //importamos el modelo de incidente para definir la estructura de los datos del incidente
 @Component({
   selector: 'app-incidentecreate',
@@ -18,25 +19,69 @@ import { SimpleReport } from 'src/core/models/models';
   styleUrls: ['./incidentecreate.page.scss'],
   standalone: true,
   imports: [IonContent, IonHeader, IonTitle, IonImg, IonInput, IonItem, IonSelect, 
-     IonSelectOption, IonButton, IonToolbar, IonIcon,   
+     IonSelectOption, IonButton, IonToolbar, IonIcon,   IonCheckbox, IonAccordion, IonAccordionGroup,
     IonCard, IonCardHeader, IonCardContent, IonCardTitle, IonLabel, 
     IonTextarea, CommonModule, FormsModule, IonBackButton]
 })
 export class IncidentecreatePage  {
+  // =============================
+  // PROPIEDADES DE UI Y ESTADO
+  // =============================
+  public isDesktop: boolean = false; // Estado: ¿pantalla de escritorio?
+  public expandedAccordions: string[] = []; // Accordions abiertos
+  // Se elimina photo, se usan solo photos en el modelo
+  public reporte: SimpleReport = {
+    id: '',
+    title: '',
+    description: '',
+    category: '',
+    photos: [],
+    latitude: 0,
+    longitude: 0,
+    aceptoTerminos: false,
+    accuracy: 0,
+    status: 'pendiente',
+    priority: 'media',
+    createdAt: '',
+    updatedAt: ''
+  };
+  categories = Categories;
+  private sanitizer = inject(DomSanitizer); // Para sanear URLs
 
-
-  constructor(private mapaService: MapaService) {}
-
-  // Método para sanear URLs de imágenes antes de mostrarlas
-  public getSanitizedUrl(url: string) {
-    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  // =============================
+  // CICLO DE VIDA
+  // =============================
+  constructor(private mapaService: MapaService) {
+    this.checkScreenSize();
+    window.addEventListener('resize', this.checkScreenSize.bind(this));
   }
 
-  public photo: string | undefined; //propiedad para almacenar la URL de la foto tomada con la cámara, como string
-  private sanitizer = inject(DomSanitizer); //inyección del servicio DomSanitizer para manejar URLs seguras en Angular
+  ngOnInit() {}
 
-  //declaración del método takePicture que utiliza el plugin de cámara para tomar una foto y almacenar su URL en la propiedad photo
+  ngOnDestroy() {
+    this.mapaService.destruirMapa();
+  }
+
+  // =============================
+  // LÓGICA DE UI
+  // =============================
+  checkScreenSize() {
+    this.isDesktop = window.innerWidth > 768;
+    if (this.isDesktop) {
+      this.expandedAccordions = ['fotos', 'ubicacion'];
+    } else {
+      this.expandedAccordions = [];
+    }
+  }
+
+  // =============================
+  // LÓGICA DE NEGOCIO
+  // =============================
   public async takePicture(): Promise<void> {
+    if (this.reporte.photos.length >= 5) {
+      // Opcional: mostrar alerta o feedback
+      return;
+    }
     try {
       const image = await Camera.getPhoto({
         quality: 100,
@@ -44,8 +89,7 @@ export class IncidentecreatePage  {
         resultType: CameraResultType.Uri,
       });
       if (image.webPath) {
-        console.log('image.webPath:', image.webPath);
-        this.photo = image.webPath;
+        this.reporte.photos.push(image.webPath);
       }
     } catch (error) {
       console.error('Error al capturar la foto:', error);
@@ -55,51 +99,36 @@ export class IncidentecreatePage  {
   public eliminarFoto(index: number): void {
     this.reporte.photos.splice(index, 1);
   }
-  // Inicializa el modelo para el formulario con los mismos campos que tu interface SimpleReport
-  public reporte: SimpleReport = {
-    id: '',
-    title: '',
-    description: '',
-    category: '',
-    photos: [],
-    latitude: 0,
-    longitude: 0,
-    accuracy: 0,
-    status: 'pending',
-    priority: 'medium',
-    createdAt: '',
-    updatedAt: ''
-  };
 
-  ngOnInit() {
-  }
-
-  ngOnDestroy() {
-    this.mapaService.destruirMapa();
-  }
-
-  //declaración del método getLocation que utiliza el plugin de geolocalización para obtener la ubicación actual del usuario
   public async getLocation() {
     try {
-      const position = await Geolocation.getCurrentPosition(); //obtenemos la posición actual del usuario
+      const position = await Geolocation.getCurrentPosition();
       this.reporte.latitude = position.coords.latitude;
       this.reporte.longitude = position.coords.longitude;
       this.reporte.accuracy = position.coords.accuracy;
-      this.mapaService.crearMapa('mapa-container', this.reporte.latitude, this.reporte.longitude, this.reporte.accuracy > 0 ? 15 : 13); //creamos el mapa centrado en la ubicación del usuario, ajustando el zoom según la precisión de la ubicación
-          // Solución para el tamaño del mapa
-          setTimeout(() => {
-            this.mapaService.getMapa()?.invalidateSize();
-          }, 200);
-          // Agregar un marcador
-          this.mapaService.agregarMarcador(this.reporte.latitude, this.reporte.longitude);
-          // Agregar más marcadores de ejemplo
+      this.mapaService.crearMapa('mapa-container', this.reporte.latitude, this.reporte.longitude, this.reporte.accuracy > 0 ? 15 : 13); 
+      setTimeout(() => {
+        this.mapaService.getMapa()?.invalidateSize();
+      }, 200);
+      this.mapaService.agregarMarcador(this.reporte.latitude, this.reporte.longitude);
     } catch (error) {
       console.error('Error al obtener la geolocalización:', error);
     }
   }
 
-  customCounterFormatter(inputLength: number, maxLength: number) {
-    return `${inputLength +'/'+maxLength}`;
+  submitReport() {
+    // Lógica para enviar el reporte
   }
+
   
+  // =============================
+  // UTILIDADES
+  // =============================
+  public getSanitizedUrl(url: string) {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
+
+  customCounterFormatter(inputLength: number, maxLength: number) {
+    return `${inputLength + '/' + maxLength}`;
+  }
 }
