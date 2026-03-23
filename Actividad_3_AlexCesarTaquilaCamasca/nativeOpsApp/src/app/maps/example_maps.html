@@ -1,0 +1,21 @@
+<!-- src/app/pages/mapa/mapa.page.html -->
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Mapa con OpenStreetMap</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="mapa-wrapper">
+    <div id="mapa-container" class="mapa-container"></div>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-button expand="block" (click)="centrarEnLima()">
+      <ion-icon name="locate" slot="start"></ion-icon>
+      Centrar en Lima
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

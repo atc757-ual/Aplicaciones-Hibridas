@@ -1,20 +1,115 @@
-<ion-header [translucent]="true">
+<ion-header [translucent]="true" mode="md" class="shadow-medium">
   <ion-toolbar>
-    <ion-title>
-      Blank
+    <ion-title class="text-center">
+      <span class="fs-24 f-semibold text-neutral-8">Incidence App</span>
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content fullscreen="true">
+  <ion-card class="pre-content-card">
+    <ion-card-header>
+      <div class="bienvenida">
+        <ion-card-title class="fs-20 f-semibold">¡Hola, Javi!</ion-card-title>
+      </div>
+    </ion-card-header>
+    <ion-card-content>
+      <div class="fs-14">
+        Aquí puedes reportar fácilmente cualquier incidencia en tu comunidad y contribuir activamente a
+        mejorar el lugar donde vives.
+      </div>
+    </ion-card-content>
+  </ion-card>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+  <div class="content">
+    <div class="container">
+      <div class="reactive reverse">
+        <div class="col-8 col-sm-12 no-padding-sm">
+
+          <ion-card class="margin-bottom-base">
+            <ion-card-header>
+              <ion-card-title class="fs-20 f-semibold">¿Qué es Incidence App?</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <div class="fs-14">
+                Incidence App es una plataforma que facilita la comunicación entre los ciudadanos y las autoridades
+                locales,
+                permitiendo reportar de manera sencilla cualquier situación que afecte a la comunidad. Nuestra misión es
+                mejorar
+                la calidad de vida promoviendo la participación ciudadana y la atención oportuna de las necesidades del
+                entorno.
+              </div>
+            </ion-card-content>
+          </ion-card>
+          <ion-card class="margin-bottom-base">
+            <ion-card-header>
+              <ion-card-title class="fs-20 f-semibold">¿Cómo funciona?</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <div class="fs-14">
+                <p>1. Toma una foto del problema que deseas reportar.</p>
+                <p>2. Proporciona una breve descripción del incidente.</p>
+                <p>3. Envía tu reporte para que las autoridades locales puedan tomar medidas.</p>
+              </div>
+            </ion-card-content>
+          </ion-card>
+
+          <ion-card class="margin-bottom-base">
+            <ion-card-header>
+              <ion-card-title class="fs-20 f-semibold">¡Tu participación es clave para mejorar nuestra
+                comunidad!</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <div class="fs-14">
+                <p>Al reportar incidencias, estás ayudando a crear un entorno más seguro y agradable para todos.
+                  ¡Gracias
+                  por
+                  ser parte del cambio!</p>
+              </div>
+            </ion-card-content>
+          </ion-card>
+          <ion-card class="margin-bottom-base">
+            <ion-card-header>
+              <ion-card-title class="fs-20 f-semibold">¿Qué tipo de incidencias puedes reportar?</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <div class="fs-14">
+                <p>Puedes reportar una amplia variedad de problemas, como:</p>
+                <ul class="padding-left-m">
+                  <li>🕳️ Baches - Hundimientos, grietas o daños en el pavimento</li>
+                  <li>🗑️ Basura acumulada - Puntos de vertido ilegal, falta de recolección</li>
+                  <li>🌳 Áreas verdes - Jardines descuidados, árboles caídos, plagas</li>
+                  <li>🚸 Señalización - Señales de tránsito dañadas o ausentes</li>
+                  <li>💧 Drenaje / Agua - Fugas, alcantarillas tapadas, inundaciones</li>
+                  <li>🎨 Vandalismo - Graffiti, mobiliario urbano dañado</li>
+                  <li>🔊 Ruido - Contaminación auditiva, molestias vecinales</li>
+                  <li>📌 Otros - Cualquier otro problema de mantenimiento</li>
+                </ul>
+              </div>
+            </ion-card-content>
+          </ion-card>
+
+        </div>
+      <div class="col-4 col-sm-12 no-padding-sm">
+        <ion-card class="">
+          <ion-card-header>
+            <ion-card-title class="fs-20 f-semibold">Gestiona tus incidencias</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-item lines="none" detail=true class="no-padding" routerLink="/incidente-create"
+              routerDirection="forward">
+              <ion-icon aria-hidden="true" size="large" name="add-circle-outline" color="primary"></ion-icon>
+              <ion-label class="margin-left-s">Crear Incidente</ion-label>
+            </ion-item>
+            <div class="border-neutral-3 margin-y-s"></div>
+            <ion-item [button]="true" detail=true lines="none" class="no-padding" routerLink="/incidente-detail">
+              <ion-icon aria-hidden="true" size="large" name="list-circle-outline" color="primary"></ion-icon>
+              <ion-label class="margin-left-s">Ver Incidentes</ion-label>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+    </div>
+  </div>
+  </div>
   </div>
 </ion-content>

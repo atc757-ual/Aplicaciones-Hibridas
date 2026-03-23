@@ -1,27 +1,22 @@
-#container {
-  text-align: center;
-
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+ion-item::part(native){
+  --inner-padding-start: 0;
+  --inner-padding-end: 0;
+  --padding-start:var(--space-xs);
+  --padding-end:var(--space-xs);
+  --detail-icon-color: var(--ion-color-base);
+  --detail-icon-opacity: 0.9;
+  --detail-icon-font-size: var(--fs-28);
+  --background-activated: var(--blue-primary-025);
+  --border-radius: var(--space-s);
 }
 
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
-}
 
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-
-  color: #8c8c8c;
-
-  margin: 0;
-}
-
-#container a {
-  text-decoration: none;
+.bienvenida {
+  display: flex;
+  align-items: center ;
+  gap: var(--space-s) ;
+  img{
+    width: 24px;
+    margin-left:auto;
+  }
 }
