@@ -1,6 +1,6 @@
 # 📱 Aplicaciones Híbridas - Proyecto Angular + Ionic
 
-Repositorio de prácticas de la asignatura **Aplicaciones Híbridas**, desarrollado con **Ionic + Angular**.
+Repositorio de prácticas y actividades académicas de la asignatura **Aplicaciones Híbridas**, desarrollado con **Ionic** y **Angular**. Cada carpeta corresponde a una actividad/práctica distinta, enfocada en el desarrollo de aplicaciones multiplataforma para dispositivos móviles.
 
 ---
 
@@ -9,8 +9,9 @@ Repositorio de prácticas de la asignatura **Aplicaciones Híbridas**, desarroll
 ```bash
 Aplicaciones-Hibridas/
 │
-├── Actividad_1_AlexCesarTaquilaCamasca/   # Proyecto frontend Ionic + Angular
-├── Actividad_2_AlexCesarTaquilaCamasca/   # Otro proyecto frontend
+├── Actividad_1_AlexCesarTaquilaCamasca/   # Proyecto frontend: App básica con Ionic + Angular
+├── Actividad_2_AlexCesarTaquilaCamasca/   # Segundo proyecto de práctica frontend híbrida
+├── Actividad_3_AlexCesarTaquilaCamasca/   # Tercer proyecto y ejercicios avanzados
 └── README.md
 ```
 
@@ -18,20 +19,19 @@ Aplicaciones-Hibridas/
 
 ## 🚀 Tecnologías utilizadas
 
-* ⚡ Ionic Framework
-* 🅰️ Angular
-* HTML, CSS, TypeScript
-* Node.js / npm
+- ⚡ Ionic Framework
+- 🅰️ Angular
+- HTML, CSS, TypeScript
+- Node.js / npm
 
 ---
 
 ## ⚙️ Funcionalidades principales
 
-* 🔍 Pantallas de películas / contenido
-* ➕ Buscador con `ion-searchbar`
-* 📄 Listados de items con `ion-list` e `ion-item`
-* 🎨 Estilos responsive para móviles
-* 💡 Uso de componentes Ionic (`ion-card`, `ion-thumbnail`, etc.)
+- 🔍 Pantallas de visualización de contenido
+- ➕ Buscador interactivo (`ion-searchbar`)
+- 📄 Listados con `ion-list` e `ion-item`
+- 🎨 Diseño responsive y componentes móviles (`ion-card`, `ion-thumbnail`, etc.)
 
 ---
 
@@ -44,11 +44,9 @@ git clone https://github.com/atc757-ual/Aplicaciones-Hibridas.git
 cd Aplicaciones-Hibridas
 ```
 
----
+### 2️⃣ Seleccionar y levantar una actividad/práctica
 
-### 2️⃣ Frontend
-
-Para cada proyecto, por ejemplo **Actividad 1**:
+Ejemplo para **Actividad 1**:
 
 ```bash
 cd Actividad_1_AlexCesarTaquilaCamasca
@@ -56,34 +54,38 @@ npm install
 ionic serve
 ```
 
-✅ La app estará disponible en: http://localhost:8100
+La app estará disponible en: http://localhost:8100
 
 ---
 
 ### 3️⃣ Recomendaciones
 
-* No subir `node_modules` (ya está en `.gitignore`)
-* Usar un navegador moderno para probar la app
-* `npm install` es obligatorio antes de ejecutar
+- No subas la carpeta `node_modules` (ya está en `.gitignore`)
+- Usa un navegador moderno para las pruebas
+- Siempre ejecuta `npm install` antes de iniciar el servidor local
 
 ---
 
-## 🎨 Arquitectura del proyecto
+## 🎨 Arquitectura típica del frontend
 
 ```
 Frontend (Ionic + Angular)
-├─ Pages / Components
-├─ Services
-├─ Models
-├─ Assets (imágenes, iconos)
-└─ Styles / SCSS
+├─ Pages / Components      # Pantallas y componentes UI
+├─ Services               # Lógica y consumo de datos/API
+├─ Models                 # Tipos y entidades de datos
+├─ Assets                 # Imágenes, íconos, etc.
+└─ Styles / SCSS          # Estilos globales y específicos
 ```
 
-* **Pages** → Cada pantalla de la app
-* **Services** → Manejo de datos (API o locales)
-* **Models** → Tipos y estructuras de datos
-* **Assets** → Imágenes y recursos
-* **Styles** → SCSS global y por componente
+---
+
+## 📋 Descripción de actividades
+
+- **Actividad 1**: Proyecto inicial de Ionic + Angular.
+- **Actividad 2**: Práctica de interfaces y componentes avanzados.
+- **Actividad 3**: Proyecto con integración de funcionalidades adicionales o plugins.
+
+Actualiza estas descripciones conforme avances y agregues nuevas actividades.
 
 ---
 
@@ -99,8 +101,22 @@ Alex Cesar Taquila Camasca
 
 ---
 
+## 🤝 Contribuciones
+
+¡Se aceptan contribuciones! Si deseas mejorar alguna práctica, abre un issue o pull request siguiendo las recomendaciones de la asignatura.
+
+---
+
 ## ⚠️ Notas importantes
 
-* Ejecutar siempre `npm install` antes de correr la app
-* No subir dependencias (`node_modules`)
-* El proyecto es **solo frontend**, no incluye backend
+- Ejecuta siempre `npm install` antes de iniciar una app.
+- No subas dependencias (`node_modules`).
+- El repositorio es exclusivamente para proyectos frontend; no incluye backend.
+
+---
+
+## 📜 Licencia
+
+Este proyecto está publicado bajo la licencia MIT, que permite el uso libre, modificación y divulgación del código, siempre que se conserve el aviso de copyright correspondiente.
+
+Para más detalles, consulta el archivo LICENSE o visita https://opensource.org/licenses/MIT
