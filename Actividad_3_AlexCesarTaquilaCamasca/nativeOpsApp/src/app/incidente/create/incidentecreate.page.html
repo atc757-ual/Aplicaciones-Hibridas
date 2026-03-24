@@ -47,7 +47,7 @@
                       <ion-label class="font-small">Gracias por compartir tu ubicación, es importante para identificar el lugar del incidente.</ion-label>
                     </ion-item>
                     <div *ngIf="!hasPermisionGeo" class="display-flex fl-justify-center padding-bottom-base">
-                          <ion-button  [disabled]="isLoadingGeo" size="small" mode="ios" class="format-capitalized" (click)="compartirUbicacion()" color="danger" fill="outline">
+                          <ion-button  [disabled]="isLoadingGeo" size="small" mode="ios" class="format-capitalized" (click)="authorizarUbicacion()" color="danger" fill="outline">
                             <ion-spinner *ngIf="isLoadingGeo" name="crescent" slot="start" size="small"></ion-spinner>
                             <ion-icon *ngIf="!isLoadingGeo"name="location" slot="start" size="small"></ion-icon>
                             <span class="padding-left-s" *ngIf="isLoadingGeo"> Procesando</span>
@@ -63,7 +63,7 @@
                 <ion-accordion value="fotos">
                   <ion-item class="padding-s" slot="header">
                     <span class="fs-20 f-semibold">Evidencia fotográfica</span>
-                    <ion-icon *ngIf="reporte.photos.length > 0" class="fs-22" slot="end" name="checkmark-circle-outline"
+                    <ion-icon *ngIf="photos.length > 0" class="fs-22" slot="end" name="checkmark-circle-outline"
                       size="medium" color="secondary" aria-hidden="true"></ion-icon>
                   </ion-item>
                   <div slot="content">
@@ -75,26 +75,26 @@
                       </ion-label>
                     </ion-item>
                     <div class="padding-x-base">
-                        <div *ngIf="reporte.photos.length > 0">
+                        <div *ngIf="photos.length > 0">
                           <ng-container class="ion-text-center" >
                             <ion-list>    
-                            <ion-item *ngFor="let foto of reporte.photos; let i = index">
-                              <ion-img aria-hidden="true" [src]="foto.url" class="miniatura-foto"></ion-img>
+                            <ion-item *ngFor="let foto of photos; let i = index">
+                              <ion-img  aria-hidden="true" [src]="foto.url" class="miniatura-foto"></ion-img>
                               <ion-label class="padding-left-s fs-14 text-neutral-8">
-                                <div class="fs-12 text-neutral-7">Lat: {{foto.latitude}}</div>
-                                <div class="fs-12 text-neutral-7">Lng: {{foto.longitude}}</div>
+                                <div class="fs-14 text-neutral-7">Latitud: {{foto.latitude}}</div>
+                                <div class="fs-14 text-neutral-7">Longitud: {{foto.longitude}}</div>
                               </ion-label>
                               <ion-icon class="icon-button " name="map-outline" color="primary" (click)="abrirModalMapa(i)"></ion-icon>
                               <ion-icon class="icon-button padding-left-s" (click)="eliminarFoto(i)" name="close-circle-outline"></ion-icon>
                             </ion-item>
                             </ion-list>
                             <div class="fs-12 text-neutral-6 margin-y-s text-center">
-                                        <span>{{reporte.photos.length}} fotos adjuntas</span>
+                                        <span>{{photos.length}} fotos adjuntas</span>
                                       </div>
                             </ng-container>
                         </div>  
                          <div class="ion-text-center">
-                              <ng-container *ngIf="reporte.photos.length === 0">
+                              <ng-container *ngIf="photos.length === 0">
                                   <ion-img class="image-photo" alt="Placeholder"
                                     src="./assets/img/profile.jpg"></ion-img>
                                   <div class="fs-12 text-neutral-6 text-center margin-y-s">No hay foto</div>
@@ -102,11 +102,11 @@
                           </div>
                         <div class="display-flex fl-justify-center padding-bottom-base">
                             <ion-button size="small" mode="ios" class="format-capitalized" expand="block" 
-                            color="primary" fill="outline" (click)="takePicture()" [disabled]="reporte.photos.length >= 5">
+                            color="primary" fill="outline" (click)="takePicture()" [disabled]="photos.length >= 5">
                               <ion-icon *ngIf="!isLoadingTakePicture" name="camera" slot="start"></ion-icon>
                               <ion-spinner *ngIf="isLoadingTakePicture" class="padding-rigth-s" name="crescent" slot="start" size="small"></ion-spinner>
                               <span *ngIf="isLoadingTakePicture"> Guardando foto</span> 
-                              <span *ngIf="!isLoadingTakePicture">{{ reporte.photos.length === 0 ? 'Tomar foto' : 'Tomar nueva foto' }}</span> 
+                              <span *ngIf="!isLoadingTakePicture">{{ photos.length === 0 ? 'Tomar foto' : 'Tomar nueva foto' }}</span> 
                             </ion-button>
                         </div>
                          
@@ -173,7 +173,7 @@
               <ion-card-content>
                 <div>
                   <ion-button [disabled]="isLoadingSubmit" mode="ios" class="format-capitalized" size="default" expand="block" (click)="submitReport()"
-                    [disabled]="!incidenteForm.form.valid || reporte.photos.length === 0 || !reporte.aceptoTerminos">
+                    [disabled]="!incidenteForm.form.valid || photos.length === 0 || !reporte.aceptoTerminos">
                     <ion-spinner *ngIf="isLoadingSubmit" name="crescent" slot="start" size="small"></ion-spinner>
                     <ion-icon   *ngIf="!isLoadingSubmit" name="send"  slot="start" size="small"></ion-icon>
                     <span *ngIf="isLoadingSubmit"> Enviando</span> 
@@ -204,8 +204,8 @@
         <h4><strong>#{{ reporte.id }}</strong></h4>
         <p>Pronto será revisado por las autoridades locales para su <br>validación y resolución.</p>
         <div class="display-flex fl-align-center fl-justify-center gap-s margin-top-base">
-          <ion-button mode="ios" expand="block" color="primary" size="" (click)="verDetalle()">Ir a mis incidencias</ion-button>
-        <ion-button mode="ios" expand="block" color="primary" size="" fill="outline" (click)="Close()">Cerrar</ion-button>
+          <ion-button mode="ios" expand="block" color="primary" size="" (click)="verIndidencias()">Ir a mis incidencias</ion-button>
+        <ion-button mode="ios" expand="block" color="primary" size="" fill="outline" (click)="closeModal()">Cerrar</ion-button>
         </div>
       </div> 
     </ng-template>
@@ -214,7 +214,9 @@
 
   <ion-modal id="modalMapa" #modalMapa (ionModalDidPresent)="onModalMapaPresent()">
     <ng-template>
-      <div class="wrapper">
+
+      <div class="wrapper"> 
+        <button class="close-btn" (click)="modalMapa.dismiss()">✕</button>
         <div id="mapa-container" class="mapa-container">
         </div> 
       </div>

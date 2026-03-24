@@ -1,20 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonIcon, IonCardContent, IonSpinner, IonBackButton, IonCard, IonCardHeader, IonCardTitle, IonList, IonItem, IonLabel, IonBadge } from '@ionic/angular/standalone';
 import { ModelReport } from 'src/core/models/models';
 import { ReporteService } from 'src/core/services/reporte-service';
 import { DialogUtils } from 'src/core/utils/dialog.utils';
-import { RouterLink } from '@angular/router';
+import { SharedIonicModule } from '../../shared/shared-ionic.module';
 
 @Component({
   selector: 'app-incidentedetail',
   templateUrl:'./incidentedetail.page.html',
   styleUrls: ['./incidentedetail.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonIcon, IonCardContent, 
-    IonSpinner, IonBackButton, IonCard, IonCardHeader, IonCardTitle, IonList, IonItem, IonLabel,
-     IonBadge, CommonModule, FormsModule, RouterLink],
+  imports: [SharedIonicModule]
 })
 export class IncidentedetailPage implements OnInit {
   reportes: ModelReport[] = [];
@@ -30,7 +25,7 @@ export class IncidentedetailPage implements OnInit {
   constructor(private reporteService: ReporteService) { }
 
   async ngOnInit() {
-    this.reportes = await this.reporteService.getAll();
+    this.reportes = await this.reporteService.getItems();
     this.totalPages = Math.ceil(this.reportes.length / this.pageSize) || 1;
     this.setPagedReportes();
     this.setStatusCounts();
@@ -43,28 +38,33 @@ export class IncidentedetailPage implements OnInit {
   }
 
 
-
-  
-  /** Lógica de paginación */
+/* Lógica para paginar los reportes, se llama cada vez que se cambia de página o cuando se cargan los reportes por primera vez */
   setPagedReportes() {
     const start = (this.page - 1) * this.pageSize;
     this.pagedReportes = this.reportes.slice(start, start + this.pageSize);
     this.setStatusCounts();
   }
 
+/** Lógica para contar los reportes por estado */
   setStatusCounts() {
     this.resolvedCount = this.reportes.filter(r => r.status && r.status.toLowerCase() === 'resuelto').length;
     this.unresolvedCount = this.reportes.filter(r => r.status && r.status.toLowerCase() === 'pendiente').length;
     this.inProgressCount = this.reportes.filter(r => r.status && r.status.toLowerCase() === 'en proceso').length;
   }
+  /** Lógica para navegar a la página de detalle del reporte, se llama desde el template cuando el usuario hace clic en un reporte */
+  async goToDetalle(reporteId: string) {
+    await DialogUtils.alert('Esta funcionalidad se encuentra en construcción','No disponible','Entendido');
+  }
 
+  /** Logica para navegar hacia adelante entre los reportes */
   nextPage() {
     if (this.page < this.totalPages) {
       this.page++;
       this.setPagedReportes();
     }
   }
-
+    
+ /** Logica para navegar hacia atrás entre los reportes */
   prevPage() {
     if (this.page > 1) {
       this.page--;

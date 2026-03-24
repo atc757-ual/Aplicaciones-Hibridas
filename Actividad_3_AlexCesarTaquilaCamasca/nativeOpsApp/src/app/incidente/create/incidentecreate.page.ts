@@ -1,290 +1,194 @@
 import { Component, ViewChild} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonImg, IonInput, IonItem,IonSelect,IonList,
-  IonSelectOption, IonButton, IonToolbar,IonBackButton,IonCheckbox,IonAccordion,IonAccordionGroup,
-  IonIcon,IonCard,IonCardContent,IonCardHeader,IonCardTitle,IonLabel,IonSpinner,IonModal,
-  IonTextarea,ToastController  } from '@ionic/angular/standalone';
-import { Camera, CameraResultType } from '@capacitor/camera'; //importamos el plugin de cámara de Capacitor
+import { SharedIonicModule } from '../../shared/shared-ionic.module';
 import { DomSanitizer ,SafeResourceUrl} from '@angular/platform-browser'; //importamos el servicio DomSanitizer para manejar URLs seguras en Angular
 import { MapaService } from 'src/core/utils/maps.utils'; //importamos el servicio MapaService para manejar la creación y manipulación de mapas en la aplicación
-import { Geolocation } from '@capacitor/geolocation'; //imortamos el plugin de geolocalización de Capacitor
 import { ModelReport,Categories, Priority} from 'src/core/models/models';
 import { ReporteService } from 'src/core/services/reporte-service';
 import { ToastUtils } from 'src/core/utils/toast.utils';
 import { NavController } from '@ionic/angular';
+import { IonModal } from '@ionic/angular';
+import { DeviceUtils } from 'src/core/utils/devices.utils';
+import { LocationService } from 'src/core/services/location.service';
+import { CameraService } from 'src/core/services/camera.service';
+import { Dialog } from '@capacitor/dialog';
+
+interface PhotoWithSafeUrl {
+  url: string;                    
+  safeUrl?: SafeResourceUrl; 
+  latitude: number;
+  longitude: number;
+  accuracy: number;
+}
+
 @Component({
   selector: 'app-incidentecreate',
   templateUrl: './incidentecreate.page.html',
   styleUrls: ['./incidentecreate.page.scss'],
   standalone: true,
-  imports: [
-    IonContent,
-    IonHeader,
-    IonTitle,
-    IonImg,
-    IonInput,
-    IonSpinner,
-    IonModal,
-    IonItem,
-    IonSelect,
-    IonSelectOption,
-    IonButton,
-    IonList,
-    IonToolbar,
-    IonIcon,
-    IonCheckbox,
-    IonAccordion,
-    IonAccordionGroup,
-    IonCard,
-    IonCardHeader,
-    IonCardContent,
-    IonCardTitle,
-    IonLabel,
-    IonTextarea,
-    CommonModule,
-    FormsModule,
-    IonBackButton,
-  ],
+  imports: [SharedIonicModule],
 })
 export class IncidentecreatePage {
   @ViewChild('modal', { static: false }) modal!: IonModal;
-  @ViewChild('modalMapa', { static: false }) modalMapa  !: IonModal;
-  public isDesktop: boolean = false;
-  public expandedAccordions: string[] = [];
-  public reporte: ModelReport = {
-    id: '',
+  @ViewChild('modalMapa', { static: false }) modalMapa!: IonModal;
+
+  expandedAccordions: string[] = [];
+  isDesktop: boolean = false;
+  categories = Categories;
+  isLoadingSubmit = false;
+  isLoadingGeo = false;
+  hasPermisionGeo = false;
+  isLoadingTakePicture = false;
+  fotoMapaIndex: number | null = null;
+  photos: PhotoWithSafeUrl[] = [];
+  img?: SafeResourceUrl; 
+  private resizeHandler = this.checkScreenSize.bind(this);
+
+  // Usar el tipo extendido para las fotos
+  reporte: ModelReport = {
+    id: '', 
     title: '',
     description: '',
+    photos: [], 
     category: '',
-    photos: [],
+    status: 'pending', 
+    priority: 'baja', 
     aceptoTerminos: false,
-    status: '',
-    priority: 'baja',
-    createdAt: '',
+    createdAt: new Date().toISOString(),
+    reporterName: ''
   };
-  public categories = Categories;
-  public isLoadingSubmit = false;
-  public isLoadingGeo = false;
-  public hasPermisionGeo = false;
-  public isLoadingTakePicture = false;
-  public fotoMapaIndex: number | null = null;
 
-    constructor(
+  constructor(
     private mapaService: MapaService,
-    private reporteService: ReporteService,
-    private toastController: ToastController, 
+    private locationService: LocationService,
+    private cameraService: CameraService,
     private sanitizer: DomSanitizer,
+    private reporteService: ReporteService,
     private navCtrl: NavController,
   ) {
-    this.sanitizer = sanitizer;
+    window.addEventListener('resize', this.resizeHandler);
     this.checkScreenSize();
-    window.addEventListener('resize', this.checkScreenSize.bind(this));
   }
-
+  // En el ngOnInit verificamos si ya tenemos permiso de geolocalización para mostrar la interfaz adecuada al usuario
   async ngOnInit() {
-    this.hasPermisionGeo = await this.reporteService.isGeolocationPermissionGranted();
+    this.hasPermisionGeo = await this.locationService.isGeolocationPermissionGranted();
   }
 
-  async compartirUbicacion() {
-    this.isLoadingGeo = true;
-    this.hasPermisionGeo = await this.reporteService.requestGeolocationPermission();
-    if (!this.hasPermisionGeo) {
-      ToastUtils.show('Permiso denegado.', { duration: 'long', position: 'top' });
-    } else {
-      ToastUtils.show('Permiso a ubicación otorgado', { duration: 'long', position: 'top' });
-    }
-    this.isLoadingGeo = false;
-  }
-
+  // En el ngOnDestroy limpiamos el event listener de resize y destruimos el mapa para liberar recursos
   ngOnDestroy() {
+    window.removeEventListener('resize', this.resizeHandler);
     this.mapaService.destruirMapa();
   }
 
-  checkScreenSize() {
-    this.isDesktop = window.innerWidth > 768;
-    if (this.isDesktop) {
-      this.expandedAccordions = ['fotos', 'ubicacion','otros'];
-    } else {
-      this.expandedAccordions = [];
-    }
+  // Lógica para solicitar permiso de geolocalización al usuario y mostrar un mensaje de confirmación
+  async authorizarUbicacion() {
+    this.isLoadingGeo = true;
+    this.hasPermisionGeo =
+    await this.locationService.requestGeolocationPermission();
+    ToastUtils.show( this.hasPermisionGeo ? 'Permiso a ubicación otorgado': 'Permiso denegado.',{ duration: 'long', position: 'top' },);
+    this.isLoadingGeo = false;
   }
-  // Solo para mostrar la última foto tomada en la vista
-  public photoPreview?: SafeResourceUrl;
-  public async takePicture(): Promise<void> {
+
+  // Método para manejar el envío del formulario de creación de reporte, se llama desde el template cuando el usuario hace clic en el botón de enviar reporte
+  async submitReport() {
+   
+    this.reporte.photos= this.photos;
+    this.isLoadingSubmit = true;
+    this.reporteService.createReporte(this.reporte);
+    setTimeout(() => {
+         this.isLoadingSubmit = false;
+         this.modal.present();
+         
+    }, 1000);
     
-    if (this.reporte.photos.length >= 5) {
+    //await this.presentToast('Se han otorgado permisos de ubicación');
+    //await ToastUtils.show('Tu Reporte se ha generado correctamente, tu código es: ' + this.reporte.id, { duration: 'long', position: 'top' });
+  }
+
+  /**  Método para mostrar el mapa en un modal, se llama cuando el usuario hace clic en el botón de ver ubicación en la foto, se obtiene la foto correspondiente al índice y se crea el mapa con la ubicación de la foto **/
+  onModalMapaPresent() {
+    const foto = this.fotoMapaIndex !== null ? this.photos[this.fotoMapaIndex] : null;
+    if (!foto) return;
+    this.mapaService.crearMapa('mapa-container',foto.latitude,foto.longitude,foto.accuracy > 0 ? 15 : 13);
+    this.mapaService.agregarMarcador(foto.latitude, foto.longitude);
+  }
+    
+
+  public async takePicture(): Promise<void> {
+
+    // Verificar permiso de geolocalización antes de permitir tomar fotos con ubicación
+    if (!this.hasPermisionGeo) {
+        await Dialog.alert({title: 'Permiso de ubicación requerido', message: 'Debes autorizar el acceso a la ubicación para tomar fotos con geolocalización.',buttonTitle: 'Entendido'});
+        this.isLoadingTakePicture = false;
+      return;
+    } 
+    // Limitar a 5 fotos por reporte para evitar saturar la interfaz y el almacenamiento
+    if (this.photos.length >= 5) {
+        this.isLoadingTakePicture = false;
       return;
     }
-    try {
-      const image = await Camera.getPhoto({
-        quality: 100,
-        allowEditing: false,
-        resultType: CameraResultType.Uri,
-      });
-      this.isLoadingTakePicture = true;
-      if (image.webPath) {
-        // Obtener ubicación al tomar la foto
-        let latitude = 0;
-        let longitude = 0;
-        let accuracy = 0;
-        try {
-          const position = await Geolocation.getCurrentPosition();
-          latitude = position.coords.latitude;
-          longitude = position.coords.longitude;
-          accuracy = position.coords.accuracy;
-        } catch (geoErr) {
-          console.warn('No se pudo obtener ubicación para la foto:', geoErr);
-        }
-        // Guardar la foto con ubicación
-        this.reporte.photos.push({
-          url: image.webPath,
-          latitude,
-          longitude,
-          accuracy
-        });
-        // Solo para previsualización en la vista
-        this.photoPreview = this.sanitizer.bypassSecurityTrustResourceUrl(image.webPath);
-      }
-    } catch (error) {
-      console.error('Error al capturar la foto:', error);
-    } finally {
-      this.isLoadingTakePicture = false;
-    }
+    // Tomar la foto con la cámara y obtener la ubicación actual para asociarla a la foto
+    const position = await this.locationService.getCurrentPosition(); 
+    const foto = await this.cameraService.takePhoto();
+    this.isLoadingTakePicture = true;
+    // Si se obtuvo la foto y la ubicación, agregarla al reporte con su información de geolocalización
+    if(position && foto) {
+      this.photos.push({
+          url: foto.webPath ? foto.webPath: '',
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          accuracy: position.coords.accuracy,
+          safeUrl: this.sanitizer.bypassSecurityTrustResourceUrl(foto.webPath ? foto.webPath : '')
+      })
+       this.img = this.sanitizer.bypassSecurityTrustResourceUrl(foto.webPath ? foto.webPath : '')
+    };
+
+    this.isLoadingTakePicture = false;
   }
 
-  public eliminarFoto(index: number): void {
-    this.reporte.photos.splice(index, 1);
-  }
-
-
-
-  public async getLocation() {
-    this.isLoadingGeo = true;
-    try {
-      const position = await Geolocation.getCurrentPosition();
-      // Si tienes al menos una foto, actualiza la ubicación de la última foto
-      if (this.reporte.photos.length > 0) {
-        const lastPhoto = this.reporte.photos[this.reporte.photos.length - 1];
-        lastPhoto.latitude = position.coords.latitude;
-        lastPhoto.longitude = position.coords.longitude;
-        lastPhoto.accuracy = position.coords.accuracy;
-      }
-      // Si quieres mostrar el mapa, usa la ubicación de la última foto
-      if (this.reporte.photos.length > 0) {
-        const lastPhoto = this.reporte.photos[this.reporte.photos.length - 1];
-        this.mapaService.crearMapa(
-          'mapa-container',
-          lastPhoto.latitude,
-          lastPhoto.longitude,
-          lastPhoto.accuracy > 0 ? 15 : 13,
-        );
-        setTimeout(() => {
-          this.mapaService.getMapa()?.invalidateSize();
-        }, 10);
-        this.mapaService.agregarMarcador(
-          lastPhoto.latitude,
-          lastPhoto.longitude,
-        );
-      }
-    } catch (error) {
-      console.error('Error al obtener la geolocalización:', error);
-    } finally {
-      this.isLoadingGeo = false;
-    }
-  }
-
-
-  async presentToast(position: 'top' | 'middle' | 'bottom') {
-  const toast = await this.toastController.create({
-      message: 'Registro exitoso, tu código de incidencia es: ' + this.reporte.id ,
-      duration: 3000,
-      position: position,
-      icon: 'checkmark-circle-outline',
-      cssClass: 'toast-success'
-  });
-
-    await toast.present();
-  }
-
-  async submitReport() {
-    this.isLoadingSubmit = true;
-    this.reporte.createdAt = new Date().toISOString();
-    this.reporte.id = 'RI-' + Date.now(); 
-    this.reporte.status = 'pendiente';
-    // Si la prioridad no está definida, asignar según la categoría
-    if (!this.reporte.priority && this.reporte.category) {
-      const categoria = Categories.find(cat => cat.value === this.reporte.category);
-      this.reporte.priority = categoria ? categoria.priority as Priority : 'baja';
-    }
-    console.log(this.reporte);
-
-    await this.reporteService.add(this.reporte);
-
-    setTimeout(() => {
-       this.isLoadingSubmit = false;
-       this.modal.present();
-    }, 1000);
-
-  //await this.presentToast('top');
-   //await ToastUtils.show('Tu Reporte se ha generado correctamente, tu código es: ' + this.reporte.id, { duration: 'long', position: 'top' });
-  }
-async abrirModalMapa(index: number) {
-  this.fotoMapaIndex = index;
-  await this.modalMapa.present();
-}
-onModalMapaPresent() {
-  if (this.fotoMapaIndex !== null) {
-    const foto = this.reporte.photos[this.fotoMapaIndex];
-    if (foto) {
-      console.log(foto);
-      this.mapaService.crearMapa(
-        'mapa-container',
-        foto.latitude,
-        foto.longitude,
-        foto.accuracy > 0 ? 15 : 13,
-      );
-      this.mapaService.agregarMarcador(
-        foto.latitude,
-        foto.longitude,
-      );
-    }
-  }
-}
-  async verDetalle() {
-  if (this.modal) {
-    await this.modal.dismiss();
-  }
-    this.navCtrl.navigateForward(['/incidente-detail'], { queryParams: { id: this.reporte.id } });
-  }
-
-  async Close(){
-    if (this.modal) {
-      await this.modal.dismiss();
-    }
-  
-      this.reporte.id= '';
-      this.reporte.title='',
-      this.reporte.description='';
-      this.reporte.category='';
-      this.reporte.photos= [];
-      this.reporte.aceptoTerminos= false;
-      this.reporte.status= '';
-      this.reporte.priority= 'baja';      
-      this.reporte.createdAt= '';
-
-  }
-  onCategoriaChange(categoriaId: string) {
-    const categoria = Categories.find(cat => cat.value === categoriaId);
-    if (categoria) {
-      this.reporte.priority = categoria.priority as Priority;
-    }
-  }
   // =============================
   // UTILIDADES
   // =============================
 
+  /** Método para abrir el modal del mapa, se llama desde el template cuando el usuario hace clic en el botón de ver ubicación en la foto **/
+  async abrirModalMapa(index: number) {
+    this.fotoMapaIndex = index;
+    await this.modalMapa.present();
+  }
+
+  /** Método para eliminar una foto del reporte, se llama desde el template cuando el usuario hace clic en el botón de eliminar foto **/
+  public eliminarFoto(index: number): void {
+    this.photos.splice(index, 1);
+  }
+
+  /** Método para navegar a la página de detalle de incidencias, se llama desde el template después de enviar un reporte exitosamente **/
+  async verIndidencias() {
+    await this.closeModal();
+    this.navCtrl.navigateForward(['/incidente-detail']);
+  }
+
+  /**  Método para cerrar el modal de confirmación después de enviar un reporte, se llama desde el template **/ 
+  async closeModal() {
+    if (this.modal) await this.modal.dismiss();
+  }
+
+  /**  Método para actualizar la prioridad del reporte en función de la categoría seleccionada, se llama desde el template cuando el usuario cambia la categoría **/
+  onCategoriaChange(categoriaId: string) {
+    const categoria = Categories.find((cat) => cat.value === categoriaId);
+    if (categoria) {
+      this.reporte.priority = categoria.priority as Priority;
+    }
+  }
+
+  /** contador de caracteres para inputs, se puede usar en el template con: {{ customCounterFormatter(reporte.title.length, 100) }} */
   customCounterFormatter(inputLength: number, maxLength: number) {
     return `${inputLength + '/' + maxLength}`;
   }
+
+  /** Lógica para expandir acordeones en desktop y colapsar en móvil, se llama en el constructor y en el evento resize de la ventana */
+
+  checkScreenSize() {
+    this.isDesktop = DeviceUtils.isDesktop();
+    this.isDesktop ? this.expandedAccordions = ['fotos', 'ubicacion','otros'] :  this.expandedAccordions = [];
+  }
+
 }

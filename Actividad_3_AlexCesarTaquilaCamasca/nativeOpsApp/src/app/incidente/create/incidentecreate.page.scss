@@ -39,8 +39,9 @@ ion-label.font-small {
 }
 
 .miniatura-foto {
-  width: 40px !important;
-  height: 40px !important;
+  width: 64px !important;
+  height: 64px !important;
+  padding: var(--space-xs);
   object-fit: cover;
 }
 .image-photo{
@@ -70,6 +71,18 @@ ion-icon.icon-button{
     
 }
 
+.close-btn {
+  position: absolute;
+  top: var(--space-s);
+  right: var(--space-s);
+  z-index: 1000;
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  color: #333; /* O el color que prefieras */
+  cursor: pointer;
+  box-shadow: none;
+}
 
 @media (max-width: 768px) {
     ion-label.font-small {
