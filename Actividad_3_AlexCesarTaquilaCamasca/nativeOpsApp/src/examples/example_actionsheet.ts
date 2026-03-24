@@ -1,5 +1,5 @@
-import { ActionSheetUtils } from './actionsheet.utils';
-import { DialogUtils } from './dialog.utils';
+import { ActionSheetUtils } from '../core/utils/actionsheet.utils';
+import { DialogUtils } from '../core/utils/dialog.utils';
 
 export class MiComponente {
   

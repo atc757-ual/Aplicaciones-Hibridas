@@ -1,14 +1,11 @@
-import { Preferences } from '@capacitor/preferences'; 
+// storage.service.ts
+import { Injectable } from '@angular/core';
+import { Preferences } from '@capacitor/preferences';
 
-export interface StorageData {
-  [key: string]: any;
-}
-
+@Injectable({
+  providedIn: 'root'  
+})
 export class StorageService {
-  /**  Guarda un objeto en el almacenamiento
-   * @param key - Clave para identificar el dato
-   * @param value - Objeto a almacenar
-  */
   async setItem<T>(key: string, value: T): Promise<void> {
     try {
       await Preferences.set({
@@ -21,13 +18,9 @@ export class StorageService {
     }
   }
 
-   /** Obtiene un objeto del almacenamiento
-   * @param key 
-   * @returns
-   */
-  async getItem<T>(key: string): Promise<T | null> {
+  async getItems<T>(key: string): Promise<T | null> {
     try {
-      const ret = await Preferences.get({ key: key });
+      const ret = await Preferences.get({ key });
       if (ret.value) {
         return JSON.parse(ret.value) as T;
       }
@@ -38,9 +31,6 @@ export class StorageService {
     }
   }
 
-  /** Elimina un dato del almacenamiento
-   * @param key - Clave del dato a eliminar
-   */
   async removeItem(key: string): Promise<void> {
     try {
       await Preferences.remove({ key });
@@ -50,21 +40,16 @@ export class StorageService {
     }
   }
 
-  /** Verifica si existe un dato
-   * @param key - Clave a verificar
-   * @returns true si existe, false si no
-   */
-  async ExistsItem(key: string): Promise<boolean> {
+  async existsItem(key: string): Promise<boolean> {
     try {
-      const { keys } = await Preferences.keys();
-      return keys.includes(key);
+      const result = await Preferences.get({ key });
+      return result.value !== null;
     } catch (error) {
       console.error(`Error checking ${key}:`, error);
       return false;
     }
   }
 
-  /** Limpia todo el almacenamiento */
   async clear(): Promise<void> {
     try {
       await Preferences.clear();
@@ -73,6 +58,7 @@ export class StorageService {
       throw error;
     }
   }
-}
 
-export const storageService = new StorageService();
+
+  
+}

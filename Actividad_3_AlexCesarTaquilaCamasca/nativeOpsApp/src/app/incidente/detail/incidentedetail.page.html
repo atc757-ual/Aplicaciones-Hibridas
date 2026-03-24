@@ -1,15 +1,111 @@
-<ion-header [translucent]="true">
+<ion-header [translucent]="true" mode="md" class="shadow-medium">
   <ion-toolbar>
-    <ion-title>incidentedetail</ion-title>
+    <ion-back-button slot="start" [defaultHref]="'/home'"></ion-back-button>
+    <ion-title class="title-with-backbutton">
+      <span class="fs-24 f-semibold text-neutral-8">Incidence App</span>
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">incidentedetail</ion-title>
+<ion-content fullscreen="true">
+  <ion-card class="pre-content-card">
+    <ion-card-header>
+      <div class="bienvenida">
+        <ion-card-title class="fs-20 f-semibold">Mis incidencias</ion-card-title>
+      </div>
+    </ion-card-header>
+    <ion-card-content>
+      <div class="fs-14">
+        En esta sección puedes ver tus incidencias registradas, su estado actual y detalles relevantes.
+        Si deseas reportar una nueva incidencia, haz clic en el botón "Crear nueva incidencia" al final
+        de la lista.
+      </div>
+    </ion-card-content>
+  </ion-card>
 
+  <div class="content">
+    <div class="container">
+      <div class="reactive reverse">
+        <div class="col-8 col-sm-12 no-padding-sm ">
 
-    </ion-toolbar>
-  </ion-header>
+            <ion-card class="margin-bottom-base">
+              <ion-card-header>
+              <ion-card-title class="fs-16 f-semibold">Lista de incidentes reportados</ion-card-title>
+            </ion-card-header>
+            
+          <ng-container *ngIf="!isLoading && pagedReportes.length > 0; else loadingOrEmpty">
+            <ion-list>
+              <ion-item [button]="true" *ngFor="let reporte of pagedReportes" (click)="verDetalle(reporte.id)">
+                <ion-label>
+                  <div class="fs-16 f-semibold margin-bottom-s">#{{ reporte.id }}</div>
+                  <div class="fs-14 margin-bottom-s">{{ reporte.title }}</div>
+                  <div class="fs-12 text-muted margin-bottom-s">{{ reporte.createdAt | date:'short' }}<br>
+                  </div>
+                </ion-label>
+                <ion-badge slot="end" >
+                  {{ reporte.priority | titlecase }}
+                </ion-badge>
+              </ion-item>
+            </ion-list>
+            <div class="display-flex fl-align-center fl-justify-center gap-s margin-y-base">
+              <ion-button (click)="prevPage()" [disabled]="page === 1">
+                <ion-icon aria-hidden="true" name="chevron-back-outline"></ion-icon>
+              </ion-button>
+              <span>Página {{page}} de {{totalPages}}</span>
+              <ion-button (click)="nextPage()" [disabled]="page === totalPages">
+                <ion-icon aria-hidden="true" name="chevron-forward-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </ng-container>
+          <ng-template #loadingOrEmpty>
+            <ion-card>
+              <ion-card-content>
+                <ion-spinner *ngIf="isLoading"></ion-spinner>
+                <span *ngIf="!isLoading">No se encontró el reporte.</span>
+              </ion-card-content>
+            </ion-card>
+          </ng-template>
+          </ion-card>
+          <ion-card class="margin-bottom-base padding-bottom-base">
+                <ion-card-header>
+                  <ion-card-title class="fs-16 f-semibold">¿Quieres reportar un nuevo incidente?</ion-card-title>
+                </ion-card-header>
+                  <ion-item [button]="true" detail=true lines="none" class="no-padding" routerLink="/incidente-create">
+                    <ion-icon aria-hidden="true" size="large" name="add-circle-outline" color="primary"></ion-icon>
+                    <ion-label class="margin-left-s">Crear Incidente</ion-label>
+                  </ion-item>
+         </ion-card>
+        </div>
+      
+         <div class="col-4 col-sm-12 no-padding-sm">
+            <ion-card class="">
+              <ion-card-header>
+                  <ion-card-title class="display-flex fl-align-center gap-s">
+                    <div class="f-bold fs-32 text-align-rigth">{{ reportes.length }}</div>
+                    <div class="fs-18 f-semibold">Incidencias reportadas </div>
+                  </ion-card-title>
+              </ion-card-header>
+              <ion-card-content>  
+                <div class="status-summary-card">
+                  <div class="status-summary">
+                      <div class="status-row">
+                        <span class="status-label ">Resueltas</span>
+                        <ion-badge class="success">{{ resolvedCount }}</ion-badge>
+                      </div>
+                      <div class="status-row">
+                        <span class="status-label">Pendientes</span>
+                        <ion-badge class="pending">{{ unresolvedCount }}</ion-badge>
+                      </div>
+                      <div class="status-row">
+                        <span class="status-label">En atención</span>
+                        <ion-badge class="inprogress">{{ inProgressCount }}</ion-badge>
+                      </div>
+                    </div>
+                    </div>
+              </ion-card-content>
+         </ion-card>
+         </div>
+    </div>
+  </div>
+  </div>
 </ion-content>

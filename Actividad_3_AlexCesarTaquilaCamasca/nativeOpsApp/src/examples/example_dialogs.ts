@@ -1,5 +1,5 @@
-import { DialogUtils } from './dialog.utils';
-import { ToastUtils } from './toast.utils';
+import { DialogUtils } from '../core/utils/dialog.utils';
+import { ToastUtils } from '../core/utils/toast.utils';
 
 
 export class EjemploComponent {

@@ -1,5 +1,5 @@
 //import { ToastUtils } from '@core/utils/toast.utils';
-import { ToastUtils } from './toast.utils';
+import { ToastUtils } from '../core/utils/toast.utils';
 
 export class MiComponente {
   // Hacer async el método

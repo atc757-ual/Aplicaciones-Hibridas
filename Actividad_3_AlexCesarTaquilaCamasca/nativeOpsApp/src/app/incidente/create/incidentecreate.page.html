@@ -27,134 +27,116 @@
       <form #incidenteForm="ngForm">
         <div class="reactive">
           <div class="col-8 col-sm-12 no-padding-sm ">
-            <ion-card class="full-width margin-bottom-base">
-              <ion-accordion-group [value]="isDesktop ? 'fotos' : null">
+            <ion-card class="full-width  margin-bottom-base">
+              <ion-accordion-group [value]="isDesktop ? 'ubicacion' : null">
+                <ion-accordion value="ubicacion">
+                  <ion-item class="padding-s" slot="header">
+                    <span class="fs-20 f-semibold">Ubicación</span>
+                      <ion-icon *ngIf="hasPermisionGeo" class="fs-22" slot="end" name="checkmark-circle-outline" size="medium" color="secondary"
+                      aria-hidden="true"></ion-icon>
+                  </ion-item>
+                  <div slot="content">
+                    <ion-item *ngIf="!hasPermisionGeo" lines="none" class="alert error">
+                      <ion-icon size="small" name="close-circle-outline" color="primary" slot="start"></ion-icon>
+                      <ion-label class="font-small">Es importante que compartas la ubicación para identificar el lugar
+                        del incidente.
+                        Asegúrate de tener activado el GPS y tener permisos de localización habilitados.</ion-label>
+                    </ion-item>
+                    <ion-item *ngIf="hasPermisionGeo" lines="none" class="alert success">
+                      <ion-icon size="small" name="information-circle-outline" color="primary" slot="start"></ion-icon>
+                      <ion-label class="font-small">Gracias por compartir tu ubicación, es importante para identificar el lugar del incidente.</ion-label>
+                    </ion-item>
+                    <div *ngIf="!hasPermisionGeo" class="display-flex fl-justify-center padding-bottom-base">
+                          <ion-button  [disabled]="isLoadingGeo" size="small" mode="ios" class="format-capitalized" (click)="compartirUbicacion()" color="danger" fill="outline">
+                            <ion-spinner *ngIf="isLoadingGeo" name="crescent" slot="start" size="small"></ion-spinner>
+                            <ion-icon *ngIf="!isLoadingGeo"name="location" slot="start" size="small"></ion-icon>
+                            <span class="padding-left-s" *ngIf="isLoadingGeo"> Procesando</span>
+                            <span *ngIf="!isLoadingGeo" >Compartir Ubicación</span>
+                          </ion-button>
+                        </div>
+                  </div>
+                </ion-accordion>
+              </ion-accordion-group>
+            </ion-card>
+            <ion-card >
+              <ion-accordion-group [value]="'fotos'">
                 <ion-accordion value="fotos">
                   <ion-item class="padding-s" slot="header">
-                    <span class="fs-20 f-semibold">Adjuntar Foto</span>
+                    <span class="fs-20 f-semibold">Evidencia fotográfica</span>
                     <ion-icon *ngIf="reporte.photos.length > 0" class="fs-22" slot="end" name="checkmark-circle-outline"
                       size="medium" color="secondary" aria-hidden="true"></ion-icon>
                   </ion-item>
                   <div slot="content">
-                    <ion-item lines="none" class="info-alert">
+                    <ion-item lines="none" class="alert info">
                       <ion-icon size="small" name="information-circle-outline" color="primary" slot="start"></ion-icon>
                       <ion-label class="font-small">Puedes añadir hasta <strong>5 fotos </strong> para respaldar tu
                         reporte de incidente.
                         Asegurate de tener los permisos de cámara habilitados.
                       </ion-label>
                     </ion-item>
-                    <div class="info-container justify-start">
-                      <div>
-                        <div>
-                          <div class="ion-text-center">
-                            <ng-container *ngIf="reporte.photos.length > 0; else noPhoto">
-                              <div class="foto-con-x">
-                                <ion-img [src]="reporte.photos[0]" class="image-photo image-photo-grande"></ion-img>
-                                <button type="button" class="btn-x-foto" (click)="eliminarFoto(0)">
-                                  <ion-icon name="close-circle"></ion-icon>
-                                </button>
-                              </div>
-                              <div class="fs-12 text-neutral-6 margin-top-xs">
-                                <span>{{reporte.photos.length}} foto{{reporte.photos.length > 1 ? 's' : ''}}
-                                  adjunta{{reporte.photos.length > 1 ? 's' : ''}}</span>
-                              </div>
+                    <div class="padding-x-base">
+                        <div *ngIf="reporte.photos.length > 0">
+                          <ng-container class="ion-text-center" >
+                            <ion-list>    
+                            <ion-item *ngFor="let foto of reporte.photos; let i = index">
+                              <ion-img aria-hidden="true" [src]="foto.url" class="miniatura-foto"></ion-img>
+                              <ion-label class="padding-left-s fs-14 text-neutral-8">
+                                <div class="fs-12 text-neutral-7">Lat: {{foto.latitude}}</div>
+                                <div class="fs-12 text-neutral-7">Lng: {{foto.longitude}}</div>
+                              </ion-label>
+                              <ion-icon class="icon-button " name="map-outline" color="primary" (click)="abrirModalMapa(i)"></ion-icon>
+                              <ion-icon class="icon-button padding-left-s" (click)="eliminarFoto(i)" name="close-circle-outline"></ion-icon>
+                            </ion-item>
+                            </ion-list>
+                            <div class="fs-12 text-neutral-6 margin-y-s text-center">
+                                        <span>{{reporte.photos.length}} fotos adjuntas</span>
+                                      </div>
                             </ng-container>
-                            <ng-template #noPhoto>
-                              <ion-img class="image-photo image-photo-grande" alt="Placeholder"
-                                src="https://ximg.es/250/fafafa/cccccc.png"></ion-img>
-                              <div class="fs-12 text-neutral-6 margin-top-xs">No hay foto</div>
-                            </ng-template>   
-                          <ion-button size="small" mode="ios" class="format-capitalized" color="primary" fill="outline"
-                            (click)="takePicture()" [disabled]="reporte.photos.length >= 5">
-                            <ion-icon name="camera" slot="start"></ion-icon>
-                            <span>Tomar Foto</span>
-                          </ion-button>
-                          
+                        </div>  
+                         <div class="ion-text-center">
+                              <ng-container *ngIf="reporte.photos.length === 0">
+                                  <ion-img class="image-photo" alt="Placeholder"
+                                    src="./assets/img/profile.jpg"></ion-img>
+                                  <div class="fs-12 text-neutral-6 text-center margin-y-s">No hay foto</div>
+                            </ng-container>
+                          </div>
+                        <div class="display-flex fl-justify-center padding-bottom-base">
+                            <ion-button size="small" mode="ios" class="format-capitalized" expand="block" 
+                            color="primary" fill="outline" (click)="takePicture()" [disabled]="reporte.photos.length >= 5">
+                              <ion-icon *ngIf="!isLoadingTakePicture" name="camera" slot="start"></ion-icon>
+                              <ion-spinner *ngIf="isLoadingTakePicture" class="padding-rigth-s" name="crescent" slot="start" size="small"></ion-spinner>
+                              <span *ngIf="isLoadingTakePicture"> Guardando foto</span> 
+                              <span *ngIf="!isLoadingTakePicture">{{ reporte.photos.length === 0 ? 'Tomar foto' : 'Tomar nueva foto' }}</span> 
+                            </ion-button>
                         </div>
-                        </div>
-                      </div>
-                      <div>
-                         <ng-container *ngIf="reporte.photos.length > 0;">
-                               <div *ngIf="reporte.photos.length > 1" class="miniaturas-container">
-                                <ng-container *ngFor="let foto of reporte.photos; let i = index">
-                                  <ng-container *ngIf="i > 0">
-                                    <div class="foto-con-x">
-                                      <ion-img [src]="foto" class="miniatura-foto"></ion-img>
-                                      <button type="button" class="btn-x-foto" (click)="eliminarFoto(i)">
-                                        <ion-icon name="close-circle"></ion-icon>
-                                      </button>
-                                    </div>
-                                  </ng-container>
-                                </ng-container>
-                              </div>
-                         </ng-container>
-                         <div *ngIf="reporte.photos.length >= 5" class="fs-12 text-neutral-6 margin-top-xs">Máximo 5 fotos
-                            permitidas</div>
-                      </div>
-                    </div>
-                  </div>
+                         
+                       
+                    </div>      
+                  </div>   
                 </ion-accordion>
               </ion-accordion-group>
-            </ion-card>
-
-            <ion-card class="full-width">
-              <ion-accordion-group [value]="isDesktop ? 'ubicacion' : null">
-                <ion-accordion value="ubicacion">
-                  <ion-item class="padding-s" slot="header">
-                    <span class="fs-20 f-semibold">Adjuntar Ubicación</span>
-                    @if(reporte.longitude && reporte.latitude){
-                    <ion-icon class="fs-22" slot="end" name="checkmark-circle-outline" size="medium" color="secondary"
-                      aria-hidden="true"></ion-icon>
-                    }
-                  </ion-item>
-                  <div slot="content">
-                    <ion-item lines="none" class="info-alert">
-                      <ion-icon size="small" name="information-circle-outline" color="primary" slot="start"></ion-icon>
-                      <ion-label class="font-small">Es importante que compartas la ubicación para identificar el lugar
-                        del incidente.
-                        Asegúrate de tener activado el GPS y tener permisos de localización habilitados.</ion-label>
-                    </ion-item>
-                    <div class="info-container fl-align-center">
-                      <div>
-                        <div *ngIf="reporte.latitude && reporte.longitude">
-                          <p><strong>Latitud:</strong> {{ reporte.latitude }}</p>
-                          <p><strong>Longitud:</strong> {{ reporte.longitude }}</p>
-                        </div>
-                        <div>
-                          <ion-button size="small" mode="ios" class="format-capitalized" color="primary" fill="outline"
-                            (click)="getLocation()">
-                            <ion-icon name="location" slot="start"></ion-icon>
-                            Compartir Ubicación
-                          </ion-button>
-                        </div>
-                      </div>
-                      <div id="mapa-container" name="mapa-container"
-                        [ngClass]="{'mapa-container': reporte.latitude && reporte.longitude}">
-                      </div>
-                    </div>
-                  </div>
-                </ion-accordion>
-              </ion-accordion-group>
-            </ion-card>
-          </div>
-
+            </ion-card>   
+           </div>
           <div class="col-4 col-sm-12 no-padding-sm">
             <ion-card class="margin-bottom-base">
-              <ion-card-header>
-                <ion-card-title class="fs-20 f-semibold">Formulario de reporte de incidente</ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
+              <ion-accordion-group [value]="isDesktop ? 'otros' : null">
+                <ion-accordion value="otros">
+                 <ion-item class="padding-s" slot="header">
+                    <span class="fs-20 f-semibold">Información relevante 
+                        @if(reporte.category != "" && reporte.title != "" && reporte.description != ""){
+                          <ion-icon class="fs-22 checkmark-absolute" name="checkmark-circle-outline" size="medium"
+                          color="secondary" aria-hidden="true"></ion-icon>
+                        }
+                    </span>
+                  </ion-item>
+                  <div slot="content">
+                                  <ion-card-content>
                 <div class="margin-bottom-base">
-                  <ion-select name="category" placeholder="Elige una categoría" interface="action-sheet"
+                  <ion-select name="category" placeholder="Elige una categoría" interface="popover"
                     cancelText="Cerrar" fill="solid" mode="md" [(ngModel)]="reporte.category" required
-                    errorText="Este campo es obligatorio">
-
+                    errorText="Este campo es obligatorio" (ionChange)="onCategoriaChange($event.detail.value)">
                     <ion-select-option slot="start" *ngFor="let cat of categories" [value]="cat.value">{{ cat.label
                       }}</ion-select-option>
-                    @if(reporte.category != ""){
-                    <ion-icon class="fs-22 checkmark-absolute" slot="end" name="checkmark-circle-outline" size="medium"
-                      color="secondary" aria-hidden="true"></ion-icon>
-                    }
                   </ion-select>
                 </div>
 
@@ -163,10 +145,6 @@
                     errorText="Este campo es obligatorio" label="Descripción breve" label-placement="floating"
                     fill="solid" placeholder="Escribe aquí" [counter]="true" maxlength="50"
                     [counterFormatter]="customCounterFormatter">
-                    @if(reporte.title != ""){
-                    <ion-icon class="fs-22" slot="end" name="checkmark-circle-outline" size="medium" color="secondary"
-                      aria-hidden="true"></ion-icon>
-                    }
                   </ion-input>
                 </div>
                 <div class="margin-bottom-base">
@@ -175,14 +153,13 @@
                     placeholder="Escribe aquí una descripción detallada del incidente" [counter]="true" maxlength="1000"
                     [autoGrow]="true" errorText="Este campo es obligatorio" [counterFormatter]="customCounterFormatter"
                     rows="5">
-                    @if(reporte.description != ""){
-                    <ion-icon class="fs-22" slot="end" name="checkmark-circle-outline" size="medium" color="secondary"
-                      aria-hidden="true"></ion-icon>
-                    }
                   </ion-textarea>
                 </div>
 
               </ion-card-content>
+                  </div>
+                </ion-accordion>
+              </ion-accordion-group>
             </ion-card>
             <ion-card class="margin-bottom-base">
               <ion-card-header>
@@ -195,18 +172,52 @@
               </ion-card-header>
               <ion-card-content>
                 <div>
-                  <ion-button mode="ios" class="format-capitalized" size="default" expand="block"
-                    (click)="submitReport()"
-                    [disabled]="!incidenteForm.form.valid || reporte.photos.length === 0 || !reporte.latitude || !reporte.longitude || !reporte.aceptoTerminos">
-                    <ion-icon name="send" slot="end"></ion-icon>
-                    Enviar Reporte
+                  <ion-button [disabled]="isLoadingSubmit" mode="ios" class="format-capitalized" size="default" expand="block" (click)="submitReport()"
+                    [disabled]="!incidenteForm.form.valid || reporte.photos.length === 0 || !reporte.aceptoTerminos">
+                    <ion-spinner *ngIf="isLoadingSubmit" name="crescent" slot="start" size="small"></ion-spinner>
+                    <ion-icon   *ngIf="!isLoadingSubmit" name="send"  slot="start" size="small"></ion-icon>
+                    <span *ngIf="isLoadingSubmit"> Enviando</span> 
+                    <span *ngIf="!isLoadingSubmit"> Enviar Reporte</span> 
                   </ion-button>
                 </div>
               </ion-card-content>
             </ion-card>
           </div>
+        
         </div>
       </form>
     </div>
   </div>
+
+  <ion-modal id="modal" #modal>
+    <ng-template>
+      <div class="wrapper">
+       <ion-item class="text-center" lines="none" class="alert success">
+          <ion-icon size="" name="checkmark-circle-outline" color="primary" slot="start"></ion-icon>
+          <ion-label>Registro procesado con éxito</ion-label>
+          </ion-item>
+        
+
+        <img src="./assets/img/ilus_tecnico.png" >
+        <h4>¡Enhorabuena!</h4>
+        <p>Hemos registrado tu reporte de incidente.</p>
+        <h4><strong>#{{ reporte.id }}</strong></h4>
+        <p>Pronto será revisado por las autoridades locales para su <br>validación y resolución.</p>
+        <div class="display-flex fl-align-center fl-justify-center gap-s margin-top-base">
+          <ion-button mode="ios" expand="block" color="primary" size="" (click)="verDetalle()">Ir a mis incidencias</ion-button>
+        <ion-button mode="ios" expand="block" color="primary" size="" fill="outline" (click)="Close()">Cerrar</ion-button>
+        </div>
+      </div> 
+    </ng-template>
+  </ion-modal>
+
+
+  <ion-modal id="modalMapa" #modalMapa (ionModalDidPresent)="onModalMapaPresent()">
+    <ng-template>
+      <div class="wrapper">
+        <div id="mapa-container" class="mapa-container">
+        </div> 
+      </div>
+    </ng-template>
+  </ion-modal>
 </ion-content>
