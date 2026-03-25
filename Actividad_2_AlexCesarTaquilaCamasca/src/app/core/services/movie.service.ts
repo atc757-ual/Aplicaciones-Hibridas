@@ -13,12 +13,15 @@ export class MovieService {
   private API_URL = `https://www.omdbapi.com/?apikey=${environment.apiKeyOMDb}`;
    // 🔥 Declaramos el Subject para confeti
   public confetti$ = new Subject<void>();
-  
-  private _movies = signal<Movie[]>([]);
-  public movies = this._movies.asReadonly();
+
+  private _isLoading = signal<boolean>(false);
+  public isLoading = this._isLoading.asReadonly();
 
   public totalResults = computed(() => this._movies().length);
   public totalPeliculas = () => this._movies().length;
+
+  private _movies = signal<Movie[]>([]);
+  public movies = this._movies.asReadonly();
 
   private _currentMovie = signal<Movie | null>(null);
   public currentMovie = this._currentMovie.asReadonly();
@@ -49,6 +52,7 @@ export class MovieService {
   }
   
   searchMovies(title: string) {
+     this._isLoading.set(true);
     this.http.get<OMDbResponse>(`${this.API_URL}&s=${title}`)
       .subscribe(response => {
         if (response.Response === 'True') {
@@ -57,14 +61,18 @@ export class MovieService {
           this._movies.set([]);
         }
       });
+      setTimeout(() => {
+        this._isLoading.set(false);
+      }, 500);
   }
 
   getMovieDetails(imdbID: string) {
-    this.http.get<Movie>(`${this.API_URL}&i=${imdbID}`)
-      .subscribe(movie => {
-        this._currentMovie.set(movie);
-      });
-      
+     this._isLoading.set(true);
+      this.http.get<Movie>(`${this.API_URL}&i=${imdbID}`)
+        .subscribe(movie => {
+          this._currentMovie.set(movie);
+        });
+     this._isLoading.set(false);  
   }
 
   /**
@@ -92,5 +100,7 @@ export class MovieService {
     return stars;
   }
 
-  
+  clearMovies() {
+    this._movies.set([]);
+  }
 }

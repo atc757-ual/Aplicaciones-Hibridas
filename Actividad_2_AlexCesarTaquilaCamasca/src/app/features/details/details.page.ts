@@ -13,6 +13,7 @@ import { ConfettiComponent } from 'src/app/shared/confetti.component';
   standalone: true,
   imports: [IonicModule, CommonModule, ConfettiComponent],
 })
+
 export class DetailsPage {
   movieService = inject(MovieService);
   route = inject(ActivatedRoute);

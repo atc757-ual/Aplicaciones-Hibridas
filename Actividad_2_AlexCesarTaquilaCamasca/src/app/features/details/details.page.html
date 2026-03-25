@@ -6,25 +6,24 @@
     <!-- Para navegación en la página, usa NavController o ion-back-button -->
     <!-- Si quieres un botón de regreso visual, usa ion-back-button -->
     <div>
-      <ion-back-button class="custom" mode="md" text="" color="light" defaultHref="/home" icon="arrow-back-outline"></ion-back-button>
-    </div>
+      <ion-back-button class="custom" mode="md" text="" color="light" defaultHref="/home"
+        icon="arrow-back-outline"></ion-back-button>
+    </div> 
     <div class="head-section">
-     <div class="title-favorite">
-      <h2>Detalle de película</h2>
-      <div (click)="movieService.toggleFavorite(movie)">
-        <ion-icon 
-          [name]="'heart'"
-          [color]="movieService.isFavorite(movie.imdbID) ? 'danger' : 'white'">
-        </ion-icon>
+      <div class="title-favorite">
+        <h2>Detalle de película</h2>
+        <div (click)="movieService.toggleFavorite(movie)">
+          <ion-icon [name]="'heart'" [color]="movieService.isFavorite(movie.imdbID) ? 'danger' : 'white'">
+          </ion-icon>
+        </div>
       </div>
-    </div>
       <div class="ticket-header">
         <img class="ticket-poster" [src]="movie.Poster" alt="{{ movie.Title }}" />
         <div class="ticket-info">
           <div class="ticket-title">{{ movie.Title }}</div>
           <div class="ticket-meta">{{ movie.Genre }}</div>
           <div class="ticket-extra">
-            <span>{{ movie.Year }}</span> &bull; <span>{{ movie.Runtime }}</span> 
+            <span>{{ movie.Year }}</span> &bull; <span>{{ movie.Runtime }}</span>
           </div>
           <div class="movie-rating">
             <ion-icon *ngFor="let star of movieService.getStars(movie)" [name]="star"></ion-icon>
@@ -34,34 +33,42 @@
           </div>
         </div>
       </div>
-   </div>
-  </div>
-  <div class="section">
-    <div>
-      <div class="section-title">Sinopsis</div>
-      <div class="sinopsis">{{ movie.Plot }}</div>
     </div>
-    <div>
-      <div class="section-title">Detalles</div>
-      <div class="details-list">
-        <div><strong>Director:</strong> {{ movie.Director }}</div>
-        <div><strong>Guionistas:</strong> {{ movie.Writer }}</div>
-        <div><strong>Actores:</strong> {{ movie.Actors }}</div>
-        <div><strong>Idioma:</strong> {{ movie.Language }}</div>
-        <div><strong>País:</strong> {{ movie.Country }}</div>
-        <div><strong>Premios:</strong> {{ movie.Awards }}</div>
+    </div>
+    @if (movieService.isLoading()) {
+    <div class="loading-container">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Buscando películas...</p>
+    </div>
+    } @else{
+    <div class="section">
+      <div>
+        <div class="section-title">Sinopsis</div>
+        <div class="sinopsis">{{ movie.Plot }}</div>
       </div>
-    </div>
-    <div>
-      <div class="section-title">Califiación</div>
-      <div class="details-list">
-        <div><strong>IMDB:</strong> {{ movie.imdbRating }}/10 ({{ movie.imdbVotes }} votos)</div>
-        <div *ngIf="movie.Metascore && movie.Metascore !== 'N/A'"><strong>Metascore:</strong> {{ movie.Metascore }}</div>
-        <div *ngIf="movie.Ratings && movie.Ratings.length">
-        <strong>Ratings:</strong>
-        <span *ngFor="let r of movie.Ratings">{{ r.Source }}: {{ r.Value }} </span>
+      <div>
+        <div class="section-title">Detalles</div>
+        <div class="details-list">
+          <div><strong>Director:</strong> {{ movie.Director }}</div>
+          <div><strong>Guionistas:</strong> {{ movie.Writer }}</div>
+          <div><strong>Actores:</strong> {{ movie.Actors }}</div>
+          <div><strong>Idioma:</strong> {{ movie.Language }}</div>
+          <div><strong>País:</strong> {{ movie.Country }}</div>
+          <div><strong>Premios:</strong> {{ movie.Awards }}</div>
         </div>
       </div>
-    </div>
+      <div>
+        <div class="section-title">Califiación</div>
+        <div class="details-list">
+          <div><strong>IMDB:</strong> {{ movie.imdbRating }}/10 ({{ movie.imdbVotes }} votos)</div>
+          <div *ngIf="movie.Metascore && movie.Metascore !== 'N/A'"><strong>Metascore:</strong> {{ movie.Metascore }}
+          </div>
+          <div *ngIf="movie.Ratings && movie.Ratings.length">
+            <strong>Ratings:</strong>
+            <span *ngFor="let r of movie.Ratings">{{ r.Source }}: {{ r.Value }} </span>
+          </div>
+        </div>
+      </div>
   </div>
+}
 </ion-content>

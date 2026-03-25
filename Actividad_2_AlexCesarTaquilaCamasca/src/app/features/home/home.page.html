@@ -1,20 +1,22 @@
 <ion-content>
   <div class="ticket space">
     <h2>Películas</h2>
-    <ion-searchbar showCancelButton="focus" mode="md" enterkeyhint="search" class="custom"
-      placeholder="Buscar películas..." (ionInput)="onSearch($event)" debounce="500"></ion-searchbar>
+    <ion-searchbar 
+    showCancelButton="focus" 
+    mode="md" 
+    enterkeyhint="search" 
+    class="custom"
+    placeholder="Buscar películas..." 
+    (ionInput)="onSearch($event)" 
+    (ionClear)="onClearSearch()"
+    debounce="500"></ion-searchbar>
   </div>
   @let totalFav = movieService.totalFavorites();
-
-  @if (totalFav >= 1) {
-  <div class="favorites-count">
+  <div  *ngIf="totalFav >= 1" class="favorites-count">
     <p>Películas favoritas</p>
     <ion-badge class="custom" mode="ios">{{ totalFav }}</ion-badge>
-  </div>}
-
-
-  @if (totalFav > 1) {
-  <div class="carousel">
+  </div>
+  <div *ngIf="totalFav > 1" class="carousel">
     <div class="group">
       @for (movie of favoriteMovies; track movie.imdbID) {
       <div class="card" [routerLink]="['/details', movie.imdbID]">
@@ -28,8 +30,9 @@
         <div class="detail-plot text-ellipsis">{{ movie.Plot }}</div>
       </div>
 
-      }
+    }
     </div>
+
     <div aria-hidden class="group">
       @for (movie of favoriteMovies; track movie.imdbID) {
       <div class="card" [routerLink]="['/details', movie.imdbID]">
@@ -45,56 +48,59 @@
       }
     </div>
   </div>
-  }@if (totalFav == 1){
-  @for (movie of favoriteMovies; track movie.imdbID) {
-  <div class="container-unique">
-    <div class="card" [routerLink]="['/details', movie.imdbID]">
-      <img class="img-carousel" src="{{ movie.Poster }}" alt="{{ movie.Title }}" />
-      <div class="detail-carousel">
-        <div class="detail-title text-ellipsis">{{ movie.Title }}</div>
-        <ion-icon class="icon-blink" name="heart" color="danger"></ion-icon>
-        <div class="detail-genre">{{ movie.Genre }}</div>
-        <div class="detail-year">{{ movie.Year }}</div>
+  <div *ngIf="totalFav == 1">
+   @for (movie of favoriteMovies; track movie.imdbID) {
+      <div class="container-unique">
+        <div class="card" [routerLink]="['/details', movie.imdbID]">
+          <img class="img-carousel" src="{{ movie.Poster }}" alt="{{ movie.Title }}" />
+          <div class="detail-carousel">
+            <div class="detail-title text-ellipsis">{{ movie.Title }}</div>
+            <ion-icon class="icon-blink" name="heart" color="danger"></ion-icon>
+            <div class="detail-genre">{{ movie.Genre }}</div>
+            <div class="detail-year">{{ movie.Year }}</div>
+          </div>
+          <div class="detail-plot text-ellipsis">{{ movie.Plot }}</div>
+        </div>
       </div>
-      <div class="detail-plot text-ellipsis">{{ movie.Plot }}</div>
-    </div>
+      }
   </div>
-  }
-  }
-  @if (movieService.movies().length > 0 && searchTerm != "" ){
-  <div class="count-result">
+
+
+  <div  *ngIf="movieService.movies().length > 0 && searchTerm != ''" class="count-result">
     Se encontraron <strong>{{ movieService.totalPeliculas() }}</strong>
     películas con el término <strong>'{{searchTerm }}'</strong>
   </div>
-  } @if(movieService.movies().length == 0 && searchTerm != "") {
-  <div class="count-result">
+  <div *ngIf=" movieService.movies().length == 0 && searchTerm != ''" class="count-result">
     No se encontraron películas con el término <strong>'{{ searchTerm }}'</strong>
 
   </div>
-  }@if(searchTerm == "") {
-  <div class="count-result">
+  
+  <div *ngIf="searchTerm == ''" class="count-result">
     Introduzca un término de búsqueda para comenzar.
   </div>
-  }
-  @if (searchTerm != "") {
-  <div class="movie-list">
-    <ion-list>
-      <div class="movie-item-container">
-
-        @for (movie of movieService.movies(); track movie.imdbID) {
-        <ion-item [routerLink]="['/details', movie.imdbID]" class="movie-item">
-          <ion-thumbnail slot="start">
-            <img class="movie-poster" src="{{ movie.Poster }}" alt="{{ movie.Title }}" />
-          </ion-thumbnail>
-          <div class="movie-info">
-            <div class="movie-genre">{{ movie.Type | titlecase }}</div>
-            <div class="movie-title">{{ movie.Title }}</div>
-            <div class="movie-year">{{ movie.Year }}</div>
-          </div>
-        </ion-item>
-        }
-      </div>
-    </ion-list>
-  </div>
-}
+  @if (movieService.isLoading()) {
+    <div class="loading-container">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Buscando películas...</p>
+    </div>
+  } @else {
+    <div *ngIf="movieService.movies().length > 0" class="movie-list">
+      <ion-list>
+        <div class="movie-item-container">
+          @for (movie of movieService.movies(); track movie.imdbID) {
+          <ion-item [routerLink]="['/details', movie.imdbID]" class="movie-item">
+            <ion-thumbnail slot="start">
+              <img class="movie-poster" src="{{ movie.Poster }}" alt="{{ movie.Title }}" />
+            </ion-thumbnail>
+            <div class="movie-info">
+              <div class="movie-genre">{{ movie.Type | titlecase }}</div>
+              <div class="movie-title">{{ movie.Title }}</div>
+              <div class="movie-year">{{ movie.Year }}</div>
+            </div>
+          </ion-item>
+          }
+        </div>
+      </ion-list>
+    </div>
+   }
 </ion-content>

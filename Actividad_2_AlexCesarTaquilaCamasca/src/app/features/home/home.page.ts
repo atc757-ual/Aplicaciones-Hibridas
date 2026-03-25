@@ -3,7 +3,7 @@ import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MovieService } from 'src/app/core/services/movie.service';
-
+import { NgModule } from '@angular/core';
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -24,7 +24,11 @@ export class HomePage {
       this.searchTerm = query;
     }
   }
-  
+  onClearSearch() {
+    this.movieService.clearMovies(); // Debes implementar este método en el servicio
+    this.searchTerm = '';
+  }
+
   /*Lista de peliculas*/
   get movies() {
     return this.movieService.movies();
