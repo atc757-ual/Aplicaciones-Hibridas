@@ -1,4 +1,4 @@
-import { Component, inject, NgModule } from '@angular/core';
+import { Component, inject, NgModule,Input, } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -20,26 +20,21 @@ export class DetailsPage {
   navCtrl = inject(NavController);
 
   // Accede a la película seleccionada:
- 
+  @Input() imdbID?: string;
+
   ngOnInit() {
     // Limpia el Signal antes de cargar una nueva película
     this.movieService.clearCurrentMovie();
-    const imdbID = this.route.snapshot.paramMap.get('imdbID');
-    if (imdbID) {
-      this.movieService.getMovieDetails(imdbID);
+    
+    if (this.imdbID) {
+      this.movieService.getMovieDetails(this.imdbID);
     }
   } 
 
-  get movie() {
-    return this.movieService.currentMovie();
-  }
+    get movie() {
+      return this.movieService.currentMovie();
+    }
 
-  goBack() {
-    this.navCtrl.back();
-  }
 
-  getRating(movie: any): number {
-    return movie.imdbRating ? Math.round(Number(movie.imdbRating) / 2) : 0;
-  }
 }
 

@@ -43,6 +43,7 @@ export class MovieService {
       this.confetti$.next();
     }
   }
+  
   getFavorites() {
       return this._favorites();
   }
@@ -52,7 +53,7 @@ export class MovieService {
   }
   
   searchMovies(title: string) {
-     this._isLoading.set(true);
+    this._isLoading.set(true);
     this.http.get<OMDbResponse>(`${this.API_URL}&s=${title}`)
       .subscribe(response => {
         if (response.Response === 'True') {
@@ -60,10 +61,8 @@ export class MovieService {
         } else {
           this._movies.set([]);
         }
-      });
-      setTimeout(() => {
         this._isLoading.set(false);
-      }, 500);
+      });    
   }
 
   getMovieDetails(imdbID: string) {
@@ -71,8 +70,8 @@ export class MovieService {
       this.http.get<Movie>(`${this.API_URL}&i=${imdbID}`)
         .subscribe(movie => {
           this._currentMovie.set(movie);
+             this._isLoading.set(false);  
         });
-     this._isLoading.set(false);  
   }
 
   /**
