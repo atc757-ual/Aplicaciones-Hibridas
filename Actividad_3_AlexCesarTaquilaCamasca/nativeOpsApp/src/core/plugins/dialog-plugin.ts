@@ -1,7 +1,7 @@
 // core/utils/dialog.utils.ts
 import { Dialog } from '@capacitor/dialog';
 
-export class DialogUtils {
+export class DialogPlugin {
   
   /**
    * Alerta simple con botón OK

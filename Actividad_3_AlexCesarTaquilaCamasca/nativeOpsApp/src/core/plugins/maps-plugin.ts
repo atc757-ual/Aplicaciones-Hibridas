@@ -22,7 +22,7 @@ L.Marker.prototype.options.icon = iconDefault;
 @Injectable({
   providedIn: 'root'
 })
-export class MapaService {
+export class MapPlugin {
   private mapa: L.Map | null = null;
 
   /**

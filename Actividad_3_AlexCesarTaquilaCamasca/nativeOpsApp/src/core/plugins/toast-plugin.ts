@@ -1,14 +1,14 @@
 import { Toast } from '@capacitor/toast';
 
 
-export class ToastUtils {
+export class ToastPlugin {
 
   static async show (message: string, options?: {
       duration?: 'short' | 'long';
       position?: 'top' | 'center' | 'bottom';
     }) {
       await Toast.show({
-        text: '✅ ' + message,
+        text: message,
         duration: options?.duration ?? 'short',
         position: options?.position ?? 'bottom',
       });

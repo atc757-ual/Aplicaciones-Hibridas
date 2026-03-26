@@ -4,7 +4,7 @@ import { Camera, CameraResultType, CameraPhoto } from '@capacitor/camera';
 @Injectable({
   providedIn: 'root',
 })
-export class CameraService {
+export class CameraPlugin {
   /**
    * Toma una foto usando la cámara del dispositivo y retorna el objeto CameraPhoto
    */

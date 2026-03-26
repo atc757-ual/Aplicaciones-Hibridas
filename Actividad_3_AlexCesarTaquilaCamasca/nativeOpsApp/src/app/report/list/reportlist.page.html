@@ -2,7 +2,7 @@
   <ion-toolbar>
     <ion-back-button slot="start" [defaultHref]="'/home'"></ion-back-button>
     <ion-title class="title-with-backbutton">
-      <span class="fs-24 f-semibold text-neutral-8">Incidence App</span>
+      <span class="fs-24 f-semibold text-neutral-8">Report App</span>
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -11,14 +11,13 @@
   <ion-card class="pre-content-card">
     <ion-card-header>
       <div class="bienvenida">
-        <ion-card-title class="fs-20 f-semibold">Mis incidencias</ion-card-title>
+        <ion-card-title class="fs-20 f-semibold">Mis reportes</ion-card-title>
       </div>
     </ion-card-header>
     <ion-card-content>
       <div class="fs-14">
-        En esta sección puedes ver tus incidencias registradas, su estado actual y detalles relevantes.
-        Si deseas reportar una nueva incidencia, haz clic en el botón "Crear nueva incidencia" al final
-        de la lista.
+        En esta sección puedes ver tus reportes registrados, su estado actual y detalles relevantes.
+        Si deseas reportar una nueva incidencia, haz clic en el botón "Crear reporte" que se encuentra debajo de la lista.
       </div>
     </ion-card-content>
   </ion-card>
@@ -47,14 +46,16 @@
                 </ion-badge>
               </ion-item>
             </ion-list>
-            <div class="display-flex fl-align-center fl-justify-center gap-s margin-y-base">
-              <ion-button (click)="prevPage()" [disabled]="page === 1">
-                <ion-icon aria-hidden="true" name="chevron-back-outline"></ion-icon>
-              </ion-button>
-              <span>Página {{page}} de {{totalPages}}</span>
-              <ion-button (click)="nextPage()" [disabled]="page === totalPages">
-                <ion-icon aria-hidden="true" name="chevron-forward-outline"></ion-icon>
-              </ion-button>
+            <div>
+              <div *ngIf="totalPages > 6" class="display-flex fl-align-center fl-justify-center gap-s margin-y-base">
+                <ion-button (click)="prevPage()" [disabled]="page === 1">
+                  <ion-icon aria-hidden="true" name="chevron-back-outline"></ion-icon>
+                </ion-button>
+                <span>Página {{page}} de {{totalPages}}</span>
+                <ion-button (click)="nextPage()" [disabled]="page === totalPages">
+                  <ion-icon aria-hidden="true" name="chevron-forward-outline"></ion-icon>
+               </ion-button>
+            </div>
             </div>
           </ng-container>
           <ng-template #loadingOrEmpty>
@@ -70,9 +71,9 @@
                 <ion-card-header>
                   <ion-card-title class="fs-16 f-semibold">¿Quieres reportar un nuevo incidente?</ion-card-title>
                 </ion-card-header>
-                  <ion-item [button]="true" detail=true lines="none" class="no-padding" routerLink="/incidente-create">
+                  <ion-item [button]="true" detail=true lines="none" class="no-padding" routerLink="/report-create">
                     <ion-icon aria-hidden="true" size="large" name="add-circle-outline" color="primary"></ion-icon>
-                    <ion-label class="margin-left-s">Crear Incidente</ion-label>
+                    <ion-label class="margin-left-s">Crear reporte</ion-label>
                   </ion-item>
          </ion-card>
         </div>
@@ -93,12 +94,12 @@
                         <ion-badge class="success">{{ resolvedCount }}</ion-badge>
                       </div>
                       <div class="status-row">
-                        <span class="status-label">Pendientes</span>
-                        <ion-badge class="pending">{{ unresolvedCount }}</ion-badge>
-                      </div>
-                      <div class="status-row">
                         <span class="status-label">En atención</span>
                         <ion-badge class="inprogress">{{ inProgressCount }}</ion-badge>
+                      </div>
+                      <div class="status-row">
+                        <span class="status-label">Pendientes</span>
+                        <ion-badge class="pending">{{ unresolvedCount }}</ion-badge>
                       </div>
                     </div>
                     </div>

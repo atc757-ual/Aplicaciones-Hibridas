@@ -1,6 +1,6 @@
 // src/app/pages/mapa/mapa.page.ts
 import { Component, AfterViewInit, OnDestroy } from '@angular/core';
-import { MapaService } from '../core/utils/maps.utils';
+import { MapaService } from '../core/plugins/maps-plugin';
 
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';

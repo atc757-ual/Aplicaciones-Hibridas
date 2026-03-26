@@ -25,7 +25,6 @@ export interface ModelReport {
 
   // Metadatos
   createdAt: string;
-  reporterName?: string;
 }
 
 export type Priority = "alta" | "media" | "baja";

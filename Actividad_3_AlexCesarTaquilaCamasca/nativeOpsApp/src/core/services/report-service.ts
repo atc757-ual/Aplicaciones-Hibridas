@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { StorageService } from '../storage/storage';
-import { Categories, ModelReport, Priority } from '../models/models';
+import { StorageService } from '../storages/storage';
+import { Categories, ModelReport, Priority } from '../models/model-photo';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ReporteService {
+export class ReportService {
   /** Clave de almacenamiento para los reportes */
   private storageKey = 'Reporte';
 
@@ -17,13 +17,11 @@ export class ReporteService {
       (await this.storageService.getItems<ModelReport[]>(this.storageKey)) || []
     );
   }
-
   async addItem(reporte: ModelReport): Promise<void> {
     const reportes = await this.getItems();
     reportes.push(reporte);
     await this.storageService.setItem(this.storageKey, reportes);
   }
-
   async updateItem(id: string, changes: Partial<ModelReport>): Promise<void> {
     const reportes = await this.getItems();
     const idx = reportes.findIndex((r) => r.id === id);
@@ -32,13 +30,11 @@ export class ReporteService {
       await this.storageService.setItem(this.storageKey, reportes);
     }
   }
-
   async deleteItem(id: string): Promise<void> {
     let reportes = await this.getItems();
     reportes = reportes.filter((r) => r.id !== id);
     await this.storageService.setItem(this.storageKey, reportes);
   }
-
   async getById(id: string): Promise<ModelReport | undefined> {
     const reportes = await this.getItems();
     return reportes.find((r) => r.id === id);
@@ -56,4 +52,5 @@ export class ReporteService {
         ?.priority as Priority) ?? 'baja';
     await this.addItem(reporte)
   }
+
 }

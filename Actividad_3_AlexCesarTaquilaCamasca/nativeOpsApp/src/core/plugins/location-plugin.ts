@@ -4,7 +4,7 @@ import { Geolocation, Position } from '@capacitor/geolocation';
 @Injectable({
   providedIn: 'root',
 })
-export class LocationService {
+export class LocationPlugin {
   /**
    * Obtiene la ubicación actual del dispositivo
    */

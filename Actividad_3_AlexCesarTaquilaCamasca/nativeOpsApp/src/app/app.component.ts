@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
-import { StorageService } from 'src/core/storage/storage';
-import { ModelReport } from 'src/core/models/models';
+import { StorageService } from 'src/core/storages/storage';
+import { ModelReport } from 'src/core/models/model-photo';
 import {
   camera,
   location,
@@ -20,7 +20,7 @@ import {
   warningOutline,
 } from 'ionicons/icons'; //importamos el icono de cámara de Ionicons para usarlo en la interfaz de usuario
 import { addIcons } from 'ionicons'; //importamos el icono de agregar de Ionicons para usarlo en la interfaz de usuario
-import { REPORTES_SEED } from 'src/core/utils/reporte.seed';
+import { REPORTES_SEED } from 'src/core/services/report.seed';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',

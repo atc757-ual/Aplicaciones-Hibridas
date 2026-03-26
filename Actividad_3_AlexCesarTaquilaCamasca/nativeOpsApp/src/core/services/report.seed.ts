@@ -1,4 +1,4 @@
-import { ModelReport } from '../models/models';
+import { ModelReport } from '../models/model-photo';
 
 export const REPORTES_SEED: ModelReport[] = [
   {

@@ -11,11 +11,11 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'incidente-create',
-    loadComponent: () => import('./incidente/create/incidentecreate.page').then( m => m.IncidentecreatePage)
+    path: 'report-create',
+    loadComponent: () => import('./report/create/reportcreate.page').then( m => m.ReportcreatePage)
   },
   {
-    path: 'incidente-detail',
-    loadComponent: () => import('./incidente/detail/incidentedetail.page').then( m => m.IncidentedetailPage)
+    path: 'report-list',
+    loadComponent: () => import('./report/list/reportlist.page').then( m => m.ReportlistPage)
   },
 ];

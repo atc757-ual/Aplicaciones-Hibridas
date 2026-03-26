@@ -1,15 +1,15 @@
 import { Component, ViewChild} from '@angular/core';
 import { SharedIonicModule } from '../../shared/shared-ionic.module';
 import { DomSanitizer ,SafeResourceUrl} from '@angular/platform-browser'; //importamos el servicio DomSanitizer para manejar URLs seguras en Angular
-import { MapaService } from 'src/core/utils/maps.utils'; //importamos el servicio MapaService para manejar la creación y manipulación de mapas en la aplicación
-import { ModelReport,Categories, Priority} from 'src/core/models/models';
-import { ReporteService } from 'src/core/services/reporte-service';
-import { ToastUtils } from 'src/core/utils/toast.utils';
+import { MapPlugin } from 'src/core/plugins/maps-plugin'; //importamos el servicio MapaService para manejar la creación y manipulación de mapas en la aplicación
+import { ModelReport,Categories, Priority} from 'src/core/models/model-photo';
+import { ReportService } from 'src/core/services/report-service';
+import { ToastPlugin } from 'src/core/plugins/toast-plugin';
 import { NavController } from '@ionic/angular';
 import { IonModal } from '@ionic/angular';
-import { DeviceUtils } from 'src/core/utils/devices.utils';
-import { LocationService } from 'src/core/services/location.service';
-import { CameraService } from 'src/core/services/camera.service';
+import { DeviceUtils } from 'src/core/utils/device-util';
+import { LocationPlugin } from 'src/core/plugins/location-plugin';
+import { CameraPlugin } from 'src/core/plugins/camera-plugin';
 import { Dialog } from '@capacitor/dialog';
 
 interface PhotoWithSafeUrl {
@@ -21,13 +21,13 @@ interface PhotoWithSafeUrl {
 }
 
 @Component({
-  selector: 'app-incidentecreate',
-  templateUrl: './incidentecreate.page.html',
-  styleUrls: ['./incidentecreate.page.scss'],
+  selector: 'app-reportcreate',
+  templateUrl: './reportcreate.page.html',
+  styleUrls: ['./reportcreate.page.scss'],
   standalone: true,
   imports: [SharedIonicModule],
 })
-export class IncidentecreatePage {
+export class ReportcreatePage {
   @ViewChild('modal', { static: false }) modal!: IonModal;
   @ViewChild('modalMapa', { static: false }) modalMapa!: IonModal;
 
@@ -54,15 +54,14 @@ export class IncidentecreatePage {
     priority: 'baja', 
     aceptoTerminos: false,
     createdAt: new Date().toISOString(),
-    reporterName: ''
   };
 
   constructor(
-    private mapaService: MapaService,
-    private locationService: LocationService,
-    private cameraService: CameraService,
+    private mapaService: MapPlugin,
+    private locationService: LocationPlugin,
+    private cameraService: CameraPlugin,
     private sanitizer: DomSanitizer,
-    private reporteService: ReporteService,
+    private reporteService: ReportService,
     private navCtrl: NavController,
   ) {
     window.addEventListener('resize', this.resizeHandler);
@@ -82,22 +81,25 @@ export class IncidentecreatePage {
   // Lógica para solicitar permiso de geolocalización al usuario y mostrar un mensaje de confirmación
   async authorizarUbicacion() {
     this.isLoadingGeo = true;
-    this.hasPermisionGeo =
-    await this.locationService.requestGeolocationPermission();
-    ToastUtils.show( this.hasPermisionGeo ? 'Permiso a ubicación otorgado': 'Permiso denegado.',{ duration: 'long', position: 'top' },);
+    this.hasPermisionGeo =  await this.locationService.requestGeolocationPermission();
+    ToastPlugin.show( this.hasPermisionGeo ? 'Permiso a ubicación otorgado': 'Permiso denegado.',{ duration: 'long', position: 'top' },);
     this.isLoadingGeo = false;
   }
 
   // Método para manejar el envío del formulario de creación de reporte, se llama desde el template cuando el usuario hace clic en el botón de enviar reporte
   async submitReport() {
    
-    this.reporte.photos= this.photos;
+    this.reporte.photos= this.photos.map((foto) => ({
+      url: foto.url,
+      latitude: foto.latitude,
+      longitude: foto.longitude,
+      accuracy: foto.accuracy
+    }));
     this.isLoadingSubmit = true;
     this.reporteService.createReporte(this.reporte);
     setTimeout(() => {
          this.isLoadingSubmit = false;
          this.modal.present();
-         
     }, 1000);
     
     //await this.presentToast('Se han otorgado permisos de ubicación');
@@ -163,7 +165,7 @@ export class IncidentecreatePage {
   /** Método para navegar a la página de detalle de incidencias, se llama desde el template después de enviar un reporte exitosamente **/
   async verIndidencias() {
     await this.closeModal();
-    this.navCtrl.navigateForward(['/incidente-detail']);
+    this.navCtrl.navigateForward(['/report-list']);
   }
 
   /**  Método para cerrar el modal de confirmación después de enviar un reporte, se llama desde el template **/ 

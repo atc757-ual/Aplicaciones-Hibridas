@@ -2,7 +2,7 @@
   <ion-toolbar>
     <ion-back-button slot="start" [defaultHref]="'/home'"></ion-back-button>
     <ion-title class="title-with-backbutton">
-      <span class="fs-24 f-semibold text-neutral-8">Incidence App</span>
+      <span class="fs-24 f-semibold text-neutral-8">Report App</span>
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -11,7 +11,7 @@
   <ion-card class="pre-content-card">
     <ion-card-header>
       <div class="bienvenida">
-        <ion-card-title class="fs-20 f-semibold">Genera un incidente</ion-card-title>
+        <ion-card-title class="fs-20 f-semibold">Genera un reporte</ion-card-title>
       </div>
     </ion-card-header>
     <ion-card-content>
@@ -28,7 +28,7 @@
         <div class="reactive">
           <div class="col-8 col-sm-12 no-padding-sm ">
             <ion-card class="full-width  margin-bottom-base">
-              <ion-accordion-group [value]="isDesktop ? 'ubicacion' : null">
+              <ion-accordion-group [value]= "'ubicacion'">
                 <ion-accordion value="ubicacion">
                   <ion-item class="padding-s" slot="header">
                     <span class="fs-20 f-semibold">Ubicación</span>
@@ -62,7 +62,7 @@
               <ion-accordion-group [value]="'fotos'">
                 <ion-accordion value="fotos">
                   <ion-item class="padding-s" slot="header">
-                    <span class="fs-20 f-semibold">Evidencia fotográfica</span>
+                    <span class="fs-20 f-semibold">Fotografía</span>
                     <ion-icon *ngIf="photos.length > 0" class="fs-22" slot="end" name="checkmark-circle-outline"
                       size="medium" color="secondary" aria-hidden="true"></ion-icon>
                   </ion-item>
@@ -122,7 +122,7 @@
               <ion-accordion-group [value]="isDesktop ? 'otros' : null">
                 <ion-accordion value="otros">
                  <ion-item class="padding-s" slot="header">
-                    <span class="fs-20 f-semibold">Información relevante 
+                    <span class="fs-20 f-semibold">Detalle 
                         @if(reporte.category != "" && reporte.title != "" && reporte.description != ""){
                           <ion-icon class="fs-22 checkmark-absolute" name="checkmark-circle-outline" size="medium"
                           color="secondary" aria-hidden="true"></ion-icon>

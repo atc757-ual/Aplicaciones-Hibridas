@@ -5,7 +5,7 @@ export interface ActionSheetOption {
   title: string;
 }
 
-export class ActionSheetUtils {
+export class ActionSheetUtilsPlugin {
   
   /**
    * Muestra una hoja de acciones con opciones
