@@ -1,0 +1,165 @@
+<ion-header [translucent]="true" mode="md" class="shadow-medium">
+  <ion-toolbar>
+    <ion-back-button *ngIf="this.isValidSession.isLoaded && !this.isValidSession.isLogged " slot="start"
+      [defaultHref]="'/home'"></ion-back-button>
+    <ion-title [ngClass]="{'title-with-backbutton': true, 'right': this.isValidSession.isLogged }">
+      <span class="fs-24 f-semibold text-neutral-8">Productos</span>
+    </ion-title>
+    <ion-buttons *ngIf="this.isValidSession.isLogged && this.isValidSession.isLoaded" slot="end">
+      <div class="vertical-divider"></div>
+      <ion-button (click)="logout()">
+        <ion-icon slot="icon-only" color="primary" name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content fullscreen="true">
+  <div></div>
+  <ion-card class="pre-content-card">
+    <ion-card-header>
+      <div *ngIf="isValidSession.isLoaded" class="bienvenida">
+        <ion-card-title class="fs-20 f-semibold">{{ isValidSession.isLogged ? '¡Hola, ' + userService.user()?.nombre +
+          '!' : 'Nuestros productos' }}</ion-card-title>
+      </div>
+    </ion-card-header>
+    <ion-card-content>
+      <div *ngIf="isValidSession.isLoaded" class="text-left text-neutral-7 fs-16 f-regular">
+        {{ isValidSession.isLogged ? 'Aquí puedes ver y gestionar los productos que has registrado. Para agregar nuevos
+        productos, haz clic en el botón "Agregar productos" a la derecha.' : 'Aquí puedes ver productos registrados.' }}
+      </div>
+    </ion-card-content>
+  </ion-card>
+  <div class="content">
+    <div class="container">
+      <div class="reactive reverse">
+        <div class="col-8 col-sm-12 no-padding-sm">
+          <ion-card class="margin-bottom-base">
+            <div class="padding-base display-flex fl-align-center gap-xs">
+              <ion-card-title class="fs-20 f-semibold">Lista de productos</ion-card-title>
+                <ng-container *ngIf="isValidSession.isLoaded && isValidSession.isLogged">
+                  <ion-icon color="primary" class="info-icon" name="information-circle-outline" id="hover-trigger"></ion-icon>
+                  <ion-popover color="light" class="popover-custom" mode="ios" translucent="false" trigger="hover-trigger" triggerAction="hover">
+                <ng-template>
+                  <ion-content class="ion-padding">
+                    <div>Si quieres <b class="text-blue-primary-100 ">ver el detalle</b> de un producto, haz swipe hacia
+                      la derecha.</div>
+                    <div class="margin-top-s">Si quieres <b class="text-red">eliminar</b> un producto, haz swipe hacia
+                      la izquierda en el producto. </div>
+                  </ion-content>
+                </ng-template>
+                  </ion-popover>
+                </ng-container>
+            </div>
+            <ion-card-content>
+              <ion-list>
+                @for (product of productService.products(); track product.id) {
+                <ion-item-sliding #slidingItem>
+                  <ion-item-options *ngIf="isValidSession.isLogged && isValidSession.isLoaded"
+                    (ionSwipe)="openModalDetail(product, slidingItem)" side="start">
+                    <ion-item-option class="detail" expandable>
+                      <ion-icon slot="icon-only" name="search-outline"></ion-icon>
+                    </ion-item-option>
+                  </ion-item-options>
+                  <ion-item>
+                    <ion-thumbnail slot="start">
+                      <ion-img *ngIf="product.imageUrl" [src]="product.imageUrl" alt="Imagen del producto"
+                        style="object-fit: cover;"></ion-img>
+                    </ion-thumbnail>
+                    <ion-label>
+                      <div class="fs-18 f-semibold">{{ product.marca }}</div>
+                      <div class="fs-14 f-regular">{{ product.modelo }}</div>
+                    </ion-label>
+                  </ion-item>
+                  <ion-item-options *ngIf="this.isValidSession.isLogged && this.isValidSession.isLoaded"
+                    (ionSwipe)="openModalDelete(product.id, slidingItem)" side="end">
+                    <ion-item-option class="delete" expandable>
+                      <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+                    </ion-item-option>
+                  </ion-item-options>
+                </ion-item-sliding>
+                } @empty {
+                <ion-item *ngIf="this.isValidSession.isLoaded">
+                  {{this.isValidSession.isLogged ? 'No tienes productos registrados.' : 'No hay productos para
+                  mostrar.'}}
+                </ion-item>
+                }
+              </ion-list>
+            </ion-card-content>
+          </ion-card>
+        </div>
+
+        <div *ngIf="this.isValidSession.isLogged && this.isValidSession.isLoaded" class="col-4 col-sm-12 no-padding-sm">
+          <ion-card class>
+            <ion-card-header>
+              <ion-card-title class="fs-20 f-semibold">Gestiona tus productos</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-item [button]="true" routerLink="/add-product" lines="none" detail=true class="no-padding"
+                routerDirection="forward">
+                  <ion-icon size="large" name="add-circle-outline" color="primary"></ion-icon>
+                <ion-label class="margin-left-s">Agregar productos</ion-label>
+              </ion-item>
+            </ion-card-content>
+          </ion-card>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal delete-->
+  <ion-modal *ngIf="this.isValidSession.isLogged && this.isValidSession.isLoaded" #modal id="modal"
+    [initialBreakpoint]="1" [breakpoints]="[0, 1]">
+    <ng-template>
+      <div class="block">
+        <ion-card-title class="fs-20 f-semibold text-neutral-8 text-left">
+          Eliminar producto
+        </ion-card-title>
+        <div class="margin-top-m text-left text-neutral-7 fs-16 f-regular">
+          ¿Estás seguro de que quieres eliminar este producto? <br>Esta acción no se puede deshacer.
+        </div>
+        <div class="margin-top-m display-flex fl-justify-center fs-16 fl-align-center gap-base">
+          <ion-button color="danger" (click)="confirmDelete()">Eliminar</ion-button>
+          <ion-button fill="outline" color="medium" (click)="modal.dismiss()">Cancelar</ion-button>
+        </div>
+      </div>
+    </ng-template>
+  </ion-modal>
+  <!-- Modal detalle-->
+  <ion-modal *ngIf="this.isValidSession.isLogged && this.isValidSession.isLoaded" #modalDetail id="modalDetail"
+    [initialBreakpoint]="1" [breakpoints]="[0, 1]">
+    <ng-template>
+      <div class="block">
+        <div class="fs-20 f-semibold text-neutral-8 text-left margin-bottom-base">
+          Detalle del producto
+        </div>
+        <div class="display-flex gap-base">
+          <img [src]="productToDetail?.imageUrl" alt="Imagen del producto" class="product-image"><img>
+          <div>
+            <div class="margin-y-s fs-14 f-semibold">{{ productToDetail?.marca }}</div>
+            <div class="margin-y-xs fs-22 f-bold">{{ productToDetail?.modelo }}</div>
+            <div *ngIf="productToDetail as detail"
+              [ngClass]="'margin-y-xs ' + (detail.descuento > 0 ? 'text-strikethrough fs-20' : 'text-blue-primary-100  fs-24 f-bold')">
+              €{{ detail.precio | number:'1.2-2' }}
+            </div>
+            <div *ngIf="productToDetail && productToDetail.descuento != null && productToDetail.descuento > 0"
+              class="margin-y-xs fs-20">{{ productToDetail.descuento/100 | percent }}</div>
+            <div *ngIf="productToDetail && productToDetail.precio != null && productToDetail.descuento > 0"
+              [ngClass]="'margin-y-xs ' + (productToDetail.descuento > 0 ? 'text-blue-primary-100  fs-24 f-bold' : 'fs-18')">
+              €{{ (productToDetail.precio - (productToDetail.precio * productToDetail.descuento/100)) | number:'1.2-2'
+              }}
+            </div>
+            <div class="margin-top-xs margin-bottom-base"> {{ productToDetail?.unidades }} <strong>unidades</strong></div>
+          </div>
+        </div>
+        <div class="border-top-neutral-5" *ngIf="productToDetail?.descripcion">
+          <div class="f-medium padding-top-base">Detalle breve:</div>
+          <div class="ellipsis-3 fs-14 margin-top-s" *ngIf="productToDetail?.descripcion"> {{ productToDetail?.descripcion }}</div>
+        </div>
+        <div *ngIf="!productToDetail?.descripcion" class="text-neutral-7 fs-14">Sin descripción</div>
+        <div class="margin-top-base display-flex fl-justify-center fs-16 fl-align-center gap-base">
+          <ion-button fill="outline" color="small" mode="ios" (click)="modalDetail.dismiss()">Cerrar</ion-button>
+        </div>
+      </div>
+    </ng-template>
+  </ion-modal>
+</ion-content>

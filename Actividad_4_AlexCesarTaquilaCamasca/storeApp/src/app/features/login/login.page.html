@@ -1,0 +1,60 @@
+<ion-header [translucent]="true" mode="md" class="shadow-medium">
+  <ion-toolbar>
+    <ion-back-button slot="start" [defaultHref]="'/home'"></ion-back-button>
+    <ion-title class="title-with-backbutton">
+      <span class="fs-24 f-semibold text-neutral-8">Inicio de sesión</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content fullscreen="true">
+  <div class="flex-center-column padding-base">
+    <ion-card class="col-4 col-md-6 col-sm-12">
+      <ion-card-header class="display-flex fl-justify-center flex-column gap-s">
+        <div>
+          <span class="fs-28 f-semibold text-neutral-8">!Te damos la <br>bienvenida a Store App!</span>
+        </div>
+        <div class="margin-top-m">
+          <ion-img class="ilus-preference" src="assets/img/ilus_persona.svg"></ion-img>
+          <div class="margin-top-m text-left text-neutral-7 fs-16 f-medium">
+            A continuación, ingresa tus credenciales.
+          </div>
+        </div>
+      </ion-card-header>
+      <ion-card-content>
+        <form [formGroup]="loginForm" (ngSubmit)="login()">
+          <div>
+            <ion-input label="Correo Electrónico" label-placement="floating" fill="outline" mode="md"
+              placeholder="Ingresa tu correo" formControlName="email" type="email" class="background-f1"></ion-input>
+            <ion-text class="fs-12" color="danger"
+              *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"> Ingresa un correo
+              válido.</ion-text>
+          </div>
+          <div class="margin-top-m">
+            <ion-input label="Contraseña" label-placement="floating" fill="outline" mode="md"
+              placeholder="Ingresa tu contraseña" type="password" formControlName="password"
+              class="background-f1">
+              <ion-input-password-toggle slot="end" color="primary"></ion-input-password-toggle>
+            </ion-input>
+            <ion-text class="fs-12" color="danger"
+              *ngIf="loginForm.get('password')?.invalid &&  loginForm.get('password')?.touched"> La contraseña debe
+              tener al menos 6 caracteres.</ion-text>
+          </div>
+          <div class="margin-top-m">
+            <ion-button class="full-width" mode="ios" type="submit" [disabled]="loginForm.invalid">Iniciar
+              sesión</ion-button>
+          </div>
+        </form>
+        <div class="flex-center-column fl-align-center gap-s margin-top-m">
+          <div>
+            <span>¿Aún no tiene una cuenta? </span>
+          </div>
+          <div>
+            <a routerLink="/register" class="color-primary">
+                Regístrate aquí
+            </a>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

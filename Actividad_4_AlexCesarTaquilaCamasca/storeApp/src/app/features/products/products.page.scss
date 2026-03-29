@@ -1,0 +1,154 @@
+.gap-xs {
+    gap: 8px;
+}
+.vertical-divider {
+    width: 1px;
+    height: 24px;
+    background-color: lightgray;
+    align-self: center;
+}
+
+
+ion-item::part(native) {
+    --inner-padding-start: 0;
+    --inner-padding-end: 0;
+    --padding-start: var(--space-xs);
+    --padding-end: var(--space-xs);
+    --detail-icon-color: var(--ion-color-base);
+    --detail-icon-opacity: 0.9;
+    --detail-icon-font-size: var(--fs-28);
+    --background-activated: var(--blue-primary-025);
+    --border-radius: var(--space-s);
+    cursor: pointer;
+}
+
+ion-item-option.detail {
+    --background: var(--color-success) !important;
+    border-radius: var(--space-s);
+    color: var(--color-neutral-0);
+    pointer-events: none;
+}
+
+ion-item-option.delete {
+    --background: var(--color-error) !important;
+    border-radius: var(--space-s);
+    color: var(--color-neutral-0);
+    pointer-events: none;
+}
+
+ion-item-option.delete.ion-activated {
+    background: var(--color-red-dark) !important;
+    border-radius: var(--space-s);
+}
+
+ion-item-option.detail.ion-activated {
+    background: var(--green-150) !important;
+    border-radius: var(--space-s);
+}
+
+ion-modal {
+    --width: 400px;
+}
+
+ion-modal::part(content) {
+    position: relative;
+    min-height: 200px;
+    max-height: 450px;
+    border-radius: var(--border-radius-medium)
+}
+
+ion-modal::part(handle) {
+    display: none;
+}
+
+ion-modal>.ion-page {
+    position: relative;
+    contain: layout style;
+}
+
+ion-modal::part(backdrop) {
+    pointer-events: none !important;
+}
+
+.block {
+    width: 100%;
+    padding: var(--space-base);
+}
+
+/* Alineación de icono de información con el título */
+.info-icon {
+    cursor: pointer;
+    font-size:var(--fs-20);
+    margin-top:var(--space-xs);
+}
+.popover-custom{
+    --backdrop-opacity:0.75;
+    --box-shadow:none;
+    --max-height:125px;
+    --min-width:350px;
+    --offset-x: 0px;
+    --offset-y: 2px;    
+}
+ion-popover ion-content::part(background){
+    --background:var(--color-neutral-0) !important;
+}   
+ion-popover ion-content.ion-padding{
+    --color: var(--color-neutral-7) !important;
+    font-size:var(--fs-16);
+}   
+
+ion-img::part(image) {
+    width:fit-content;
+    object-fit: cover;
+    margin: auto;
+}
+
+.text-strikethrough{
+    text-decoration: line-through;
+}
+ .product-image{
+    width: auto;
+    height:200px;
+    object-fit: cover;
+}
+/* Truncar texto a 3 líneas con puntos suspensivos */
+.ellipsis-3 {
+    display: -webkit-box;
+    /* stylelint-disable-next-line property-no-vendor-prefix */
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+}
+
+@media screen and (max-width: 768px) {
+    .block {
+        width: 100%;
+        min-height: 200px ;
+        max-height: 70%;
+        padding: var(--space-m) var(--space-base) var(--space-base);
+    }
+
+    ion-modal {
+        --height: auto;
+    }
+
+    ion-modal>.ion-page {
+        height: 100%;
+    }
+
+    ion-modal::part(content) {
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+        border-start-start-radius: var(--border-radius);
+        border-start-end-radius: var(--border-radius);
+        border-end-end-radius: 0;
+        border-end-start-radius: 0;
+    }
+    
+    ion-modal::part(handle) {
+    display: flex;
+}
+}

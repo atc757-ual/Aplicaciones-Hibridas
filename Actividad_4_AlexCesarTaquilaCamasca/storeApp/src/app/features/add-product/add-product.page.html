@@ -1,0 +1,174 @@
+<ion-header [translucent]="true" mode="md" class="shadow-medium">
+  <ion-toolbar>
+    <ion-back-button slot="start" [defaultHref]="'/products'"></ion-back-button>
+    <ion-title class="title-with-backbutton">
+      <span class="fs-24 f-semibold text-neutral-8">Crear producto</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content fullscreen="true">
+  <div>
+    <ion-card class="pre-content-card">
+      <ion-card-header>
+        <div class="bienvenida">
+          <ion-card-title class="fs-20 f-semibold">Registra nuevo producto</ion-card-title>
+        </div>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="text-left text-neutral-7 fs-16 f-regular">
+          Ingresa información de tu producto.
+        </div>
+      </ion-card-content>
+    </ion-card>
+    <div class="content">
+      <div class="container">
+        <form [formGroup]="productForm" (ngSubmit)="addProduct()">
+          <div class="reactive">
+            <div class="col-8 col-sm-12 no-padding-sm">
+              <ion-card>
+                <ion-card-header class="flex-column">
+                  <div class="fs-18 f-semibold">Formulario de registro</div>
+                </ion-card-header>
+                <ion-card-content>
+
+                  <div class="display-flex fl-align-center gap-base break-sm">
+                    <div class="full-width">
+                      <ion-input label="Marca" label-placement="floating" fill="outline" mode="md"
+                        placeholder="Ingresa la marca del producto" formControlName="marca" type="text"
+                        class="background-f1" formControlName="marca">
+                        <ion-icon slot="end" color="success" class="fs-24" name="checkmark-circle-outline"
+                          *ngIf="productForm.get('marca')?.valid && productForm.get('marca')?.touched"></ion-icon>
+                      </ion-input>
+                      <ion-text class="fs-12" color="danger"
+                        *ngIf="productForm.get('marca')?.invalid &&  productForm.get('marca')?.touched"> La marca es
+                        requerida.
+                      </ion-text>
+                    </div>
+                    <div class="full-width">
+                      <ion-input label="Modelo" label-placement="floating" fill="outline" mode="md"
+                        placeholder="Ingresa el modelo del producto" formControlName="modelo" type="text"
+                        class="background-f1" formControlName="modelo">
+                        <ion-icon slot="end" color="success" class="fs-24" name="checkmark-circle-outline"
+                          *ngIf="productForm.get('modelo')?.valid && productForm.get('modelo')?.touched"></ion-icon>
+                      </ion-input>
+                      <ion-text class="fs-12" color="danger"
+                        *ngIf="productForm.get('modelo')?.invalid &&  productForm.get('modelo')?.touched"> El modelo es
+                        requerido.
+                      </ion-text>
+                    </div>
+                  </div>
+                  <div class="margin-top-base">
+                    <ion-textarea class="background-f1" label="Descripción (Máx. 1000 caracteres)"
+                      label-placement="floating" fill="outline" mode="md"
+                      placeholder="Ingresa la descripción del producto" formControlName="descripcion" type="text"
+                      class="background-f1" [spellcheck]="true" [maxlength]="1000" [rows]="5" [autoGrow]="true"
+                      [clearOnEdit]="true">
+                      <ion-icon slot="end" color="success" class="fs-24" name="checkmark-circle-outline"
+                        *ngIf="productForm.get('descripcion')?.valid && productForm.get('descripcion')?.touched"></ion-icon>
+                    </ion-textarea>
+                    <ion-text class="fs-12" color="danger"
+                      *ngIf="productForm.get('descripcion')?.invalid &&  productForm.get('descripcion')?.touched"> La
+                      descripción es requerida.
+                    </ion-text>
+                  </div>
+
+                  <div class="display-flex fl-align-center gap-base break-sm margin-top-base">
+                    <div class="full-width">
+                      <ion-input label="Precio (€)" label-placement="floating" fill="outline" mode="md"
+                        placeholder="Ingresa el precio del producto" formControlName="precio" type="number"
+                        class="background-f1" formControlName="precio">
+                        <ion-icon slot="end" color="success" class="fs-24" name="checkmark-circle-outline"
+                          *ngIf="productForm.get('precio')?.valid && productForm.get('precio')?.touched"></ion-icon>
+                      </ion-input>
+                      <ion-text class="fs-12" color="danger"
+                        *ngIf="productForm.get('precio')?.invalid &&  productForm.get('precio')?.touched"> El precio es
+                        requerido.
+                      </ion-text>
+                    </div>
+                    <div class="full-width">
+                      <ion-input label="Descuento (%)" label-placement="floating" fill="outline" mode="md"
+                        placeholder="Ingresa el descuento del producto" formControlName="descuento" type="number"
+                        class="background-f1" formControlName="descuento">
+                        <ion-icon slot="end" color="success" class="fs-24" name="checkmark-circle-outline"
+                          *ngIf="productForm.get('descuento')?.valid && productForm.get('descuento')?.touched"></ion-icon>
+                      </ion-input>
+                      <ion-text class="fs-12" color="danger"
+                        *ngIf="productForm.get('descuento')?.invalid &&  productForm.get('descuento')?.touched"> El
+                        descuento debe estar entre 0 y 100.
+                      </ion-text>
+                    </div>
+                    <div class="full-width">
+                      <ion-input label="Unidades" label-placement="floating" fill="outline" mode="md"
+                        placeholder="Ingresa la cantidad en stock" formControlName="unidades" type="number"
+                        class="background-f1" formControlName="unidades">
+                        <ion-icon slot="end" color="success" class="fs-24" name="checkmark-circle-outline"
+                          *ngIf="productForm.get('unidades')?.valid && productForm.get('unidades')?.touched"></ion-icon>
+                      </ion-input>
+                      <ion-text class="fs-12" color="danger"
+                        *ngIf="productForm.get('unidades')?.invalid &&  productForm.get('unidades')?.touched"> Las
+                        unidades son requeridas.
+                      </ion-text>
+                    </div>
+                  </div>
+                </ion-card-content>
+              </ion-card>
+            </div>
+            <div class="col-4 col-sm-12 no-padding-sm">
+              <ion-card class="margin-bottom-base padding-base">
+                @if (productForm.get('imageUrl')?.valid) {
+                <div class="ion-text-center">
+                  <div class="fs-14 margin-bottom-base">Previsualización externa:</div>
+                  <div class="img-prev">
+                    <img [src]="productForm.value.imageUrl" class="img-fluid" />
+                    <ion-icon name="close-circle-outline" color="danger" (click)="clearImageUrl()"
+                      class="delete-icon"></ion-icon>
+                  </div>
+                </div>
+                }
+                @if (productForm.get('imagenfile')?.value) {
+                <div class="ion-text-center">
+                  <div class="fs-14 margin-bottom-base">Previsualización local:</div>
+                  <div class="img-prev">
+                    <img [src]="productForm.get('imagenfile')?.value.localUrl" class="img-fluid" />
+                    <ion-icon name="close-circle-outline" color="danger" (click)="clearSelectedImage()"
+                      class="delete-icon"></ion-icon>
+                  </div>
+
+                  <div *ngIf="productForm.get('imagenfile')?.value">
+                    <p><strong>Archivo seleccionado: </strong><br>
+                      <span class="fs-12">{{ productForm.get('imagenfile')?.value.name }}</span>
+                    </p>
+                  </div>
+                </div>}
+                <div *ngIf="productForm.get('imagenfile')?.value === null" class="margin-top-base">
+                  <ion-input label="URL de la imagen (Internet)" label-placement="floating" fill="outline" mode="md"
+                    placeholder="Ingresa la URL de la imagen del producto" formControlName="imageUrl" type="url"
+                    class="background-f1" (ionInput)="onImageUrlInput()"></ion-input>
+                </div>
+                <div *ngIf="!productForm.get('imageUrl')?.value  && !productForm.get('imagenfile')?.value"  class="margin-top-base">
+                  O sube una imagen desde tu dispositivo:
+                </div>
+                <div *ngIf="productForm.get('imageUrl')?.value === ''" class="margin-top-base">
+                  <div class="display-flex fl-align-center gap-s">
+                    <ion-button mode="ios" color="light" size="small" class="btn-file" (click)="fileInput.click()">
+                      <ion-icon name="image-outline" class="margin-right-s fs-22"></ion-icon>
+                      {{ productForm.get('imagenfile')?.value ?  'Cambiar imagen seleccionada' : 'Seleccionar una imagen'  }}
+                    </ion-button>
+                  </div>
+                  <input #fileInput (change)="onFileSelected($event)" type="file" accept=".svg,.png,.jpeg,.jpg,.webp"
+                    hidden>
+                </div>
+
+                <div class="margin-top-base full-width display-flex fl-justify-center">
+                  <ion-button class="col-12" mode="ios" type="submit" [disabled]="productForm.invalid">
+                    Subir a mi Firebase
+                  </ion-button>
+                </div>
+              </ion-card>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</ion-content>

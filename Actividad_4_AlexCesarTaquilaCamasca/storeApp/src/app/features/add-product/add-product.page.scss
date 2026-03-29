@@ -1,0 +1,37 @@
+.img-fluid {
+    width:150px;
+}
+
+.btn-file {
+    height:45px;
+    border-radius:var(--space-base);
+    gap:var(--space-s);
+    min-width: 200px;
+}
+
+.btn-file:hover {
+  background-color: #3171e0;
+}
+
+ion-button.col-12{
+    width: 100%;
+}
+
+
+.img-prev{
+    position: relative; 
+    display: inline-block;
+}
+.delete-icon {
+    position: absolute;
+    top: 2px;
+    right: 0;
+    font-size: var(--fs-20);
+    cursor: pointer;
+    z-index: 2;
+}
+@media screen and (max-width: 768px) {
+   .break-sm{
+    flex-direction: column;
+    } 
+}

@@ -1,0 +1,7 @@
+{
+  "name": "storeApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
