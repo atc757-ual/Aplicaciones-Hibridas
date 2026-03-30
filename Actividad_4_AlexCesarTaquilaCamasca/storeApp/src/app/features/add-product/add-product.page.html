@@ -115,7 +115,7 @@
             </div>
             <div class="col-4 col-sm-12 no-padding-sm">
               <ion-card class="margin-bottom-base padding-base">
-                @if (productForm.get('imageUrl')?.valid) {
+                @if (productForm.get('imageUrl')?.value) {
                 <div class="ion-text-center">
                   <div class="fs-14 margin-bottom-base">Previsualización externa:</div>
                   <div class="img-prev">
@@ -125,34 +125,34 @@
                   </div>
                 </div>
                 }
-                @if (productForm.get('imagenfile')?.value) {
+                @if (productForm.get('imagefile')?.value) {
                 <div class="ion-text-center">
                   <div class="fs-14 margin-bottom-base">Previsualización local:</div>
                   <div class="img-prev">
-                    <img [src]="productForm.get('imagenfile')?.value.localUrl" class="img-fluid" />
+                    <img [src]="selectedImageUrl" class="img-fluid" />
                     <ion-icon name="close-circle-outline" color="danger" (click)="clearSelectedImage()"
                       class="delete-icon"></ion-icon>
                   </div>
 
-                  <div *ngIf="productForm.get('imagenfile')?.value">
+                  <div *ngIf="productForm.get('imagefile')?.value">
                     <p><strong>Archivo seleccionado: </strong><br>
-                      <span class="fs-12">{{ productForm.get('imagenfile')?.value.name }}</span>
+                      <span class="fs-12">{{ productForm.get('imagefile')?.value.name }}</span>
                     </p>
                   </div>
                 </div>}
-                <div *ngIf="productForm.get('imagenfile')?.value === null" class="margin-top-base">
+                <div *ngIf="productForm.get('imagefile')?.value === null" class="margin-top-base">
                   <ion-input label="URL de la imagen (Internet)" label-placement="floating" fill="outline" mode="md"
                     placeholder="Ingresa la URL de la imagen del producto" formControlName="imageUrl" type="url"
-                    class="background-f1" (ionInput)="onImageUrlInput()"></ion-input>
+                    class="background-f1" ></ion-input>
                 </div>
-                <div *ngIf="!productForm.get('imageUrl')?.value  && !productForm.get('imagenfile')?.value"  class="margin-top-base">
+                <div *ngIf="!productForm.get('imageUrl')?.value  && !productForm.get('imagefile')?.value"  class="margin-top-base">
                   O sube una imagen desde tu dispositivo:
                 </div>
                 <div *ngIf="productForm.get('imageUrl')?.value === ''" class="margin-top-base">
                   <div class="display-flex fl-align-center gap-s">
                     <ion-button mode="ios" color="light" size="small" class="btn-file" (click)="fileInput.click()">
                       <ion-icon name="image-outline" class="margin-right-s fs-22"></ion-icon>
-                      {{ productForm.get('imagenfile')?.value ?  'Cambiar imagen seleccionada' : 'Seleccionar una imagen'  }}
+                      {{ productForm.get('imagefile')?.value ?  'Cambiar imagen seleccionada' : 'Seleccionar una imagen'  }}
                     </ion-button>
                   </div>
                   <input #fileInput (change)="onFileSelected($event)" type="file" accept=".svg,.png,.jpeg,.jpg,.webp"

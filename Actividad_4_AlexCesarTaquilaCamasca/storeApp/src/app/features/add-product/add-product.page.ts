@@ -16,12 +16,8 @@ import { addIcons } from 'ionicons';
   imports: [IonicModule, CommonModule, ReactiveFormsModule]
 })
 export class AddProductPage  {
+  selectedImageUrl: string | null = null;
 
-imgenFile?: { 
-  name: string;
-  file: File;     
-  localUrl: string;
-};
 
 constructor() {
   addIcons({ closeCircleOutline,checkmarkCircleOutline,imageOutline});
@@ -34,14 +30,15 @@ private toastController = inject(ToastController);
 
   productForm = new FormGroup({
     descripcion: new FormControl('', [Validators.required]),
-    imageUrl: new FormControl('', [Validators.required]),
+    imageUrl: new FormControl(''),
     precio: new FormControl('', [Validators.required, Validators.min(0)]),
     descuento: new FormControl(0, [Validators.min(0), Validators.max(100)]),
     unidades: new FormControl('', [Validators.required, Validators.min(0)]),
     marca: new FormControl('', [Validators.required]),
     modelo: new FormControl('', [Validators.required]),  
-    imagenfile: new FormControl()
+    imagefile: new FormControl(),
   });
+
 
   async addProduct() {
   if (this.productForm.invalid) return;
@@ -72,8 +69,18 @@ private toastController = inject(ToastController);
 
     // Obtener el archivo seleccionado
     const file: File = event.target.files[0];
+
     if (!file) {
-      this.productForm.get('imagenfile')?.setValue(null);
+      this.productForm.get('imagefile')?.setValue(null);
+      return;
+    }
+
+    // Validar peso máximo (100KB)
+    const maxSizeKB = 100;
+    const maxSizeBytes = maxSizeKB * 1024;
+    if (file.size > maxSizeBytes) {
+      this.showErrorMessage(`La imagen supera el peso máximo de ${maxSizeKB}KB.`);
+      this.productForm.get('imagefile')?.setValue(null);
       return;
     }
 
@@ -81,12 +88,13 @@ private toastController = inject(ToastController);
     const validTypes = ['image/svg+xml', 'image/png', 'image/jpeg', 'image/webp'];
     if (!validTypes.includes(file.type)) {
       this.showErrorMessage('Archivo no permitido');
-      this.productForm.get('imagenfile')?.setValue(null);
+      
+      this.productForm.get('imagefile')?.setValue(null);
       return;
     }
-
-    this.productForm.get('imagenfile')?.setValue({ name: file.name, file, localUrl: URL.createObjectURL(file) });
+    this.productForm.get('imagefile')?.setValue(file);
     this.productForm.get('imageUrl')?.setValue('');
+    this.selectedImageUrl = URL.createObjectURL(file);
   }
 
 /* Mostrar mensajes de error o información */
@@ -114,13 +122,15 @@ private toastController = inject(ToastController);
 
     // Eliminar imagen cargada
   clearSelectedImage() {
-    this.productForm.get('imagenfile')?.setValue(null);
+    this.productForm.get('imagefile')?.setValue(null);
+    this.selectedImageUrl = null;
   }
-  // Eliminar imagen cargada al ingresar una URL
-  clearImageUrl(){
+
+  // Limpiar la url si borro una imagen
+  clearImageUrl() {
     this.productForm.get('imageUrl')?.setValue('');
   }
-  // Limpiar imagen local si se ingresa una URL
+  //limpia la imagen local si ingreso una URL
   onImageUrlInput() {
     if (this.productForm.get('imageUrl')?.value) {
       this.clearSelectedImage();

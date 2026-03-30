@@ -9,4 +9,5 @@ export interface Product {
     precio: number;
     descuento: number;
     unidades: number;
+    imagefile?: File;
 }

@@ -54,8 +54,23 @@ export class ProductsService {
   public products = toSignal(this.products$, { initialValue: [] });
 
   async addProduct(product: Product) {
+    console.log(product);
     const uid = this.authService.getUID();
+    if (product.imagefile) {
+      try {
+        // Usar el File puro
+        const imageUrl = await this.subirImagen(product.imagefile);
+        product.imageUrl = imageUrl;
+      } catch (error) {
+        console.error('Error al subir imagen:', error);
+        throw new Error('Error al subir imagen');
+      }
+    }
+    console.log(product)
     product.createAt = new Date();
+    if (product.imagefile != null) {
+      delete product.imagefile;
+    }
     if (!uid) throw new Error('No hay usuario autenticado');
     return addDoc(this.productsCollection, {
       ...product,

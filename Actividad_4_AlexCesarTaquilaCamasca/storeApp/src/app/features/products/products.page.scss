@@ -107,9 +107,9 @@ ion-img::part(image) {
     text-decoration: line-through;
 }
  .product-image{
-    width: auto;
-    height:200px;
-    object-fit: cover;
+    width: 150px;
+    height: 180px;
+    object-fit: contain;
 }
 /* Truncar texto a 3 líneas con puntos suspensivos */
 .ellipsis-3 {
