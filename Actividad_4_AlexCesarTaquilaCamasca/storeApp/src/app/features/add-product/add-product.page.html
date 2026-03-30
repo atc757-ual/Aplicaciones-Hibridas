@@ -145,17 +145,17 @@
                     placeholder="Ingresa la URL de la imagen del producto" formControlName="imageUrl" type="url"
                     class="background-f1" ></ion-input>
                 </div>
-                <div *ngIf="!productForm.get('imageUrl')?.value  && !productForm.get('imagefile')?.value"  class="margin-top-base">
+                <div *ngIf="!productForm.get('imageUrl')?.value && !productForm.get('imagefile')?.value"  class="margin-top-base">
                   O sube una imagen desde tu dispositivo:
                 </div>
-                <div *ngIf="productForm.get('imageUrl')?.value === ''" class="margin-top-base">
+                <div *ngIf="!productForm.get('imageUrl')?.value" class="margin-top-base">
                   <div class="display-flex fl-align-center gap-s">
                     <ion-button mode="ios" color="light" size="small" class="btn-file" (click)="fileInput.click()">
                       <ion-icon name="image-outline" class="margin-right-s fs-22"></ion-icon>
                       {{ productForm.get('imagefile')?.value ?  'Cambiar imagen seleccionada' : 'Seleccionar una imagen'  }}
                     </ion-button>
                   </div>
-                  <input #fileInput (change)="onFileSelected($event)" type="file" accept=".svg,.png,.jpeg,.jpg,.webp"
+                  <input #fileInput (change)="onFileSelected($event)" type="file" accept=".svg,.png,.jpeg,.jpg,.webp,.jfif"
                     hidden>
                 </div>
 

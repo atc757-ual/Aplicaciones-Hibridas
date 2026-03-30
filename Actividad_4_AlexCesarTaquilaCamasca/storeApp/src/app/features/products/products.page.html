@@ -34,7 +34,7 @@
       <div class="reactive reverse">
         <div class="col-8 col-sm-12 no-padding-sm">
           <ion-card class="margin-bottom-base">
-            <div class="padding-base display-flex fl-align-center gap-xs">
+            <div class="padding-base display-flex fl-align-center gap-s">
               <ion-card-title class="fs-20 f-semibold">Lista de productos</ion-card-title>
                 <ng-container *ngIf="isValidSession.isLoaded && isValidSession.isLogged">
                   <ion-icon color="primary" class="info-icon" name="information-circle-outline" id="hover-trigger"></ion-icon>
@@ -132,7 +132,7 @@
         <div class="fs-20 f-semibold text-neutral-8 text-left margin-bottom-base">
           Detalle del producto
         </div>
-        <div class="display-flex gap-base margin-bottom-base">
+        <div class="display-flex gap-s margin-bottom-base">
           <img [src]="productToDetail?.imageUrl" alt="Imagen del producto" class="product-image"><img>
           <div>
             <div class="margin-y-s fs-14 f-semibold">{{ productToDetail?.marca }}</div>

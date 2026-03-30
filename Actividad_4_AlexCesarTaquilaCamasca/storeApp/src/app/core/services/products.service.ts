@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Firestore, collection, collectionData, query, where, addDoc, 
 doc, deleteDoc, getDoc } from '@angular/fire/firestore';
-import { getStorage,ref,uploadBytes,getDownloadURL } from 'firebase/storage';
+import { getStorage,ref,uploadBytes,getDownloadURL, deleteObject } from 'firebase/storage';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { AuthService } from './auth.service';
 import { Product } from '../models/product.model';
@@ -96,7 +96,22 @@ export class ProductsService {
     if (productData['userId'] !== uid) {
       throw new Error('No tienes permiso para eliminar este producto');
     }
-    // 4. Si todo está bien, eliminar
+    // 4. Si todo está bien, eliminar imagen de Storage si existe
+    if (productData['imageUrl']) {
+      try {
+        // Extraer el path relativo de la URL de Firebase Storage
+        const url = productData['imageUrl'];
+        const matches = url.match(/\/o\/(.+)\?/);
+        if (matches && matches[1]) {
+          // Decodificar el path (puede tener %2F en vez de /)
+          const path = decodeURIComponent(matches[1]);
+          const storageRef = ref(this.storage, path);
+          await deleteObject(storageRef);
+        }
+      } catch (e) {
+        console.warn('No se pudo eliminar la imagen de Storage:', e);
+      }
+    }
     return deleteDoc(productRef);
   }
 

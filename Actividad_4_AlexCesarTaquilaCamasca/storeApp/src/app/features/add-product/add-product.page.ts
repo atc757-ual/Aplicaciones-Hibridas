@@ -75,6 +75,14 @@ private toastController = inject(ToastController);
       return;
     }
 
+    // Validar tipo
+    const validTypes = ['image/svg+xml', 'image/png', 'image/jpeg', 'image/webp','image/jfif'];
+    if (!validTypes.includes(file.type)) {
+      this.showErrorMessage('Archivo no permitido');
+      this.productForm.get('imagefile')?.setValue(null);
+      return;
+    }
+
     // Validar peso máximo (100KB)
     const maxSizeKB = 100;
     const maxSizeBytes = maxSizeKB * 1024;
@@ -84,14 +92,7 @@ private toastController = inject(ToastController);
       return;
     }
 
-    // Validar tipo
-    const validTypes = ['image/svg+xml', 'image/png', 'image/jpeg', 'image/webp'];
-    if (!validTypes.includes(file.type)) {
-      this.showErrorMessage('Archivo no permitido');
-      
-      this.productForm.get('imagefile')?.setValue(null);
-      return;
-    }
+
     this.productForm.get('imagefile')?.setValue(file);
     this.productForm.get('imageUrl')?.setValue('');
     this.selectedImageUrl = URL.createObjectURL(file);
