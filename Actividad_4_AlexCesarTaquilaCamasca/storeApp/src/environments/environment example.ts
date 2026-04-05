@@ -8,7 +8,7 @@ export const environment = {
     apiKey: "",
     authDomain: "",
     projectId: "",
-    storageBucket: "p",
+    storageBucket: "",
     messagingSenderId: "",
     appId: ""
   }
