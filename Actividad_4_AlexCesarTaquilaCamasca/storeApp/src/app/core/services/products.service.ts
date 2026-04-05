@@ -44,8 +44,7 @@ export class ProductsService {
         );
         return collectionData(q, { idField: 'id' }) as Observable<Product[]>;
       } else {
-        return collectionData(this.productsCollection, {
-          idField: 'id',
+        return collectionData(this.productsCollection, {idField: 'id',
         }) as Observable<Product[]>;
       }
     }),

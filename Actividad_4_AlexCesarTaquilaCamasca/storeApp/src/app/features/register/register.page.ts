@@ -27,6 +27,7 @@ import {
 import { arrowBackOutline,checkmarkCircleOutline,eyeOff,eye, closeCircleOutline } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import { UsersService } from 'src/app/core/services/users.service';
+import { AuthService } from 'src/app/core/services/auth.service';
 @Component({
   selector: 'app-register',
   templateUrl: './register.page.html',
@@ -56,6 +57,7 @@ export class RegisterPage implements OnInit {
   private toastController = inject(ToastController);
   private loadingController = inject(LoadingController);
   private userService = inject(UsersService);
+  private authService = inject(AuthService);
   
   registerForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -95,6 +97,10 @@ export class RegisterPage implements OnInit {
         passwordConfirm: this.registerForm.value.confirmPassword!,
         createAt: new Date()
       });
+
+      // Firebase inicia sesión automáticamente al crear usuario; la cerramos para forzar login manual.
+      await this.authService.logout();
+
       this.showInfoMessage('Registro exitoso, redirigiendo a login...');
       setTimeout(() => {
         this.navCtrl.navigateRoot(['/login']);

@@ -89,6 +89,7 @@ export class LoginPage {
 
     const { email, password } = this.loginForm.value;
     try {
+      console.log(email, password);
       await this.authService.login(email!, password!);
       this.showInfoMessage('Credenciales válidas, redirigiendo...');
       setTimeout(() => {
@@ -100,6 +101,9 @@ export class LoginPage {
       switch (code) {
       case 'auth/user-not-found':
         this.showErrorMessage('No se encontró una cuenta con este correo.'); ;
+        break;
+      case 'auth/wrong-password':
+         this.showErrorMessage('Contraseña incorrecta, por favor intenta de nuevo.'); 
         break;
       case 'auth/invalid-credential':
         this.showErrorMessage('Credenciales incorrectas, por favor intenta de nuevo.'); 
