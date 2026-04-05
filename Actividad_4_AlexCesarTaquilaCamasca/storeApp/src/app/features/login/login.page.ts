@@ -104,6 +104,12 @@ export class LoginPage {
       case 'auth/invalid-credential':
         this.showErrorMessage('Credenciales incorrectas, por favor intenta de nuevo.'); 
         break;
+      case 'auth/user-disabled':
+        this.showErrorMessage('Tu cuenta ha sido deshabilitada. Contacta al soporte.'); 
+        break;
+      case 'auth/invalid-email':
+      this.showErrorMessage('El formato del correo es inválido.'); 
+      break;
       default:
         this.showErrorMessage('Error al iniciar sesión. Por favor, intenta de nuevo.'); 
       }
