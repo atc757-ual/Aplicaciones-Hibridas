@@ -1,0 +1,43 @@
+<section class="login-shell">
+<div class="back">
+    <ion-icon name="arrow-back-outline" size="large" color="primary" (click)="goBack()" *ngIf="showCodeStep"></ion-icon>
+</div>
+  <div class="login-image-block">
+    <img class="" src="https://ionicacademy.com/wp-content/uploads/2020/02/ionic-Logo.svg" 
+    style="height:72px;width:72px"></div>
+  <div class="brand-block">
+    <h1>¡Hola, bienvenido!</h1>
+  </div>
+
+  <ion-card class="login-card">
+    <ion-card-content>
+      <div class="code-block" *ngIf="!showCodeStep">
+        <p class="code-title">Ingresa tu móvil</p>
+      </div>
+      <form [formGroup]="loginForm" novalidate>
+
+        <ion-item lines="none" class="field-item" *ngIf="!showCodeStep">
+          <ion-input formControlName="mobile" label="Móvil" labelPlacement="stacked" placeholder="666777555"
+            autocomplete="tel" type="tel" maxlength="9" minlength="9" pattern="6[0-9]{8}"
+            inputmode="numeric"></ion-input>
+        </ion-item>
+        <div *ngIf="showMobileError" class="validation-text">
+          El móvil  ingresado no es válido.
+        </div>
+
+        <div class="code-block" *ngIf="showCodeStep">
+          <p class="code-title">Ingresa código de verificación</p>
+          <p class="code-label">Enviado vía SMS al xxxxx{{ mobileLast4 }}</p>
+          <ion-input-otp class="custom" inputmode="numeric" length="6" size="medium" (ionInput)="onOtpChange($event)">
+          </ion-input-otp>
+        </div>        <div>
+          <ion-button mode="ios" class="contain-button" expand="block" *ngIf="!showCodeStep" (click)="goToCodeStep()" [disabled]="!isMobileValid">
+            Continuar
+          </ion-button>
+        </div>
+      </form>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-loading [isOpen]="loading" [message]="loadingMessage" translucent></ion-loading>
+</section>

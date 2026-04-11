@@ -1,0 +1,129 @@
+<app-header-app title="Crear reservacion"></app-header-app>
+
+<ion-content [fullscreen]="true" class="create-reservation-content">
+  <form [formGroup]="form" (ngSubmit)="save()" class="form-wrapper">
+  
+      <p class="section-eyebrow">Nueva reserva</p>
+
+    <section class="form-section">
+      <div class="section-header">
+        <p class="section-eyebrow">Vuelo</p>
+        <h2 class="section-title">Selecciona tu salida</h2>
+      </div>
+
+      <div class="selector-grid">
+        <div class="custom-select" [class.custom-select--disabled]="false">
+          <button
+            type="button"
+            class="custom-select__trigger"
+            [class.is-open]="isSelectorOpen('origen')"
+            (click)="toggleSelector('origen')"
+          >
+            <span class="custom-select__label">Origen</span>
+            <span class="custom-select__value" [class.is-placeholder]="!form.controls['origen'].value">
+              {{ form.controls['origen'].value || 'Selecciona origen' }}
+            </span>
+            <ion-icon name="chevron-down-outline" class="custom-select__icon"></ion-icon>
+          </button>
+
+          <div class="custom-select__menu" *ngIf="isSelectorOpen('origen')">
+            <button
+              type="button"
+              class="custom-select__option"
+              *ngFor="let origin of originOptions"
+              (click)="selectOrigin(origin)"
+            >
+              <span>{{ origin }}</span>
+              <ion-icon
+                *ngIf="form.controls['origen'].value === origin"
+                name="checkmark-outline"
+                class="custom-select__check"
+              ></ion-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="custom-select" [class.custom-select--disabled]="!form.controls['origen'].value">
+          <button
+            type="button"
+            class="custom-select__trigger"
+            [class.is-open]="isSelectorOpen('destino')"
+            [disabled]="!form.controls['origen'].value"
+            (click)="toggleSelector('destino')"
+          >
+            <span class="custom-select__label">Destino</span>
+            <span class="custom-select__value" [class.is-placeholder]="!form.controls['destino'].value">
+              {{ form.controls['destino'].value || 'Selecciona destino' }}
+            </span>
+            <ion-icon name="chevron-down-outline" class="custom-select__icon"></ion-icon>
+          </button>
+
+          <div class="custom-select__menu" *ngIf="isSelectorOpen('destino')">
+            <button
+              type="button"
+              class="custom-select__option"
+              *ngFor="let destination of destinationOptions"
+              (click)="selectDestination(destination)"
+            >
+              <span>{{ destination }}</span>
+              <ion-icon
+                *ngIf="form.controls['destino'].value === destination"
+                name="checkmark-outline"
+                class="custom-select__check"
+              ></ion-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="custom-select custom-select--full" [class.custom-select--disabled]="!form.controls['destino'].value">
+          <label class="custom-select__trigger custom-select__trigger--date" for="travel-date">
+            <span class="custom-select__label">Fecha</span>
+            <input
+              id="travel-date"
+              type="date"
+              class="custom-date-input"
+              formControlName="fechaViaje"
+              [min]="minTravelDate"
+              [disabled]="!form.controls['destino'].value"
+            />
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <section class="flight-preview" *ngIf="previewFlight as flight">
+      <div class="flight-preview__header">
+        <div class="route-main">
+          <span class="route-code">{{ flight.codIataOrigen }}</span>
+          <ion-icon name="airplane-outline" class="plane-icon"></ion-icon>
+          <span class="route-code">{{ flight.codIataDestino }}</span>
+        </div>
+        <span class="duration-badge">{{ getFlightDuration(flight) }}</span>
+      </div>
+
+      <div class="flight-preview__body">
+        <div class="route-detail">
+          <p class="time-main">{{ flight.horaSalida }}</p>
+          <p class="city-name">{{ flight.origen }}</p>
+        </div>
+        <div class="route-separator"></div>
+        <div class="route-detail text-right">
+          <p class="time-main">{{ flight.horaLlegada }}</p>
+          <p class="city-name">{{ flight.destino }}</p>
+        </div>
+      </div>
+
+      <div class="flight-preview__footer">
+        <span class="flight-meta">{{ flight.aerolinea }}</span>
+        <span class="flight-meta">{{ flight.fechaViaje | date:'dd/MM/yyyy' }}</span>
+      </div>
+    </section>
+
+    <div class="actions-panel" *ngIf="hasFlightSelection">
+      <p class="actions-caption">La reserva se agregará a tu lista principal al confirmar.</p>
+      <ion-button mode="ios"expand="block" type="submit" class="submit-button">
+        Guardar reservacion
+      </ion-button>
+    </div>
+  </form>
+</ion-content>

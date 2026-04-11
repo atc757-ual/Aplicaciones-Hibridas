@@ -1,0 +1,66 @@
+<app-header-app title="Detalle de cliente" defaultHref="/clients"></app-header-app>
+
+<ion-content class="detail-content">
+  <ng-container *ngIf="client; else notFound">
+
+    <div class="profile-header">
+      <img src="{{ client.img }}" [alt]="client.name" class="avatar-lg" />
+      <h1 class="client-name">{{ client.name }}</h1>
+      <p class="client-role">{{ client.role }}</p>
+      <p class="client-id">ID: {{ client.id }}</p>
+      <span class="status-badge" [class.active]="client.status === 'activo'">
+        {{ client.status === 'activo' ? 'Activo' : 'Inactivo' }}
+      </span>
+    </div>
+
+    <ion-list inset class="info-list">
+      <ion-item>
+        <ion-icon name="mail-outline" slot="start"></ion-icon>
+        <ion-label>
+          <p>Email</p>
+          <h3>{{ client.email }}</h3>
+        </ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon name="call-outline" slot="start"></ion-icon>
+        <ion-label>
+          <p>Móvil</p>
+          <h3>{{ client.phone }}</h3>
+        </ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon name="business-outline" slot="start"></ion-icon>
+        <ion-label>
+          <p>Deparamento</p>
+          <h3>{{ client.department }}</h3>
+        </ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon name="location-outline" slot="start"></ion-icon>
+        <ion-label>
+          <p>Ubicación</p>
+          <h3>{{ client.location }}</h3>
+        </ion-label>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-icon name="calendar-outline" slot="start"></ion-icon>
+        <ion-label>
+          <p>Fecha de incorporación</p>
+          <h3>{{ client.joinDate }}</h3>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+
+  </ng-container>
+
+  <ng-template #notFound>
+    <div class="not-found">
+      <ion-icon name="person-circle-outline" class="not-found-icon"></ion-icon>
+      <p>Cliente no encontrado</p>
+    </div>
+  </ng-template>
+</ion-content>

@@ -1,0 +1,157 @@
+<app-header-app title="Mis reservaciones" [hideBack]="true"></app-header-app>
+
+<ion-content [fullscreen]="true" class="reservations-content">
+  <ng-container *ngIf="(reservations$ | async) as reservations">
+    <ng-container *ngIf="getUpcomingReservations(reservations) as upcomingReservations">
+      <ng-container *ngIf="getPastReservations(reservations) as pastReservations">
+    <p class="results-count" *ngIf="upcomingReservations.length > 0">
+      {{ upcomingReservations.length }} Reservas pendientes
+    </p>
+
+    <div class="cards-container" *ngIf="upcomingReservations.length > 0">
+      <article
+        class="premium-card"
+        *ngFor="let reservation of upcomingReservations"
+        [style.--card-accent]="getCardAccentColor(reservation)"
+        [class.is-expanded]="isReservationExpanded(reservation.id)"
+        [attr.aria-expanded]="isReservationExpanded(reservation.id)"
+        (click)="toggleReservationCard(reservation.id)"
+      >
+        <div class="card-content">
+          <!-- Header con ruta principal -->
+          <div class="card-header">
+            <div class="route-main">
+              <span class="route-code">{{ reservation.CodIataOrigen }}</span>
+              <ion-icon name="airplane-outline" class="plane-icon"></ion-icon>
+              <span class="route-code">{{ reservation.CodIataDestino }}</span>
+            </div>
+            <span class="duration-badge">{{ calculateDuration(reservation.horaSalida, reservation.horaLlegada) }}</span>
+          </div>
+
+          <!-- Ruta con horarios -->
+          <div class="card-route">
+            <div class="route-detail">
+              <p class="time-main">{{ reservation.horaSalida }}</p>
+              <p class="city-name">{{ reservation.origen }}</p>
+            </div>
+            <div class="route-separator"></div>
+            <div class="route-detail text-right">
+              <p class="time-main">{{ reservation.horaLlegada }}</p>
+              <p class="city-name">{{ reservation.destino }}</p>
+            </div>
+          </div>
+
+          <!-- Info de vuelo y aerolínea -->
+          <div class="card-flight-info">
+            <div class="info-row">
+              <span class="info-label">Vuelo</span>
+              <span class="info-value">{{ reservation.numeroVuelo }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Aerolínea</span>
+              <span class="info-value">{{ reservation.aerolinea }}</span>
+            </div>
+          </div>
+          
+          <!-- Pie con código de reserva y fecha -->
+          <div class="card-footer">
+            <div class="footer-row">
+              <ion-icon name="ticket" class="footer-icon"></ion-icon>
+              <p class="reservation-code">{{ reservation.numeroReserva }}</p>
+            </div>
+            <p class="flight-date">{{ reservation.fechaViaje | date:'dd/MM/yyyy' }}</p>
+            <span class="status-badge">{{ getReservationStatusLabel(reservation) }}</span>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <section class="reservation-section" *ngIf="pastReservations.length > 0">
+      <ion-button mode="ios"
+        size="small"
+        fill="clear" class="past-toggle-button"
+        (click)="togglePastReservations()"
+      >
+        <ion-icon [name]="isPastReservationsVisible ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+        <span>{{ isPastReservationsVisible ? 'Ocultar reservas pasadas' : 'Mostrar reservas pasadas' }}</span>
+      </ion-button>
+
+      <div class="cards-container cards-container--past" *ngIf="isPastReservationsVisible">
+        <article
+          class="premium-card premium-card--past"
+          *ngFor="let reservation of pastReservations"
+          [style.--card-accent]="getCardAccentColor(reservation)"
+          [class.is-expanded]="isReservationExpanded(reservation.id)"
+          [attr.aria-expanded]="isReservationExpanded(reservation.id)"
+          (click)="toggleReservationCard(reservation.id)"
+        >
+          <div class="card-content">
+            <div class="card-header">
+              <div class="route-main">
+                <span class="route-code">{{ reservation.CodIataOrigen }}</span>
+                <ion-icon name="airplane-outline" class="plane-icon"></ion-icon>
+                <span class="route-code">{{ reservation.CodIataDestino }}</span>
+              </div>
+              <span class="duration-badge">{{ calculateDuration(reservation.horaSalida, reservation.horaLlegada) }}</span>
+            </div>
+
+            <div class="card-route">
+              <div class="route-detail">
+                <p class="time-main">{{ reservation.horaSalida }}</p>
+                <p class="city-name">{{ reservation.origen }}</p>
+              </div>
+              <div class="route-separator"></div>
+              <div class="route-detail text-right">
+                <p class="time-main">{{ reservation.horaLlegada }}</p>
+                <p class="city-name">{{ reservation.destino }}</p>
+              </div>
+            </div>
+
+            <div class="card-flight-info">
+              <div class="info-row">
+                <span class="info-label">Vuelo</span>
+                <span class="info-value">{{ reservation.numeroVuelo }}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Aerolínea</span>
+                <span class="info-value">{{ reservation.aerolinea }}</span>
+              </div>
+            </div>
+
+            <div class="card-footer">
+              <div class="footer-row">
+                <ion-icon name="ticket" class="footer-icon"></ion-icon>
+                <p class="reservation-code">{{ reservation.numeroReserva }}</p>
+              </div>
+              <p class="flight-date">{{ reservation.fechaViaje | date:'dd/MM/yyyy' }}</p>
+              <span class="status-badge">{{ getReservationStatusLabel(reservation) }}</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <div class="empty-state" *ngIf="reservations.length === 0">
+      <ion-icon name="airplane" class="empty-icon"></ion-icon>
+      <p>No hay reservaciones todavía</p>
+      <span>Crea tu próximo viaje para empezar</span>
+    </div>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end" class="reservations-fab">
+    <ion-fab-button mode="ios"
+      *ngIf="isFabMenuOpen"
+      class="fab-menu-card"
+      (click)="goToCreateReservation()"
+    >
+      <span class="fab-menu-card__label">Reservar ahora</span>
+      <ion-icon name="airplane" class="fab-menu-card__icon"></ion-icon>
+    </ion-fab-button>
+
+    <ion-fab-button color="primary" (click)="toggleFabMenu()">
+      <ion-icon name="add" [class.fab-toggle-icon--open]="isFabMenuOpen"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
