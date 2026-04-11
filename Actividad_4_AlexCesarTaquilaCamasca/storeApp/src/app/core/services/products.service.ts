@@ -16,6 +16,7 @@ export class ProductsService {
   private productsCollection = collection(this.firestore, 'products');
   
   private storage = getStorage();
+  
   //Guardar archivo en Firebase Storage
   private async subirImagen(file: File): Promise<string> {
     try {
