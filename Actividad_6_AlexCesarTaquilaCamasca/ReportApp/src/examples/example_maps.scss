@@ -1,0 +1,27 @@
+// src/app/pages/mapa/mapa.page.scss
+
+
+.mapa-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 400px;
+  height: 400px;
+  padding:16px;
+  background: #e0e0e0;
+}
+
+.mapa-container {
+  width: 350px;
+  height: 350px;
+  padding:16px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+ion-content {
+  --background: transparent;
+  height: 100vh;
+}

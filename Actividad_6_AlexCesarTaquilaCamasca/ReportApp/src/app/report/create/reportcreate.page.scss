@@ -1,0 +1,99 @@
+ion-item::part(native){
+  --background-activated: var(--blue-primary-025);
+  --inner-padding-start: var(--space-s);
+  --inner-padding-end: var(--space-s);
+  --padding-start:var(--space-xs);
+  --padding-end:var(--space-xs);
+}
+
+/* Personalizar el modal de selección */
+ion-select::part(icon) {
+    margin-left:auto;
+}
+ion-select::part(inner) {
+    width:100%;
+}
+
+ion-label.font-small {
+    font-size: var(--fs-14) !important;
+}
+
+
+.checkmark-absolute {
+  position: absolute;
+  right: 48px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+::ng-deep .action-sheet-group-cancel {
+  .action-sheet-button {
+    border-top: 3px solid var(--color-neutral-2);
+    color: var(--color-neutral-7);
+    background:var(--color-neutral-2);
+    &:hover {
+      background:var(--color-neutral-3);
+    }
+  }
+}
+
+.miniatura-foto {
+  width: 64px !important;
+  height: 64px !important;
+  padding: var(--space-xs);
+  object-fit: cover;
+}
+.image-photo{
+    width: 128px;
+    height: 128px;
+    margin: auto;
+}
+
+ion-img::part(image){
+    border-radius: var(--space-xs);
+    margin-bottom:var(--space-s);
+}
+
+.info-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 0  var(--space-base) var(--space-base);
+    gap:var(--space-base);
+    color:var(--color-neutral-8);
+}
+
+ion-icon.icon-button{
+    color:var(--color-red);
+    font-size: var(--fs-20);
+    cursor:pointer;
+    
+}
+
+.close-btn {
+  position: absolute;
+  top: var(--space-s);
+  right: var(--space-s);
+  z-index: 1000;
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  color: #333; /* O el color que prefieras */
+  cursor: pointer;
+  box-shadow: none;
+}
+
+@media (max-width: 768px) {
+    ion-label.font-small {
+        font-size: var(--fs-12) !important;
+    }
+
+    .info-container  {
+      flex-direction: column;
+      gap:var(--space-s);
+  }
+
+
+}
+

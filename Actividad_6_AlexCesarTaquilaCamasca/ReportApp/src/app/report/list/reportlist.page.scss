@@ -1,0 +1,29 @@
+.status-summary-card {
+	.status-summary {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-s);
+		margin-top: var(--space-xs);
+	}
+	.status-row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		font-size: var(--fs-14);
+	}
+	ion-badge {
+		min-width: 32px;
+		font-size: var(--fs-16);
+		justify-content: center;}
+
+    ion-badge.success {
+        background: var(--color-success) !important ;
+    }
+    ion-badge.inprogress {
+        background: var(--blue-primary-050) !important;
+    }
+    ion-badge.pending {
+        background: var(--color-red-light) !important;
+    }
+	}
+

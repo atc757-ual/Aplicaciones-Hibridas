@@ -1,0 +1,19 @@
+<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg" data-fgid-9dt26=":ras:" data-fg-9dt26="1.10:1.12959:/src/app/components/ReportAppLogo.tsx:93:9:3229:1866:e:svg:etxtetetxtetetxtetete" fill="none">
+ <g id="Layer_1">
+  <title>Layer 1</title>
+  <g stroke="null" stroke-width="0" id="svg_11">
+   <rect stroke="null" x="0" y="0.13194" id="svg_1" data-fg-9dt27="1.10:1.12959:/src/app/components/ReportAppLogo.tsx:101:11:3425:46:e:rect" fill="white" height="199.96432" width="199.78575"/>
+   <circle stroke="null" id="svg_2" data-fg-9dt29="1.10:1.12959:/src/app/components/ReportAppLogo.tsx:104:11:3536:67:e:circle" opacity="0.1" fill="#002eff" r="81.03199" cy="106.40669" cx="99.19433"/>
+   <circle stroke="null" id="svg_3" data-fg-9dt30="1.10:1.12959:/src/app/components/ReportAppLogo.tsx:105:11:3614:53:e:circle" fill="#002eff" r="81.03199" cy="103.60998" cx="99.19433"/>
+   <path stroke="null" id="svg_4" data-fg-9dt32="1.10:1.12959:/src/app/components/ReportAppLogo.tsx:108:11:3732:171:e:path" fill="white" d="m99.19433,57.46437c-15.43198,0 -27.94206,12.52126 -27.94206,27.96704c0,10.48764 6.98552,29.36539 27.94206,55.93408c20.95655,-26.56869 27.94206,-45.44644 27.94206,-55.93408c0,-15.44578 -12.50966,-27.96704 -27.94206,-27.96704z"/>
+   <circle stroke="null" id="svg_5" data-fg-9dt33="1.10:1.12959:/src/app/components/ReportAppLogo.tsx:113:11:3925:52:e:circle" fill="#002eff" r="9.77972" cy="85.43141" cx="99.19433"/>
+   <g stroke="null" id="svg_6" data-fg-9dt35="1.10:1.12959:/src/app/components/ReportAppLogo.tsx:116:11:4039:313:e:g:etetete">
+    <rect stroke="null" id="svg_6" data-fg-9dt36="1.10:1.12959:/src/app/components/ReportAppLogo.tsx:117:13:4085:71:e:rect" fill="#ff3d00" rx="4" height="30.76374" width="41.9131" y="123.18691" x="78.23778"/>
+    <circle stroke="null" id="svg_7" data-fg-9dt37="1.10:1.12959:/src/app/components/ReportAppLogo.tsx:118:13:4169:45:e:circle" fill="white" r="9.77972" cy="138.56878" cx="99.19433"/>
+    <circle stroke="null" id="svg_8" data-fg-9dt38="1.10:1.12959:/src/app/components/ReportAppLogo.tsx:119:13:4227:53:e:circle" fill="#ff3d00" r="5.58841" cy="138.56878" cx="99.19433"/>
+    <circle stroke="null" id="svg_9" data-fg-9dt39="1.10:1.12959:/src/app/components/ReportAppLogo.tsx:120:13:4293:44:e:circle" fill="white" r="2.79421" cy="128.78032" cx="111.76826"/>
+   </g>
+  </g>
+ </g>
+
+</svg>

@@ -1,0 +1,34 @@
+ion-item::part(native){
+  --inner-padding-start: 0;
+  --inner-padding-end: 0;
+  --padding-start:var(--space-xs);
+  --padding-end:var(--space-xs);
+  --detail-icon-color: var(--ion-color-base);
+  --detail-icon-opacity: 0.9;
+  --detail-icon-font-size: var(--fs-28);
+  --background-activated: var(--blue-primary-025);
+  --border-radius: var(--space-s);
+}
+
+
+.bienvenida {
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+
+  img {
+    width: 24px;
+    margin-left: auto;
+  }
+}
+
+ion-badge {
+  min-width: 32px;
+  font-size: var(--fs-18);
+  justify-content: center;
+}
+
+ion-badge.info {
+  background: var(--blue-primary-010) !important;
+  color: var(--color-neutral-7) !important;
+}

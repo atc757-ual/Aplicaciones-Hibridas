@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+ <defs>
+  <filter filterUnits="objectBoundingBox" height="100%" id="alpha" width="100%" x="0%" y="0%">
+   <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0"/>
+  </filter>
+  <mask id="mask0">
+   <g filter="url(#alpha)" id="svg_1">
+    <rect fill="rgb(0%,0%,0%)" fill-opacity="0.1" height="200" id="svg_2" width="200" x="0" y="0"/>
+   </g>
+  </mask>
+  <clipPath id="clip1">
+   <rect height="200" id="svg_3" width="200" x="0" y="0"/>
+  </clipPath>
+  <g clip-path="url(#clip1)" id="surface5">
+   <path d="m180.23,106.41c0,-44.76 -36.28,-81.03 -81.03,-81.03c-44.76,0 -81.04,36.27 -81.04,81.03c0,44.75 36.28,81.03 81.04,81.03c44.75,0 81.03,-36.28 81.03,-81.03zm0,0" fill="rgb(0%,18.039216%,100%)" fill-rule="nonzero" id="svg_4"/>
+  </g>
+ </defs>
+ <g class="layer">
+  <title>Layer 1</title>
+  <g id="surface1">
+   <path d="m0,-0.87l199.79,0l0,199.97l-199.79,0l0,-199.97zm0,0" fill="rgb(100%,100%,100%)" fill-rule="nonzero" id="svg_5"/>
+   <g id="svg_14">
+    <use id="svg_6" mask="url(#mask0)" transform="matrix(1.10489 0 0 1.07885 -10.2374 -8.6378)" x="1.06" xlink:href="#surface5" y="-3.84"/>
+    <path d="m190.07,99c0,-48.28 -40.09,-87.42 -89.53,-87.42c-49.46,0 -89.54,39.14 -89.54,87.42c0,48.28 40.09,87.42 89.54,87.42c49.44,0 89.53,-39.14 89.53,-87.42zm0,0" fill="rgb(0%,18.039216%,100%)" fill-rule="nonzero" id="svg_7"/>
+    <path d="m100.54,49.21c-17.06,0 -30.88,13.51 -30.88,30.18c0,11.32 7.72,31.69 30.88,60.35c23.15,-28.67 30.87,-49.03 30.87,-60.35c0,-16.67 -13.82,-30.18 -30.87,-30.18zm0,0" fill="rgb(100%,100%,100%)" fill-rule="nonzero" id="svg_8"/>
+    <path d="m111.34,79.39c0,-5.83 -4.84,-10.55 -10.79,-10.55c-5.98,0 -10.82,4.73 -10.82,10.55c0,5.83 4.84,10.55 10.82,10.55c5.96,0 10.79,-4.73 10.79,-10.55zm0,0" fill="rgb(0%,18.039216%,100%)" fill-rule="nonzero" id="svg_9"/>
+    <path d="m81.8,120.12l37.47,0c2.44,0 4.42,1.93 4.42,4.32l0,24.55c0,2.38 -1.98,4.32 -4.42,4.32l-37.47,0c-2.44,0 -4.42,-1.93 -4.42,-4.32l0,-24.55c0,-2.38 1.98,-4.32 4.42,-4.32zm0,0" fill="rgb(100%,23.921569%,0%)" fill-rule="nonzero" id="svg_10"/>
+    <path d="m111.34,136.72c0,-5.83 -4.84,-10.55 -10.79,-10.55c-5.98,0 -10.82,4.73 -10.82,10.55c0,5.83 4.84,10.55 10.82,10.55c5.96,0 10.79,-4.73 10.79,-10.55zm0,0" fill="rgb(100%,100%,100%)" fill-rule="nonzero" id="svg_11"/>
+    <path d="m106.71,136.72c0,-3.33 -2.76,-6.03 -6.17,-6.03c-3.41,0 -6.18,2.7 -6.18,6.03c0,3.33 2.76,6.03 6.18,6.03c3.4,0 6.17,-2.7 6.17,-6.03zm0,0" fill="rgb(100%,23.921569%,0%)" fill-rule="nonzero" id="svg_12"/>
+    <path d="m117.51,126.15c0,-1.66 -1.38,-3.02 -3.08,-3.02c-1.7,0 -3.09,1.36 -3.09,3.02c0,1.66 1.39,3.01 3.09,3.01c1.7,0 3.08,-1.35 3.08,-3.01zm0,0" fill="rgb(100%,100%,100%)" fill-rule="nonzero" id="svg_13"/>
+   </g>
+  </g>
+ </g>
+</svg>
