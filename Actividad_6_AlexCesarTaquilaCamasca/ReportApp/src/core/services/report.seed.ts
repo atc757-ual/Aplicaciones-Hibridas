@@ -2,7 +2,7 @@ import { ModelReport } from '../models/model-photo';
 
 export const REPORTES_SEED: ModelReport[] = [
   {
-    id: 'RI-1001',
+    id: '7676761001',
     title: 'Bache peligroso en avenida',
     description: 'Hay un bache grande y profundo en la Av. Central, frente al colegio.',
     category: 'baches',
@@ -15,12 +15,12 @@ export const REPORTES_SEED: ModelReport[] = [
       }
     ],
     aceptoTerminos: true,
-    status: 'pendiente',
+    status: 'resuelto',
     priority: 'alta',
     createdAt: new Date().toISOString(),
   },
   {
-    id: 'RI-1002',
+    id: '3443431002',
     title: 'Basura acumulada en parque',
     description: 'El parque principal tiene bolsas de basura sin recoger desde hace días.',
     category: 'basura',
@@ -38,7 +38,7 @@ export const REPORTES_SEED: ModelReport[] = [
     createdAt: new Date().toISOString(),
   },
   {
-    id: 'RI-1003',
+    id: '1241411003',
     title: 'Fuga de agua en esquina',
     description: 'Se observa fuga de agua en la esquina de Av. Lima con Jr. Arequipa.',
     category: 'drenaje',

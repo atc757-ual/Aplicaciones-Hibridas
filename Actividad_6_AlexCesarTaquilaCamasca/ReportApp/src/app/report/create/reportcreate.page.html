@@ -105,7 +105,7 @@
                             color="primary" fill="outline" (click)="takePicture()" [disabled]="photos.length >= 5">
                               <ion-icon *ngIf="!isLoadingTakePicture" name="camera" slot="start"></ion-icon>
                               <ion-spinner *ngIf="isLoadingTakePicture" class="padding-rigth-s" name="crescent" slot="start" size="small"></ion-spinner>
-                              <span *ngIf="isLoadingTakePicture"> Guardando foto</span> 
+                              <span *ngIf="isLoadingTakePicture"></span> 
                               <span *ngIf="!isLoadingTakePicture">{{ photos.length === 0 ? 'Tomar foto' : 'Tomar nueva foto' }}</span> 
                             </ion-button>
                         </div>
@@ -201,11 +201,11 @@
         <img src="./assets/img/ilus_tecnico.png" >
         <h4>¡Enhorabuena!</h4>
         <p>Hemos registrado tu reporte de incidente.</p>
-        <h4><strong>#{{ reporte.id }}</strong></h4>
-        <p>Pronto será revisado por las autoridades locales para su <br>validación y resolución.</p>
-        <div class="display-flex fl-align-center fl-justify-center gap-s margin-top-base">
+        <h5><strong>#{{ reporte.id }}</strong></h5>
+        <p>Pronto será revisado por las autoridades locales para su validación y resolución.</p>
+        <div class="display-flex fl-align-center fl-justify-center gap-s margin-top-base direction-column">
           <ion-button mode="ios" expand="block" color="primary" size="" (click)="verIndidencias()">Ir a mis incidencias</ion-button>
-        <ion-button mode="ios" expand="block" color="primary" size="" fill="outline" (click)="closeModal()">Cerrar</ion-button>
+           <ion-button mode="ios" expand="block" color="primary" size="" fill="outline" (click)="closeModal()">Cerrar</ion-button>
         </div>
       </div> 
     </ng-template>

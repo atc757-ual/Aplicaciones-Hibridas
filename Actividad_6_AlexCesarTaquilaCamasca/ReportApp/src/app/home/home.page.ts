@@ -42,7 +42,7 @@ export class HomePage {
   
     constructor(private reporteService: ReportService) { }
   
-    async ngOnInit() {
+    async ionViewWillEnter() {
       this.countReports = (await this.reporteService.getItems()).length;
     }
   

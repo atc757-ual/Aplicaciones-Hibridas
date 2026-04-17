@@ -4,13 +4,14 @@ import { ReportService } from 'src/core/services/report-service';
 import { DialogPlugin } from 'src/core/plugins/dialog-plugin';
 import { SharedIonicModule } from '../../shared/shared-ionic.module';
 import { RouterLink } from '@angular/router';
+import { CapitalizePipe } from 'src/app/pipes/capitalize.pipe';
 
 @Component({
   selector: 'app-reportlist',
   templateUrl:'./reportlist.page.html',
   styleUrls: ['./reportlist.page.scss'],
   standalone: true,
-  imports: [SharedIonicModule, RouterLink]
+  imports: [SharedIonicModule, RouterLink, CapitalizePipe]
 })
 export class ReportlistPage implements OnInit {
   reportes: ModelReport[] = [];
@@ -26,8 +27,19 @@ export class ReportlistPage implements OnInit {
   constructor(private reporteService: ReportService) { }
 
   async ngOnInit() {
+    await this.loadReports();
+  }
+
+  // Recargar lista cada vez que la vista entra en pantalla (navegación/volver desde modal)
+  async ionViewWillEnter() {
+    await this.loadReports();
+  }
+
+  private async loadReports() {
+    this.isLoading = true;
     this.reportes = (await this.reporteService.getItems()).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-    this.totalPages = Math.ceil(this.reportes.length / this.pageSize) || 1;
+    this.totalPages = Math.max(1, Math.ceil(this.reportes.length / this.pageSize));
+    this.page = Math.min(this.page, this.totalPages);
     this.setPagedReportes();
     this.setStatusCounts();
     this.isLoading = false;
@@ -68,6 +80,24 @@ export class ReportlistPage implements OnInit {
       this.page--;
       this.setPagedReportes();
     }
+  }
+
+  /** Devuelve un objeto de clases para usar con [ngClass] en badges */
+  getBadgeClass(status?: string) {
+    const s = (status || '').toLowerCase();
+    return {
+      success: s === 'resuelto',
+      inprogress: s === 'en proceso' ,
+      pending: s === 'pendiente'
+    };
+  }
+
+  /** Etiqueta legible para mostrar dentro del badge */
+  getBadgeLabel(status?: string) {
+    const s = (status || '').toLowerCase();
+    if (s === 'resuelto') return 'Resuelto';
+    if (s === 'en proceso') return 'En atención';
+    return 'Registrado';
   }
 
 }

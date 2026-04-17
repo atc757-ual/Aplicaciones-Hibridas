@@ -34,15 +34,14 @@
             
           <ng-container *ngIf="!isLoading && pagedReportes.length > 0; else loadingOrEmpty">
             <ion-list>
-              <ion-item [button]="true" *ngFor="let reporte of pagedReportes" (click)="verDetalle(reporte.id)">
+              <ion-item class="align-status" [button]="true" *ngFor="let reporte of pagedReportes" (click)="verDetalle(reporte.id)">
                 <ion-label>
-                  <div class="fs-16 f-semibold margin-bottom-s">#{{ reporte.id }}</div>
-                  <div class="fs-14 margin-bottom-s">{{ reporte.title }}</div>
-                  <div class="fs-12 text-muted margin-bottom-s">{{ reporte.createdAt | date:'short' }}<br>
-                  </div>
+                  <div class="fs-14 f-medium margin-bottom-s">#{{ reporte.id }} - <span class="fs-14 f-semibold">Prioridad {{reporte.priority | capitalize }}</span></div>
+                  <div class="fs-12 text-neutral-8 margin-bottom-s">{{ reporte.category | capitalize }} - {{reporte.title }}</div>
+                  <div class="fs-10 text-neutral-7  margin-bottom-s">{{ reporte.createdAt | date:'short' }}  </div>
                 </ion-label>
-                <ion-badge slot="end" >
-                  {{ reporte.priority | titlecase }}
+                <ion-badge class="margin-top-base" slot="end" [ngClass]="getBadgeClass(reporte.status)">
+                  {{ getBadgeLabel(reporte.status) }}
                 </ion-badge>
               </ion-item>
             </ion-list>
@@ -98,7 +97,7 @@
                         <ion-badge class="inprogress">{{ inProgressCount }}</ion-badge>
                       </div>
                       <div class="status-row">
-                        <span class="status-label">Pendientes</span>
+                        <span class="status-label">Registradas</span>
                         <ion-badge class="pending">{{ unresolvedCount }}</ion-badge>
                       </div>
                     </div>

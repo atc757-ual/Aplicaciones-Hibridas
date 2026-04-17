@@ -45,7 +45,7 @@ export class ReportService {
  
  async createReporte(reporte: ModelReport): Promise<void> {
     reporte.createdAt = new Date().toISOString();
-    reporte.id = 'RI-' + Date.now();
+    reporte.id = Date.now().toString();
     reporte.status = 'pendiente';
     reporte.priority =
       (Categories.find((cat) => cat.value === reporte.category)

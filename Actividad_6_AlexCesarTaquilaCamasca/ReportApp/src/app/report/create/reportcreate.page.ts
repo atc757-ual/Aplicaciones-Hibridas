@@ -1,4 +1,5 @@
 import { Component, ViewChild} from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { SharedIonicModule } from '../../shared/shared-ionic.module';
 import { DomSanitizer ,SafeResourceUrl} from '@angular/platform-browser'; //importamos el servicio DomSanitizer para manejar URLs seguras en Angular
 import { MapPlugin } from 'src/core/plugins/maps-plugin'; //importamos el servicio MapaService para manejar la creación y manipulación de mapas en la aplicación
@@ -10,6 +11,7 @@ import { IonModal } from '@ionic/angular';
 import { DeviceUtils } from 'src/core/utils/device-util';
 import { LocationPlugin } from 'src/core/plugins/location-plugin';
 import { CameraPlugin } from 'src/core/plugins/camera-plugin';
+import { Capacitor } from '@capacitor/core';
 import { Dialog } from '@capacitor/dialog';
 
 interface PhotoWithSafeUrl {
@@ -30,6 +32,7 @@ interface PhotoWithSafeUrl {
 export class ReportcreatePage {
   @ViewChild('modal', { static: false }) modal!: IonModal;
   @ViewChild('modalMapa', { static: false }) modalMapa!: IonModal;
+  @ViewChild('incidenteForm', { static: false }) incidenteForm!: NgForm;
 
   expandedAccordions: string[] = [];
   isDesktop: boolean = false;
@@ -76,6 +79,43 @@ export class ReportcreatePage {
   ngOnDestroy() {
     window.removeEventListener('resize', this.resizeHandler);
     this.mapaService.destruirMapa();
+    this.resetForm();
+  }
+
+  // Llamado por Ionic cuando la vista va a dejar de estar activa (ej. botón back)
+  async ionViewWillLeave() {
+    this.resetForm();
+  }
+
+  /** Reinicia los valores del formulario al destruir la vista */
+  private resetForm() {
+    this.photos = [];
+    this.img = undefined;
+    this.fotoMapaIndex = null;
+    this.isLoadingSubmit = false;
+    this.isLoadingGeo = false;
+    this.isLoadingTakePicture = false;
+    this.expandedAccordions = [];
+    this.reporte = {
+      id: '',
+      title: '',
+      description: '',
+      photos: [],
+      category: '',
+      status: 'pending',
+      priority: 'baja',
+      aceptoTerminos: false,
+      createdAt: new Date().toISOString(),
+    };
+    // Resetear el estado del formulario (pristine, untouched) para no mostrar errores
+    try {
+      // usar setTimeout para esperar a que Angular aplique cambios en el template
+      setTimeout(() => {
+        if (this.incidenteForm) this.incidenteForm.resetForm(this.reporte);
+      }, 0);
+    } catch (e) {
+      // noop
+    }
   }
 
   // Lógica para solicitar permiso de geolocalización al usuario y mostrar un mensaje de confirmación
@@ -118,16 +158,7 @@ export class ReportcreatePage {
   public async takePicture(): Promise<void> {
     this.isLoadingTakePicture = true;
 
-    // Verificar permiso de cámara
-    const camGranted = await this.cameraService.isCameraPermissionGranted();
-    if (!camGranted) {
-      const camReq = await this.cameraService.requestCameraPermission();
-      if (!camReq) {
-        await Dialog.alert({ title: 'Permiso de cámara requerido', message: 'Debes autorizar el acceso a la cámara para tomar fotos.', buttonTitle: 'Entendido' });
-        this.isLoadingTakePicture = false;
-        return;
-      }
-    }
+    // En web usaremos un fallback (input file). En nativo, los permisos se gestionan más abajo.
 
     // Limitar a 5 fotos por reporte para evitar saturar la interfaz y el almacenamiento
     if (this.photos.length >= 5) {
@@ -135,10 +166,31 @@ export class ReportcreatePage {
       return;
     }
 
-    // Tomar la foto inmediatamente
+    // Intentar obtener posición cacheada primero (no pide permisos)
+    let cachedPosition = null;
+    try {
+      cachedPosition = await this.locationService.getCurrentPosition({ useCache: true, maxAgeMs: 300000 });
+    } catch (e) {
+      cachedPosition = null;
+    }
+
+    // Tomar la foto. Usar fallback web cuando corresponda.
+    const platform = Capacitor.getPlatform();
     let foto = null;
     try {
-      foto = await this.cameraService.takePhoto();
+      if (platform !== 'web') {
+        const camGranted = await this.cameraService.isCameraPermissionGranted().catch(() => false);
+        if (!camGranted) {
+          const camReq = await this.cameraService.requestCameraPermission().catch(() => false);
+          if (!camReq) {
+            await Dialog.alert({ title: 'Permiso de cámara requerido', message: 'Debes autorizar el acceso a la cámara para tomar fotos.', buttonTitle: 'Entendido' });
+            this.isLoadingTakePicture = false;
+            return;
+          }
+        }
+      }
+
+      foto = await this.cameraService.takePhotoWithFallback();
     } catch (err) {
       console.error('Error al tomar foto:', err);
       this.isLoadingTakePicture = false;
@@ -159,30 +211,39 @@ export class ReportcreatePage {
       safeUrl: this.sanitizer.bypassSecurityTrustResourceUrl(webPath)
     };
 
+    // Si tenemos posición cacheada, adjuntarla inmediatamente
+    if (cachedPosition) {
+      photoEntry.latitude = cachedPosition.coords.latitude;
+      photoEntry.longitude = cachedPosition.coords.longitude;
+      photoEntry.accuracy = cachedPosition.coords.accuracy;
+    }
+
     this.photos.push(photoEntry);
     this.img = this.sanitizer.bypassSecurityTrustResourceUrl(webPath);
 
-    // Obtener la ubicación en segundo plano y actualizar la foto cuando esté disponible
-    (async () => {
-      try {
-        let granted = this.hasPermisionGeo;
-        if (!granted) {
-          granted = await this.locationService.requestGeolocationPermission();
-          this.hasPermisionGeo = granted;
+    // Si no había posición cacheada, intentar obtenerla en background solicitando permiso solo si es necesario
+    if (!cachedPosition) {
+      (async () => {
+        try {
+          let granted = this.hasPermisionGeo;
+          if (!granted) {
+            granted = await this.locationService.requestGeolocationPermission();
+            this.hasPermisionGeo = granted;
+          }
+          if (!granted) return;
+          const position = await this.locationService.getCurrentPosition({ useCache: true, maxAgeMs: 300000, enableHighAccuracy: false, timeout: 5000 });
+          if (!position) return;
+          const idx = this.photos.findIndex(p => p.url === webPath);
+          if (idx >= 0) {
+            this.photos[idx].latitude = position.coords.latitude;
+            this.photos[idx].longitude = position.coords.longitude;
+            this.photos[idx].accuracy = position.coords.accuracy;
+          }
+        } catch (e) {
+          console.warn('Fallo al obtener ubicación en background:', e);
         }
-        if (!granted) return;
-        const position = await this.locationService.getCurrentPosition({ useCache: true, maxAgeMs: 300000, enableHighAccuracy: false, timeout: 5000 });
-        if (!position) return;
-        const idx = this.photos.findIndex(p => p.url === webPath);
-        if (idx >= 0) {
-          this.photos[idx].latitude = position.coords.latitude;
-          this.photos[idx].longitude = position.coords.longitude;
-          this.photos[idx].accuracy = position.coords.accuracy;
-        }
-      } catch (e) {
-        console.warn('Fallo al obtener ubicación en background:', e);
-      }
-    })();
+      })();
+    }
 
     this.isLoadingTakePicture = false;
   }
@@ -211,6 +272,7 @@ export class ReportcreatePage {
   /**  Método para cerrar el modal de confirmación después de enviar un reporte, se llama desde el template **/ 
   async closeModal() {
     if (this.modal) await this.modal.dismiss();
+    this.resetForm();
   }
 
   /**  Método para actualizar la prioridad del reporte en función de la categoría seleccionada, se llama desde el template cuando el usuario cambia la categoría **/

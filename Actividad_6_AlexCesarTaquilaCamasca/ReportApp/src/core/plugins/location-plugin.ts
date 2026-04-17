@@ -9,6 +9,15 @@ export class LocationPlugin {
   private lastPosition: Position | null = null;
   private lastPositionTs: number = 0;
 
+  private isPositionValid(pos: Position | null): boolean {
+    if (!pos) return false;
+    const c: any = (pos as any).coords;
+    if (!c) return false;
+    const lat = Number(c.latitude);
+    const lng = Number(c.longitude);
+    return Number.isFinite(lat) && Number.isFinite(lng) && !(lat === 0 && lng === 0 && typeof c.accuracy === 'undefined');
+  }
+
   /**
    * Limpia la posición cacheada
    */
@@ -28,8 +37,8 @@ export class LocationPlugin {
     const useCache = options?.useCache ?? false;
     const maxAgeMs = options?.maxAgeMs ?? 300000; // 5 min por defecto
 
-    // Devolver cache si está dentro del maxAge
-    if (useCache && this.lastPosition && (Date.now() - this.lastPositionTs) <= maxAgeMs) {
+    // Devolver cache si está dentro del maxAge y contiene datos válidos
+    if (useCache && this.lastPosition && (Date.now() - this.lastPositionTs) <= maxAgeMs && this.isPositionValid(this.lastPosition)) {
       return this.lastPosition;
     }
 
@@ -41,11 +50,20 @@ export class LocationPlugin {
       if (typeof options?.timeout !== 'undefined') geoOptions.timeout = options?.timeout;
       // Intentar obtener posición real
       const position = await Geolocation.getCurrentPosition(geoOptions);
-      // Guardar en cache
-      this.lastPosition = position;
-      this.lastPositionTs = Date.now();
+      // Guardar en cache sólo si la posición es válida
+      if (this.isPositionValid(position)) {
+        this.lastPosition = position;
+        this.lastPositionTs = Date.now();
+      }
       return position;
-    } catch (error) {
+    } catch (error: any) {
+      // Si el usuario negó el permiso, limpiar cache y no mostrar un error crítico
+      if (error && (error.code === 1 || /denied/i.test(error.message || ''))) {
+        this.lastPosition = null;
+        this.lastPositionTs = 0;
+        console.warn('Permiso de geolocalización denegado por el usuario');
+        return null;
+      }
       console.error('Error al obtener la ubicación:', error);
       return null;
     }
@@ -78,16 +96,63 @@ export class LocationPlugin {
     const platform = Capacitor.getPlatform();
     // En web usamos navigator; en nativo solicitamos mediante el plugin de Capacitor
     if (platform === 'web') {
-      return new Promise((resolve) => {
-        if (typeof window !== 'undefined' && 'navigator' in window && 'geolocation' in navigator) {
-          navigator.geolocation.getCurrentPosition(
-            () => resolve(true),
-            () => resolve(false)
-          );
-        } else {
-          resolve(false);
+      // Preferir Permissions API cuando esté disponible para distinguir estados
+      try {
+        if (typeof window !== 'undefined' && 'navigator' in window) {
+          // @ts-ignore
+          if ('permissions' in navigator) {
+            try {
+              // @ts-ignore
+              const status = await navigator.permissions.query({ name: 'geolocation' });
+              if (status.state === 'granted') {
+                // Intentar obtener posición para cachearla (no fuerza prompt)
+                try {
+                  const pos = await new Promise<Position>((res, rej) => navigator.geolocation.getCurrentPosition(res, rej));
+                  if (this.isPositionValid(pos)) {
+                    this.lastPosition = pos as any;
+                    this.lastPositionTs = Date.now();
+                  }
+                } catch (e) {
+                  // ignore
+                }
+                return true;
+              }
+              if (status.state === 'denied') {
+                return false;
+              }
+              // state === 'prompt' -> intentar solicitar permiso (requiere gesto del usuario)
+            } catch (e) {
+              // permisos no disponibles, seguiremos a fallback
+            }
+          }
+
+          // Fallback: intentar solicitar la posición para provocar el prompt.
+          return await new Promise<boolean>((resolve) => {
+            if ('geolocation' in navigator) {
+              navigator.geolocation.getCurrentPosition(
+                (position) => {
+                  try {
+                    const pos = position as any;
+                    if (this.isPositionValid(pos)) {
+                      this.lastPosition = pos;
+                      this.lastPositionTs = Date.now();
+                    }
+                  } catch (e) {
+                    // noop
+                  }
+                  resolve(true);
+                },
+                () => resolve(false)
+              );
+            } else {
+              resolve(false);
+            }
+          });
         }
-      });
+      } catch (e) {
+        // ignore and return false
+      }
+      return false;
     }
     const geoPerm = await Geolocation.requestPermissions();
     return geoPerm.location === 'granted';

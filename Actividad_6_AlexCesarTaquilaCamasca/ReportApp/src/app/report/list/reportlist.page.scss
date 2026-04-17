@@ -11,19 +11,25 @@
 		justify-content: space-between;
 		font-size: var(--fs-14);
 	}
+	.status-label {
+		color: var(--color-neutral-7);
+	}
+}
+
 	ion-badge {
 		min-width: 32px;
-		font-size: var(--fs-16);
-		justify-content: center;}
-
-    ion-badge.success {
-        background: var(--color-success) !important ;
-    }
+		font-size: var(--fs-12) !important;
+		justify-content: center;
+		color: var(--color-neutral-7) !important;
+	}
+ 	ion-badge.success {
+        background: var(--green-025) !important ;	}
     ion-badge.inprogress {
-        background: var(--blue-primary-050) !important;
+        background: var(--color-blue-lightest) !important;
     }
     ion-badge.pending {
-        background: var(--color-red-light) !important;
+        background: var(--color-orange-lightest) !important;
     }
+	ion-item.align-status {
+		align-items: flex-start;
 	}
-
