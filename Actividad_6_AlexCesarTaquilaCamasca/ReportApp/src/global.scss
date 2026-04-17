@@ -3187,6 +3187,17 @@ ion-card {
     padding-right: 48px;
 }
 
+/* Title color: dark on light, light on dark */
+.title-with-backbutton ion-title,
+.title-with-backbutton .toolbar-title {
+    color: var(--color-neutral-8);
+}
+
+.dark .title-with-backbutton ion-title,
+.dark .title-with-backbutton .toolbar-title {
+    color: var(--color-neutral-0);
+}
+
 .content {
     display: -webkit-box;
     display: -ms-flexbox;

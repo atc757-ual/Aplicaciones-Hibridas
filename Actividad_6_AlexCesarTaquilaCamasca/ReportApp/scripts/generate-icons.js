@@ -29,14 +29,18 @@ async function generate() {
     // so the adaptive background ring remains visible (reduce zoom).
     const innerFactor = 0.9;
     const innerFg = Math.round(size * innerFactor);
-    const fgResizedBuf = await sharp(srcImg)
-      .resize(innerFg, innerFg, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+    // Use 2x oversampling for mask to get smooth antialiased edges
+    const oversample = 2;
+    const tmpFg = innerFg * oversample;
+    const fgTmpBuf = await sharp(srcImg)
+      .resize(tmpFg, tmpFg, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
       .png()
       .toBuffer();
-    const maskInnerFg = Buffer.from(
-      `<svg width="${innerFg}" height="${innerFg}" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="black"/><circle cx="${innerFg/2}" cy="${innerFg/2}" r="${innerFg/2}" fill="white"/></svg>`
+    const maskTmpFg = Buffer.from(
+      `<svg width="${tmpFg}" height="${tmpFg}" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="black"/><circle cx="${tmpFg/2}" cy="${tmpFg/2}" r="${tmpFg/2}" fill="white"/></svg>`
     );
-    const fgMasked = await sharp(fgResizedBuf).composite([{ input: maskInnerFg, blend: 'dest-in' }]).png().toBuffer();
+    const fgMaskedTmp = await sharp(fgTmpBuf).composite([{ input: maskTmpFg, blend: 'dest-in' }]).png().toBuffer();
+    const fgMasked = await sharp(fgMaskedTmp).resize(innerFg, innerFg, { kernel: 'lanczos3' }).png().toBuffer();
     const canvasFg = sharp({ create: { width: size, height: size, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0 } } });
     await canvasFg
       .composite([{ input: fgMasked, gravity: 'center' }])
@@ -47,14 +51,17 @@ async function generate() {
     // and center a slightly smaller image on it (no additional mask).
     // Use a reduced inner size for round icons (less zoom) so background ring shows.
     const inner = Math.round(size * 0.9);
-    const resizedBuffer = await sharp(srcImg)
-      .resize(inner, inner, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+    // Oversample masking for smooth circular edges
+    const tmpInner = inner * oversample;
+    const resizedTmp = await sharp(srcImg)
+      .resize(tmpInner, tmpInner, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
       .png()
       .toBuffer();
-    const maskInner = Buffer.from(
-      `<svg width="${inner}" height="${inner}" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="black"/><circle cx="${inner/2}" cy="${inner/2}" r="${inner/2}" fill="white"/></svg>`
+    const maskTmp = Buffer.from(
+      `<svg width="${tmpInner}" height="${tmpInner}" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="black"/><circle cx="${tmpInner/2}" cy="${tmpInner/2}" r="${tmpInner/2}" fill="white"/></svg>`
     );
-    const masked = await sharp(resizedBuffer).composite([{ input: maskInner, blend: 'dest-in' }]).png().toBuffer();
+    const maskedTmp = await sharp(resizedTmp).composite([{ input: maskTmp, blend: 'dest-in' }]).png().toBuffer();
+    const masked = await sharp(maskedTmp).resize(inner, inner, { kernel: 'lanczos3' }).png().toBuffer();
     // Create transparent canvas and center the circular image on it (no white background)
     const canvas = sharp({ create: { width: size, height: size, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0 } } });
     await canvas
