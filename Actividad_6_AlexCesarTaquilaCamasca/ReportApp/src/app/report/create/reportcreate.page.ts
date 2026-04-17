@@ -166,17 +166,21 @@ export class ReportcreatePage {
       return;
     }
 
-    // Intentar obtener posición cacheada primero (no pide permisos)
+    // Sólo comprobar cache de posición si ya tenemos permiso explícito (evita disparar prompt)
     let cachedPosition = null;
-    try {
-      cachedPosition = await this.locationService.getCurrentPosition({ useCache: true, maxAgeMs: 300000 });
-    } catch (e) {
+    if (this.hasPermisionGeo) {
+      try {
+        cachedPosition = await this.locationService.getCurrentPosition({ useCache: true, maxAgeMs: 300000 });
+      } catch (e) {
+        cachedPosition = null;
+      }
+    } else {
       cachedPosition = null;
     }
 
     // Si no hay posición cacheada y no tenemos permiso de geolocalización, avisar y cancelar
     if (!cachedPosition && !this.hasPermisionGeo) {
-      ToastPlugin.show('Para tomar fotos debes habilitar la ubicación en tu dispositivo o navegador.', { duration: 'long', position: 'top' });
+      ToastPlugin.show('Para tomar fotos debes habilitar la ubicación en tu dispositivo.', { duration: 'long', position: 'top' });
       this.isLoadingTakePicture = false;
       return;
     }
@@ -228,16 +232,12 @@ export class ReportcreatePage {
     this.photos.push(photoEntry);
     this.img = this.sanitizer.bypassSecurityTrustResourceUrl(webPath);
 
-    // Si no había posición cacheada, intentar obtenerla en background solicitando permiso solo si es necesario
+    // Si no había posición cacheada, sólo intentar obtenerla en background si ya tenemos permiso (no pedir permisos aquí)
     if (!cachedPosition) {
       (async () => {
         try {
-          let granted = this.hasPermisionGeo;
-          if (!granted) {
-            granted = await this.locationService.requestGeolocationPermission();
-            this.hasPermisionGeo = granted;
-          }
-          if (!granted) return;
+          const granted = this.hasPermisionGeo;
+          if (!granted) return; // no solicitar permisos desde aquí
           const position = await this.locationService.getCurrentPosition({ useCache: true, maxAgeMs: 300000, enableHighAccuracy: false, timeout: 5000 });
           if (!position) return;
           const idx = this.photos.findIndex(p => p.url === webPath);
