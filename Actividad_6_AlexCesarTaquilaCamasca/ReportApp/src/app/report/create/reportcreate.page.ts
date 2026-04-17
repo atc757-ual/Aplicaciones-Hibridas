@@ -174,6 +174,13 @@ export class ReportcreatePage {
       cachedPosition = null;
     }
 
+    // Si no hay posición cacheada y no tenemos permiso de geolocalización, avisar y cancelar
+    if (!cachedPosition && !this.hasPermisionGeo) {
+      ToastPlugin.show('Para tomar fotos debes habilitar la ubicación en tu dispositivo o navegador.', { duration: 'long', position: 'top' });
+      this.isLoadingTakePicture = false;
+      return;
+    }
+
     // Tomar la foto. Usar fallback web cuando corresponda.
     const platform = Capacitor.getPlatform();
     let foto = null;
